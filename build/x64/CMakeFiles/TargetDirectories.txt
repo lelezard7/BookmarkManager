@@ -1,0 +1,3 @@
+Z:/Project/CMake/Applications/BookmarkManager/build/x64/CMakeFiles/BookmarkManager.dir
+Z:/Project/CMake/Applications/BookmarkManager/build/x64/CMakeFiles/ALL_BUILD.dir
+Z:/Project/CMake/Applications/BookmarkManager/build/x64/CMakeFiles/ZERO_CHECK.dir

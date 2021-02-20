@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Z:\Project\CMake\Applications\BookmarkManager\src\BookmarkManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Z:\Project\CMake\Applications\BookmarkManager\src\Windows\BookmarkManagerWindow.cpp">
+      <Filter>src\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Z:\Project\CMake\Applications\BookmarkManager\src\Windows\ContainerCreationWindow.cpp">
+      <Filter>src\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Z:\Project\CMake\Applications\BookmarkManager\src\Windows\AboutProgramWindow.cpp">
+      <Filter>src\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Z:\Project\CMake\Applications\BookmarkManager\src\ApplicationSettings\ApplicationSettings.cpp">
+      <Filter>src\ApplicationSettings</Filter>
+    </ClCompile>
+    <ClCompile Include="Z:\Project\CMake\Applications\BookmarkManager\src\Archive\Archive.cpp">
+      <Filter>src\Archive</Filter>
+    </ClCompile>
+    <ClCompile Include="Z:\Project\CMake\Applications\BookmarkManager\src\Total\GeneralOperations.cpp">
+      <Filter>src\Total</Filter>
+    </ClCompile>
+    <ClCompile Include="Z:\Project\CMake\Applications\BookmarkManager\src\Total\HandleManager.cpp">
+      <Filter>src\Total</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Z:\Project\CMake\Applications\BookmarkManager\src\res\Resource.h">
+      <Filter>src\res</Filter>
+    </ClInclude>
+    <ClInclude Include="Z:\Project\CMake\Applications\BookmarkManager\src\Windows\BookmarkManagerWindow.h">
+      <Filter>src\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Z:\Project\CMake\Applications\BookmarkManager\src\Windows\ContainerCreationWindow.h">
+      <Filter>src\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Z:\Project\CMake\Applications\BookmarkManager\src\Windows\AboutProgramWindow.h">
+      <Filter>src\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Z:\Project\CMake\Applications\BookmarkManager\src\ApplicationSettings\ApplicationSettings.h">
+      <Filter>src\ApplicationSettings</Filter>
+    </ClInclude>
+    <ClInclude Include="Z:\Project\CMake\Applications\BookmarkManager\src\Archive\Archive.h">
+      <Filter>src\Archive</Filter>
+    </ClInclude>
+    <ClInclude Include="Z:\Project\CMake\Applications\BookmarkManager\src\Total\GeneralOperations.h">
+      <Filter>src\Total</Filter>
+    </ClInclude>
+    <ClInclude Include="Z:\Project\CMake\Applications\BookmarkManager\src\Total\HandleManager.h">
+      <Filter>src\Total</Filter>
+    </ClInclude>
+    <ClInclude Include="Z:\Project\CMake\Applications\BookmarkManager\src\Total\BmDef.h">
+      <Filter>src\Total</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="Z:\Project\CMake\Applications\BookmarkManager\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Z:\Project\CMake\Applications\BookmarkManager\res\icon\q1.ico">
+      <Filter>res\icon</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Z:\Project\CMake\Applications\BookmarkManager\res\Resource.rc">
+      <Filter>res</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="res">
+      <UniqueIdentifier>{E39C07AC-2FF3-32CF-8E5A-D16DCBE1398E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\icon">
+      <UniqueIdentifier>{85B11E1C-BD29-3297-B7BD-0895C105C48B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{FBEDF948-2A89-3AD2-9F87-675E9BF02346}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ApplicationSettings">
+      <UniqueIdentifier>{8F2DF03F-8A1E-3890-9D06-3FD794B2B4EE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Archive">
+      <UniqueIdentifier>{D273401E-CB08-3EF0-8A5C-CB3857BB8012}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Total">
+      <UniqueIdentifier>{523475BB-7F09-3824-A144-DE0103801C9E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Windows">
+      <UniqueIdentifier>{5178B27C-FC43-33E0-A0D8-90A6D287927B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\res">
+      <UniqueIdentifier>{A197A581-4D34-3583-B99F-70911F49AD6D}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

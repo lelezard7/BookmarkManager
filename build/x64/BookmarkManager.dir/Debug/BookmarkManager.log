@@ -1,0 +1,18 @@
+﻿  Building Custom Rule Z:/Project/CMake/Applications/BookmarkManager/CMakeLists.txt
+  BookmarkManager.cpp
+  BookmarkManagerWindow.cpp
+Z:\Project\CMake\Applications\BookmarkManager\src\Windows\BookmarkManagerWindow.cpp(128,65): warning C4311: приведение типов: усечение указателя из "HMENU" в "UINT"
+Z:\Project\CMake\Applications\BookmarkManager\src\Windows\BookmarkManagerWindow.cpp(128,65): warning C4302: приведение типов: усечение из "HMENU" к "UINT"
+Z:\Project\CMake\Applications\BookmarkManager\src\Windows\BookmarkManagerWindow.cpp(134,65): warning C4311: приведение типов: усечение указателя из "HMENU" в "UINT"
+Z:\Project\CMake\Applications\BookmarkManager\src\Windows\BookmarkManagerWindow.cpp(134,65): warning C4302: приведение типов: усечение из "HMENU" к "UINT"
+Z:\Project\CMake\Applications\BookmarkManager\src\Windows\BookmarkManagerWindow.cpp(254,9): warning C4101: lvitem: неиспользованная локальная переменная
+  ContainerCreationWindow.cpp
+Z:\Project\CMake\Applications\BookmarkManager\src\Windows\ContainerCreationWindow.cpp(258,38): warning C4267: аргумент: преобразование из "size_t" в "int"; возможна потеря данных
+  AboutProgramWindow.cpp
+  ApplicationSettings.cpp
+  Archive.cpp
+  GeneralOperations.cpp
+  HandleManager.cpp
+  Создание кода...
+Z:\Project\CMake\Applications\BookmarkManager\src\Archive\Archive.cpp(130): warning C4715: Container::getContent: значение возвращается не при всех путях выполнения
+  BookmarkManager.vcxproj -> Z:\Project\CMake\Applications\BookmarkManager\build\x64\Debug\BookmarkManager.exe

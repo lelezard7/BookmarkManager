@@ -1,0 +1,10 @@
+^Z:\PROJECT\CMAKE\APPLICATIONS\BOOKMARKMANAGER\BUILD\X64\CMAKEFILES\D8A07B50BAF47C971F2AAC93D1152971\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SZ:/Project/CMake/Applications/BookmarkManager -BZ:/Project/CMake/Applications/BookmarkManager/build/x64 --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file Z:/Project/CMake/Applications/BookmarkManager/build/x64/BookmarkManager.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
