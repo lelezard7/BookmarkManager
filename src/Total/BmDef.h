@@ -3,7 +3,7 @@
 #define _BMDEF_
 
 /*		Application information.		*/
-#define BOOKMARKMANAGER_VERSION					0x0002
+#define BOOKMARKMANAGER_VERSION					0x0003
 
 /*		Class names.		*/
 #define BOOKMARKMANAGERWND_CLASSNAME			(L"BookmarkManagerWindow")
