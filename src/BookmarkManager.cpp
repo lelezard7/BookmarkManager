@@ -95,7 +95,7 @@ ErrorCode register_windowClasses(HINSTANCE hInstance)
 	wndClass.style = CS_HREDRAW | CS_VREDRAW;
 	wndClass.hbrBackground = CreateSolidBrush(RGB(70, 68, 81));
 	wndClass.hCursor = LoadCursor(hInstance, IDC_ARROW);
-	wndClass.hIcon = (HICON)LoadImage(hInstance, MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON, NULL, NULL, LR_SHARED);
+	wndClass.hIcon = (HICON)LoadImage(hInstance, MAKEINTRESOURCE(BKM_ICON_1), IMAGE_ICON, NULL, NULL, LR_SHARED);
 
 	if (!RegisterClassEx(&wndClass))
 		return false;

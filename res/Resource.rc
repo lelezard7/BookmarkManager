@@ -62,19 +62,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_ICON1               ICON                    "Icon\\q1.ico"
-
-IDI_ICON2               ICON                    "icon\\q2.ico"
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Bitmap
-//
-
-IDB_BITMAP1             BITMAP                  "icon\\bitmap1.bmp"
-
-IDB_BITMAP2             BITMAP                  "icon\\bitmap2.bmp"
+BKM_ICON_1              ICON                    "icon\\BKM_Icon_1.ico"
 
 #endif    // Английский (США) resources
 /////////////////////////////////////////////////////////////////////////////

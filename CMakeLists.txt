@@ -30,7 +30,7 @@ set(TOTAL
 source_group(src FILES src/BookmarkManager.cpp)
 source_group(src/res FILES src/res/Resource.h)
 source_group(res FILES res/Resource.rc)
-source_group(res/icon FILES res/icon/q1.ico)
+source_group(res/icon FILES res/icon/BKM_Icon_1.ico)
 source_group(src/Windows FILES ${WINDOWS})
 source_group(src/ApplicationSettings FILES ${APPLICATIONSETTINGS})
 source_group(src/Archive FILES ${ARCHIVE})
@@ -40,7 +40,7 @@ add_executable(BookmarkManager WIN32
 					src/BookmarkManager.cpp
 					src/res/Resource.h
 					res/Resource.rc
-					res/icon/q1.ico
+					res/icon/BKM_Icon_1.ico
 					${WINDOWS}
 					${APPLICATIONSETTINGS}
 					${ARCHIVE}
