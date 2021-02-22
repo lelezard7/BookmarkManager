@@ -1,53 +1,63 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(BookmarkManager
-			LANGUAGES C	CXX)
+project(BookmarkManager	LANGUAGES C	CXX)
 
 
-set(WINDOWS
-		src/Windows/BookmarkManagerWindow.h
-		src/Windows/BookmarkManagerWindow.cpp
-		src/Windows/ContainerCreationWindow.h
-		src/Windows/ContainerCreationWindow.cpp
-		src/Windows/AboutProgramWindow.h
-		src/Windows/AboutProgramWindow.cpp)
+#			Variables
+set(BKM_WINDOWS
+			src/Windows/BookmarkManagerWindow.h
+			src/Windows/BookmarkManagerWindow.cpp
+			src/Windows/ContainerCreationWindow.h
+			src/Windows/ContainerCreationWindow.cpp
+			src/Windows/AboutProgramWindow.h
+			src/Windows/AboutProgramWindow.cpp)
 		
-set(APPLICATIONSETTINGS
-		src/ApplicationSettings/ApplicationSettings.h
-		src/ApplicationSettings/ApplicationSettings.cpp)
+set(BKM_APPLICATIONSETTINGS
+			src/ApplicationSettings/ApplicationSettings.h
+			src/ApplicationSettings/ApplicationSettings.cpp)
 
-set(ARCHIVE
-		src/Archive/Archive.h
-		src/Archive/Archive.cpp)
+set(BKM_ARCHIVE
+			src/Archive/Archive.h
+			src/Archive/Archive.cpp)
 		
-set(TOTAL
-		src/Total/GeneralOperations.h
-		src/Total/GeneralOperations.cpp
-		src/Total/HandleManager.h
-		src/Total/HandleManager.cpp
-		src/Total/BmDef.h)
-		
-source_group(src FILES src/BookmarkManager.cpp)
-source_group(src/res FILES src/res/Resource.h)
-source_group(res FILES res/Resource.rc)
-source_group(res/icon FILES res/icon/BKM_Icon_1.ico)
-source_group(src/Windows FILES ${WINDOWS})
-source_group(src/ApplicationSettings FILES ${APPLICATIONSETTINGS})
-source_group(src/Archive FILES ${ARCHIVE})
-source_group(src/Total FILES ${TOTAL})
+set(BKM_TOTAL
+			src/Total/GeneralOperations.h
+			src/Total/GeneralOperations.cpp
+			src/Total/HandleManager.h
+			src/Total/HandleManager.cpp
+			src/Total/BmDef.h)
 
-add_executable(BookmarkManager WIN32
-					src/BookmarkManager.cpp
-					src/res/Resource.h
-					res/Resource.rc
-					res/icon/BKM_Icon_1.ico
-					${WINDOWS}
-					${APPLICATIONSETTINGS}
-					${ARCHIVE}
-					${TOTAL})
-					
-#set_source_files_properties(res/icon/q1.ico res/Resource.rc src/res/Resource.h PROPERTIES LANGUAGES RC)
+set(BKM_RESOURCES
+			src/BookmarkManager.cpp
+			src/res/Resource.h
+			res/Resource.rc
+			res/icon/BKM_Icon_1.ico)
+
+set(BKM_OTHER
+			src/BookmarkManager.cpp)
+
+set(BKM_ALL
+			${BKM_WINDOWS}
+			${BKM_APPLICATIONSETTINGS}
+			${BKM_ARCHIVE}
+			${BKM_TOTAL}
+			${BKM_RESOURCES}
+			${BKM_OTHER})
+
+
+#			Visual Studio
+foreach(i ${BKM_ALL})
+	get_filename_component(FILE_DIR ${i} DIRECTORY)
+	source_group(${FILE_DIR} FILES ${i})
+endforeach()
+
+
+add_executable(BookmarkManager WIN32 ${BKM_ALL})
+
+#			Libraries
+target_link_libraries(BookmarkManager PRIVATE comctl32)
+
 
 set_target_properties(BookmarkManager PROPERTIES
-						CXX_STANDARD 11
-						CXX_STANDARD_REQUIRED ON)
+											CXX_STANDARD 11
+											CXX_STANDARD_REQUIRED TRUE)

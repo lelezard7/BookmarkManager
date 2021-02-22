@@ -24,9 +24,7 @@
 #include "res\Resource.h"
 #include <Windows.h>
 #include <CommCtrl.h>
-#include <WinUser.h>
 
-#pragma comment(lib,"comctl32.lib")
 #pragma comment(linker,"\"/manifestdependency:type='win32' \
 name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
 processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
@@ -96,7 +94,7 @@ ErrorCode register_windowClasses(HINSTANCE hInstance)
 	wndClass.hbrBackground = CreateSolidBrush(RGB(70, 68, 81));
 	wndClass.hCursor = LoadCursor(hInstance, IDC_ARROW);
 	wndClass.hIcon = (HICON)LoadImage(hInstance, MAKEINTRESOURCE(BKM_ICON_1), IMAGE_ICON, NULL, NULL, LR_SHARED);
-
+	
 	if (!RegisterClassEx(&wndClass))
 		return false;
 
