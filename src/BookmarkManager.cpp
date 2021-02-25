@@ -16,11 +16,11 @@
 #define UNICODE
 #endif
 
-#include "Windows\BookmarkManagerWindow.h"
-#include "Windows\ContainerCreationWindow.h"
-#include "Windows\AboutProgramWindow.h"
-#include "Total\BmDef.h"
-#include "Total\HandleManager.h"
+#include "Windows\BookmarkManagerWindow\BookmarkManagerWindow.h"
+#include "Windows\ContainerCreationWindow\ContainerCreationWindow.h"
+#include "Windows\AboutProgramWindow\AboutProgramWindow.h"
+#include "Common\BkmDef.h"
+#include "HandleManager\HandleManager.h"
 #include "res\Resource.h"
 #include <Windows.h>
 #include <CommCtrl.h>
@@ -71,14 +71,25 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	return (int)msg.wParam;
 }
 
-ErrorCode initialization_commCtrl()
+ErrorCode initialization_commCtrl() //TODO: Вынести общий знаменатель в функцию.
 {
 	INITCOMMONCONTROLSEX	commonControl;
 
+	/*		List View		*/
 	commonControl.dwSize = sizeof(INITCOMMONCONTROLSEX);
 	commonControl.dwICC = ICC_LISTVIEW_CLASSES;
 
-	return InitCommonControlsEx(&commonControl);
+	if (!InitCommonControlsEx(&commonControl))
+		return false;
+
+	///*		List View		*/
+	//commonControl.dwSize = sizeof(INITCOMMONCONTROLSEX);
+	//commonControl.dwICC = ICC_;
+
+	//if (!InitCommonControlsEx(&commonControl))
+	//	return false;
+
+	return true;
 }
 
 ErrorCode register_windowClasses(HINSTANCE hInstance)

@@ -159,3 +159,20 @@ void Container::addTag(PCWSTR tag)
 	wcscpy_s(_tag, _length, tag);
 	tags_.push_back(_tag);
 }
+
+void Container::start()
+{
+	STARTUPINFO startupinfo;
+	ZeroMemory(&startupinfo, sizeof(STARTUPINFO));
+	PROCESS_INFORMATION pi;
+	WCHAR o[]{ L"Z:\\OperaGX\\launcher.exe \"https://github.com/lelezard7/BookmarkManager\"" };
+	PWSTR p = GetCommandLine();
+
+	//MessageBox(NULL, o, L"", MB_OK);
+	if (CreateProcess(NULL, o, NULL, NULL, false, NULL, NULL, NULL, &startupinfo, &pi))
+	{
+		//CreateProcess(L"Z:\\OperaGX\\launcher.exe", NULL, NULL, NULL, false, NULL, NULL, NULL, &startupinfo, &pi)
+		//Sleep(1000);
+		//TerminateProcess(pi.hProcess, NO_ERROR);
+	}
+}

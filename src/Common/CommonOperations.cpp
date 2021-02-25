@@ -2,11 +2,11 @@
 #define UNICODE
 #endif
 
-#include "GeneralOperations.h"
-#include "BmDef.h"
+#include "CommonOperations.h"
+#include "BkmDef.h"
 
 
-void GeneralOperations::moveWindowToCenterScreen(HWND hWnd, HWND hWndInsertAfter)
+void CommonOperations::moveWindowToCenterScreen(HWND hWnd, HWND hWndInsertAfter)
 {
 	RECT rect;
 	GetWindowRect(hWnd, &rect);
@@ -17,7 +17,7 @@ void GeneralOperations::moveWindowToCenterScreen(HWND hWnd, HWND hWndInsertAfter
 		NULL, NULL, SWP_NOSIZE);
 }
 
-void GeneralOperations::setMinimumWindowSize(LONG width, LONG height, LPARAM lParam)
+void CommonOperations::setMinimumWindowSize(LONG width, LONG height, LPARAM lParam)
 {
 	LPMINMAXINFO lpminmaxinfo = (LPMINMAXINFO)lParam;
 	lpminmaxinfo->ptMinTrackSize.x = width;

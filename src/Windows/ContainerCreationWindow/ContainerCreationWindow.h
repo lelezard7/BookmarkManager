@@ -7,13 +7,14 @@
 #ifndef _ADDITEMSWINDOW_
 #define _ADDITEMSWINDOW_
 #include <Windows.h>
-#include "..\Archive\Archive.h"
+#include "..\..\Archive\Archive.h"
 
 namespace ContainerCreationWindow
 {
 	LRESULT CALLBACK WndProc(_In_ HWND hWnd, _In_ UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam);
 	void create_containerCreationWindow(HINSTANCE hInstance);
 
+	void create_taskTypeDropDList(HWND hWndParent, HINSTANCE hInstance);
 	void create_nameTextBox(HWND hWndParent, HINSTANCE hInstance);
 	void create_adressTextBox(HWND hWndParent, HINSTANCE hInstance);
 	void create_tagsTextBox(HWND hWndParent, HINSTANCE hInstance);

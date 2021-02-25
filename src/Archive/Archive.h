@@ -86,6 +86,8 @@ public:
 	/*		index - array element.		*/
 	PWSTR getTag(const size_t index);
 	void addTag(PCWSTR tag);
+
+	void start();
 };
 
 enum class ContainerDataTypes

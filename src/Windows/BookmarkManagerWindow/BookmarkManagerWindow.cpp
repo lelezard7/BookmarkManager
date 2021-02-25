@@ -6,13 +6,13 @@
 #endif
 
 #include "BookmarkManagerWindow.h"
-#include "ContainerCreationWindow.h"
-#include "AboutProgramWindow.h"
-#include "..\Total\HandleManager.h"
-#include "..\Total\BmDef.h"
-#include "..\ApplicationSettings\ApplicationSettings.h"
-#include "..\Total\GeneralOperations.h"
-#include "..\Archive\Archive.h"
+#include "..\ContainerCreationWindow\ContainerCreationWindow.h"
+#include "..\AboutProgramWindow\AboutProgramWindow.h"
+#include "..\..\HandleManager\HandleManager.h"
+#include "..\..\Common\BkmDef.h"
+#include "..\..\ApplicationSettings\ApplicationSettings.h"
+#include "..\..\Common\CommonOperations.h"
+#include "..\..\Archive\Archive.h"
 #include <CommCtrl.h>
 
 
@@ -71,7 +71,7 @@ LRESULT CALLBACK BookmarkManagerWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg, _
 	}
 
 	case WM_GETMINMAXINFO: {
-		GeneralOperations::setMinimumWindowSize(350, 400, lParam);
+		CommonOperations::setMinimumWindowSize(350, 400, lParam);
 		return 0;
 	}
 
@@ -113,7 +113,7 @@ HWND BookmarkManagerWindow::create_bookmarkManagerWindow(HINSTANCE hInstance)
 	create_openButton(*hWnd, hInstance);
 	create_cleanButton(*hWnd, hInstance);
 
-	GeneralOperations::moveWindowToCenterScreen(*hWnd);
+	CommonOperations::moveWindowToCenterScreen(*hWnd);
 
 	return *hWnd;
 }
@@ -266,19 +266,13 @@ void BookmarkManagerWindow::openButton_pressed()
 
 		if (taskName == selectedName)
 		{
-			STARTUPINFO startupinfo;
-			ZeroMemory(&startupinfo, sizeof(STARTUPINFO));
-			PROCESS_INFORMATION pi;
-			if (CreateProcess(L"Z:\\OperaGX\\launcher.exe", NULL, NULL, NULL, false, NULL, NULL, NULL, &startupinfo, &pi))
-			{
-				Sleep(1000);
-				TerminateProcess(pi.hProcess, NO_ERROR);
-			}
+			container->start();
 		}
 	}
 
 	delete[] lvText;
 }
+
 
 void BookmarkManagerWindow::adjustmentOfControls(HWND hWnd)
 {

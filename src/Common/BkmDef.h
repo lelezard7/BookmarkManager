@@ -1,6 +1,6 @@
 #pragma once
-#ifndef _BMDEF_
-#define _BMDEF_
+#ifndef _BKMDEF_
+#define _BKMDEF_
 
 /*		Application information.		*/
 #define BOOKMARKMANAGER_VERSION					0x0003

@@ -3,9 +3,9 @@
 #endif
 
 #include "AboutProgramWindow.h"
-#include "..\Total\HandleManager.h"
-#include "..\Total\GeneralOperations.h"
-#include "..\Total\BmDef.h"
+#include "..\..\HandleManager\HandleManager.h"
+#include "..\..\Common\CommonOperations.h"
+#include "..\..\Common\BkmDef.h"
 
 LRESULT CALLBACK AboutProgramWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam)
 {
@@ -45,7 +45,7 @@ void AboutProgramWindow::create_aboutProgramWindow(HINSTANCE hInstance)
 		hInstance,
 		NULL);
 
-	GeneralOperations::moveWindowToCenterScreen(*hWnd);
+	CommonOperations::moveWindowToCenterScreen(*hWnd);
 
 	ShowWindow(*hWnd, true);
 	EnableWindow(*hWndParent, false);

@@ -5,10 +5,11 @@
 #endif
 
 #include "ContainerCreationWindow.h"
-#include "..\Total\HandleManager.h"
-#include "..\Total\BmDef.h"
-#include "..\ApplicationSettings\ApplicationSettings.h"
-#include "..\Total\GeneralOperations.h"
+#include "..\..\HandleManager\HandleManager.h"
+#include "..\..\Common\BkmDef.h"
+#include "..\..\ApplicationSettings\ApplicationSettings.h"
+#include "..\..\Common\CommonOperations.h"
+#include "..\..\Common\PositionAndSizeControls.h"
 #include <CommCtrl.h>
 
 
@@ -33,7 +34,7 @@ LRESULT CALLBACK ContainerCreationWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg,
 	}
 
 	case WM_GETMINMAXINFO: {	
-		GeneralOperations::setMinimumWindowSize(350, 400, lParam);
+		CommonOperations::setMinimumWindowSize(350, 400, lParam);
 		return 0;
 	}
 
@@ -97,18 +98,41 @@ void ContainerCreationWindow::create_containerCreationWindow(HINSTANCE hInstance
 		hInstance,
 		NULL);
 
+	create_taskTypeDropDList(*hWnd, hInstance);
 	create_applyButton(*hWnd, hInstance);
 	create_nameTextBox(*hWnd, hInstance);
 	create_adressTextBox(*hWnd, hInstance);
 	create_tagsTextBox(*hWnd, hInstance);
 	create_tagsListView(*hWnd, hInstance);
 
-	GeneralOperations::moveWindowToCenterScreen(*hWnd);
+	CommonOperations::moveWindowToCenterScreen(*hWnd);
 
 	ShowWindow(*hWnd, true);
 	EnableWindow(*hWndParent, false);
 }
 
+
+void ContainerCreationWindow::create_taskTypeDropDList(HWND hWndParent, HINSTANCE hInstance)
+{
+	RECT	rect;
+	GetClientRect(hWndParent, &rect);
+
+	HWND* hDropDList = HandleManager::addHandleWnd(L"containerCreationWindow_taskTypeDropDList");
+
+	//hDropDList = HandleManager::addHandleWnd(L"containerCreationWindow_taskTypeDropDList");
+	//TODO: Нужно оповещать разработчиков о повторном создании
+
+	*hDropDList = CreateWindow(
+		L"COMBOBOX",
+		NULL,
+		WS_VISIBLE | WS_CHILD | CBS_DROPDOWNLIST,
+		ContainerCreationWnd_taskTypeDropDList_X(rect.right), 15,
+		100, 15,
+		hWndParent,
+		NULL,
+		hInstance,
+		NULL);
+}
 
 void ContainerCreationWindow::create_nameTextBox(HWND hWndParent, HINSTANCE hInstance)
 {
@@ -121,7 +145,7 @@ void ContainerCreationWindow::create_nameTextBox(HWND hWndParent, HINSTANCE hIns
 		L"EDIT",
 		NULL,
 		WS_VISIBLE | WS_CHILD | WS_BORDER,
-		5, 20,
+		5, 30,
 		(rect.right / 2) - 4, 25,
 		hWndParent,
 		NULL,
@@ -143,7 +167,7 @@ void ContainerCreationWindow::create_adressTextBox(HWND hWndParent, HINSTANCE hI
 		L"EDIT",
 		NULL,
 		WS_VISIBLE | WS_CHILD | WS_BORDER,
-		(rect.right / 2) + 4, 20,
+		(rect.right / 2) + 4, 30,
 		(rect.right / 2) - 9, 25,
 		hWndParent,
 		NULL,
@@ -281,7 +305,7 @@ void ContainerCreationWindow::adjustmentOfControls(HWND hWnd)
 
 		SetWindowPos(*hApplyButton, HWND_TOP, rect.right - 107, rect.bottom - 40, NULL, NULL, SWP_NOSIZE);
 		SetWindowPos(*hNameTextBox, HWND_TOP, NULL, NULL, (rect.right / 2) - 4, 25, SWP_NOMOVE);
-		SetWindowPos(*hAdressTextBox, HWND_TOP, (rect.right / 2) + 4, 20, (rect.right / 2) - 9, 25, NULL);
+		SetWindowPos(*hAdressTextBox, HWND_TOP, (rect.right / 2) + 4, 30, (rect.right / 2) - 9, 25, NULL);
 		SetWindowPos(*hTagsTextBox, HWND_TOP, NULL, NULL, rect.right - 10, 25, SWP_NOMOVE);
 		SetWindowPos(*hTagsListView, HWND_TOP, NULL, NULL, rect.right - 10, (rect.bottom - 85) - 80, SWP_NOMOVE);
 	}

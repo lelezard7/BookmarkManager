@@ -1,17 +1,17 @@
 /*
-*		General operations on window and controls are descrided here.
+*		Common operations on window and controls are descrided here.
 */
 
 #pragma once
-#ifndef _GENERALOPERATIONS_
-#define _GENERALOPERATIONS_
+#ifndef _COMMONOPERATIONS_
+#define _COMMONOPERATIONS_
 
 #include <Windows.h>
 
 
-class GeneralOperations
+class CommonOperations
 {
-	GeneralOperations() = delete;
+	CommonOperations() = delete;
 
 public:
 	/*		
