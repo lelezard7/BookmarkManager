@@ -8,18 +8,47 @@
 
 void CommonOperations::moveWindowToCenterScreen(HWND hWnd, HWND hWndInsertAfter)
 {
-	RECT rect;
-	GetWindowRect(hWnd, &rect);
+	RECT _rect;
+	GetWindowRect(hWnd, &_rect);
 
 	SetWindowPos(hWnd, hWndInsertAfter,
-		CENTERSCREEN_X - ((rect.right - rect.left) / 2),
-		CENTERSCREEN_Y - ((rect.bottom - rect.top) / 2),
+		CENTERSCREEN_X - ((_rect.right - _rect.left) / 2),
+		CENTERSCREEN_Y - ((_rect.bottom - _rect.top) / 2),
 		NULL, NULL, SWP_NOSIZE);
 }
 
 void CommonOperations::setMinimumWindowSize(LONG width, LONG height, LPARAM lParam)
 {
-	LPMINMAXINFO lpminmaxinfo = (LPMINMAXINFO)lParam;
-	lpminmaxinfo->ptMinTrackSize.x = width;
-	lpminmaxinfo->ptMinTrackSize.y = height;
+	LPMINMAXINFO _lpminmaxinfo = (LPMINMAXINFO)lParam;
+	_lpminmaxinfo->ptMinTrackSize.x = width;
+	_lpminmaxinfo->ptMinTrackSize.y = height;
+}
+
+LONG CommonOperations::getClientRectValue(HWND hWnd, ClientRectCoordinates clientRectCoordinates)
+{
+	RECT _rect;
+
+	if (!GetClientRect(hWnd, &_rect))
+		return false;
+
+	switch (clientRectCoordinates)
+	{
+	case ClientRectCoordinates::BOTTOM: {
+		return _rect.bottom;
+	}
+
+	case ClientRectCoordinates::LEFT: {
+		return _rect.left;
+	}
+
+	case ClientRectCoordinates::RIGHT: {
+		return _rect.right;
+	}
+
+	case ClientRectCoordinates::TOP: {
+		return _rect.top;
+	}
+	}
+
+	return false;
 }

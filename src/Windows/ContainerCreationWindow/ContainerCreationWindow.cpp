@@ -126,8 +126,10 @@ void ContainerCreationWindow::create_taskTypeDropDList(HWND hWndParent, HINSTANC
 		L"COMBOBOX",
 		NULL,
 		WS_VISIBLE | WS_CHILD | CBS_DROPDOWNLIST,
-		ContainerCreationWnd_taskTypeDropDList_X(rect.right), 15,
-		100, 15,
+		ContainerCreationWnd_taskTypeDropDList_X,
+		ContainerCreationWnd_taskTypeDropDList_Y,
+		ContainerCreationWnd_taskTypeDropDList_WIDTH,
+		ContainerCreationWnd_taskTypeDropDList_HEIGHT,
 		hWndParent,
 		NULL,
 		hInstance,
@@ -145,8 +147,10 @@ void ContainerCreationWindow::create_nameTextBox(HWND hWndParent, HINSTANCE hIns
 		L"EDIT",
 		NULL,
 		WS_VISIBLE | WS_CHILD | WS_BORDER,
-		5, 30,
-		(rect.right / 2) - 4, 25,
+		ContainerCreationWnd_nameTextBox_X,
+		ContainerCreationWnd_nameTextBox_Y,
+		ContainerCreationWnd_nameTextBox_WIDTH,
+		ContainerCreationWnd_nameTextBox_HEIGHT,
 		hWndParent,
 		NULL,
 		hInstance,
@@ -167,8 +171,10 @@ void ContainerCreationWindow::create_adressTextBox(HWND hWndParent, HINSTANCE hI
 		L"EDIT",
 		NULL,
 		WS_VISIBLE | WS_CHILD | WS_BORDER,
-		(rect.right / 2) + 4, 30,
-		(rect.right / 2) - 9, 25,
+		ContainerCreationWnd_adressTextBox_X,
+		ContainerCreationWnd_adressTextBox_Y,
+		ContainerCreationWnd_adressTextBox_WIDTH,
+		ContainerCreationWnd_adressTextBox_HEIGHT,
 		hWndParent,
 		NULL,
 		hInstance,
@@ -188,8 +194,10 @@ void ContainerCreationWindow::create_tagsTextBox(HWND hWndParent, HINSTANCE hIns
 		L"EDIT",
 		NULL,
 		WS_VISIBLE | WS_CHILD | WS_BORDER,
-		5, 55,
-		rect.right - 10, 25,
+		ContainerCreationWnd_tagsTextBox_X,
+		ContainerCreationWnd_tagsTextBox_Y,
+		ContainerCreationWnd_tagsTextBox_WIDTH,
+		ContainerCreationWnd_tagsTextBox_HEIGHT,
 		hWndParent,
 		NULL,
 		hInstance,
@@ -209,8 +217,10 @@ void ContainerCreationWindow::create_applyButton(HWND hWndParent, HINSTANCE hIns
 		L"BUTTON",
 		L"Ïðèìåíèòü",
 		WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
-		rect.right - 107, rect.bottom - 40,
-		100, 25,
+		ContainerCreationWnd_applyButton_X,
+		ContainerCreationWnd_applyButton_Y,
+		ContainerCreationWnd_applyButton_WIDTH,
+		ContainerCreationWnd_applyButton_HEIGHT,
 		hWndParent,
 		(HMENU)ID_CONTAINERCREATIONWND_APPLYBUTTON,
 		hInstance,
@@ -228,8 +238,10 @@ void ContainerCreationWindow::create_tagsListView(HWND hWndParent, HINSTANCE hIn
 		WC_LISTVIEW,
 		NULL,
 		WS_CHILD | WS_VISIBLE | LVS_EDITLABELS | LVS_REPORT, //TODO: delete LVS_EDITLABELS
-		5, 85,
-		rect.right - 10, (rect.bottom - 85) - 80,
+		ContainerCreationWnd_tagsListView_X,
+		ContainerCreationWnd_tagsListView_Y,
+		ContainerCreationWnd_tagsListView_WIDTH,
+		ContainerCreationWnd_tagsListView_HEIGHT,
 		hWndParent,
 		NULL,
 		hInstance,
@@ -290,7 +302,7 @@ void ContainerCreationWindow::adjustmentOfControls(HWND hWnd)
 {
 	HandleName ñhecklist[]{ L"containerCreationWindow_nameTextBox", L"containerCreationWindow_adressTextBox",
 							L"containerCreationWindow_tagsTextBox", L"containerCreationWindow_applyButton",
-							L"containerCreationWindow_tagsListView", L"\0" };
+							L"containerCreationWindow_tagsListView", L"containerCreationWindow_taskTypeDropDList", L"\0" };
 	
 	if (HandleManager::checkExistence(ñhecklist))
 	{
@@ -302,11 +314,31 @@ void ContainerCreationWindow::adjustmentOfControls(HWND hWnd)
 		HWND* hAdressTextBox = HandleManager::getHandleWnd(L"containerCreationWindow_adressTextBox");
 		HWND* hTagsTextBox = HandleManager::getHandleWnd(L"containerCreationWindow_tagsTextBox");
 		HWND* hTagsListView = HandleManager::getHandleWnd(L"containerCreationWindow_tagsListView");
+		HWND* hTaskTypeDropDList = HandleManager::getHandleWnd(L"containerCreationWindow_taskTypeDropDList");
 
-		SetWindowPos(*hApplyButton, HWND_TOP, rect.right - 107, rect.bottom - 40, NULL, NULL, SWP_NOSIZE);
-		SetWindowPos(*hNameTextBox, HWND_TOP, NULL, NULL, (rect.right / 2) - 4, 25, SWP_NOMOVE);
-		SetWindowPos(*hAdressTextBox, HWND_TOP, (rect.right / 2) + 4, 30, (rect.right / 2) - 9, 25, NULL);
-		SetWindowPos(*hTagsTextBox, HWND_TOP, NULL, NULL, rect.right - 10, 25, SWP_NOMOVE);
-		SetWindowPos(*hTagsListView, HWND_TOP, NULL, NULL, rect.right - 10, (rect.bottom - 85) - 80, SWP_NOMOVE);
+		SetWindowPos(*hApplyButton, HWND_TOP, ContainerCreationWnd_applyButton_X,
+			ContainerCreationWnd_applyButton_Y,
+			ContainerCreationWnd_applyButton_WIDTH,
+			ContainerCreationWnd_applyButton_HEIGHT, NULL);
+		SetWindowPos(*hNameTextBox, HWND_TOP, ContainerCreationWnd_nameTextBox_X,
+			ContainerCreationWnd_nameTextBox_Y,
+			ContainerCreationWnd_nameTextBox_WIDTH,
+			ContainerCreationWnd_nameTextBox_HEIGHT, NULL);
+		SetWindowPos(*hAdressTextBox, HWND_TOP, ContainerCreationWnd_adressTextBox_X,
+			ContainerCreationWnd_adressTextBox_Y,
+			ContainerCreationWnd_adressTextBox_WIDTH,
+			ContainerCreationWnd_adressTextBox_HEIGHT, NULL);
+		SetWindowPos(*hTagsTextBox, HWND_TOP, ContainerCreationWnd_tagsTextBox_X,
+			ContainerCreationWnd_tagsTextBox_Y,
+			ContainerCreationWnd_tagsTextBox_WIDTH,
+			ContainerCreationWnd_tagsTextBox_HEIGHT, NULL);
+		SetWindowPos(*hTagsListView, HWND_TOP, ContainerCreationWnd_tagsListView_X,
+			ContainerCreationWnd_tagsListView_Y,
+			ContainerCreationWnd_tagsListView_WIDTH,
+			ContainerCreationWnd_tagsListView_HEIGHT, NULL);
+		SetWindowPos(*hTaskTypeDropDList, HWND_TOP, ContainerCreationWnd_taskTypeDropDList_X,
+			ContainerCreationWnd_taskTypeDropDList_Y,
+			ContainerCreationWnd_taskTypeDropDList_WIDTH,
+			ContainerCreationWnd_taskTypeDropDList_HEIGHT, NULL);
 	}
 }

@@ -8,6 +8,7 @@
 
 #include <Windows.h>
 
+enum class ClientRectCoordinates;
 
 class CommonOperations
 {
@@ -20,6 +21,22 @@ public:
 	*/
 	static void moveWindowToCenterScreen(HWND hWnd, HWND hWndInsertAfter = HWND_TOP);
 	static void setMinimumWindowSize(LONG width, LONG height, LPARAM lParam);
+
+	/*		
+	*		Receives the coordinates of the client area and returns the valuespecified
+	*		in the 'ClientRectCoordinates'.
+	*		If the function succeeds, the return value is nonzero.
+	*		If the function fails, the return value is zero.
+	*/
+	static LONG getClientRectValue(HWND hWnd, ClientRectCoordinates clientRectCoordinates);
+};
+
+enum class ClientRectCoordinates
+{
+	BOTTOM,
+	LEFT,
+	TOP,
+	RIGHT
 };
 
 #endif

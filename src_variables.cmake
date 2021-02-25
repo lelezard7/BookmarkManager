@@ -30,7 +30,8 @@ set(BKM_HANDLEMANAGER
 			src/HandleManager/HandleManager.cpp)
 
 set(BKM_OTHER
-			src/BookmarkManager.cpp)
+			src/BookmarkManager.cpp
+			src_variables.cmake)
 
 
 set(BKM_ALL

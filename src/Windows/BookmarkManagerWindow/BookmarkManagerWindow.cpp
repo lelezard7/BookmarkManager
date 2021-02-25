@@ -13,6 +13,7 @@
 #include "..\..\ApplicationSettings\ApplicationSettings.h"
 #include "..\..\Common\CommonOperations.h"
 #include "..\..\Archive\Archive.h"
+#include "..\..\Common\PositionAndSizeControls.h"
 #include <CommCtrl.h>
 
 
@@ -151,8 +152,10 @@ void BookmarkManagerWindow::create_mainListView(HWND hWndParent, HINSTANCE hInst
 		WC_LISTVIEW,
 		NULL,
 		WS_CHILD | WS_VISIBLE | LVS_REPORT,
-		5, 5,
-		rect.right - 10, rect.bottom - 50,
+		BookmarkManagerWnd_mainListView_X,
+		BookmarkManagerWnd_mainListView_Y,
+		BookmarkManagerWnd_mainListView_WIDTH,
+		BookmarkManagerWnd_mainListView_HEIGHT,
 		hWndParent,
 		NULL,
 		hInstance,
@@ -177,8 +180,10 @@ void BookmarkManagerWindow::create_addButton(HWND hWndParent, HINSTANCE hInstanc
 		L"BUTTON",
 		L"Добавить",
 		WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
-		rect.right - 107, rect.bottom - 40,
-		100, 25,
+		BookmarkManagerWnd_addButton_X,
+		BookmarkManagerWnd_addButton_Y,
+		BookmarkManagerWnd_addButton_WIDTH,
+		BookmarkManagerWnd_addButton_HEIGHT,
 		hWndParent,
 		(HMENU)ID_BOOKMARKMANAGERNWND_ADDBUTTON,
 		hInstance,
@@ -196,8 +201,10 @@ void BookmarkManagerWindow::create_openButton(HWND hWndParent, HINSTANCE hInstan
 		L"BUTTON",
 		L"Открыть",
 		WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
-		rect.left + 7, rect.bottom - 40,
-		100, 25,
+		BookmarkManagerWnd_openButton_X,
+		BookmarkManagerWnd_openButton_Y,
+		BookmarkManagerWnd_openButton_WIDTH,
+		BookmarkManagerWnd_openButton_HEIGHT,
 		hWndParent,
 		(HMENU)ID_BOOKMARKMANAGERNWND_OPENBUTTON,
 		hInstance,
@@ -215,8 +222,10 @@ void BookmarkManagerWindow::create_cleanButton(HWND hWndParent, HINSTANCE hInsta
 		L"BUTTON",
 		L"Очистить",
 		WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
-		rect.left + 112, rect.bottom - 40,
-		100, 25,
+		BookmarkManagerWnd_cleanButton_X,
+		BookmarkManagerWnd_cleanButton_Y,
+		BookmarkManagerWnd_cleanButton_WIDTH,
+		BookmarkManagerWnd_cleanButton_HEIGHT,
 		hWndParent,
 		(HMENU)ID_BOOKMARKMANAGERNWND_CLEANBUTTON,
 		hInstance,
@@ -290,10 +299,22 @@ void BookmarkManagerWindow::adjustmentOfControls(HWND hWnd)
 		HWND* hOpenButton = HandleManager::getHandleWnd(L"bookmarkManagerWindow_openButton");
 		HWND* hCleanButton = HandleManager::getHandleWnd(L"bookmarkManagerWindow_cleanButton");
 
-		SetWindowPos(*hMainListView, HWND_TOP, NULL, NULL, rect.right - 10, rect.bottom - 50, SWP_NOMOVE);
-		SetWindowPos(*hAddButton, HWND_TOP, rect.right - 107, rect.bottom - 40, NULL, NULL, SWP_NOSIZE);
-		SetWindowPos(*hOpenButton, HWND_TOP, rect.left + 7, rect.bottom - 40, NULL, NULL, SWP_NOSIZE);
-		SetWindowPos(*hCleanButton, HWND_TOP, rect.left + 112, rect.bottom - 40, NULL, NULL, SWP_NOSIZE);
+		SetWindowPos(*hMainListView, HWND_TOP, BookmarkManagerWnd_mainListView_X,
+			BookmarkManagerWnd_mainListView_Y,
+			BookmarkManagerWnd_mainListView_WIDTH,
+			BookmarkManagerWnd_mainListView_HEIGHT, NULL);
+		SetWindowPos(*hAddButton, HWND_TOP, BookmarkManagerWnd_addButton_X,
+			BookmarkManagerWnd_addButton_Y,
+			BookmarkManagerWnd_addButton_WIDTH,
+			BookmarkManagerWnd_addButton_HEIGHT, NULL);
+		SetWindowPos(*hOpenButton, HWND_TOP, BookmarkManagerWnd_openButton_X,
+			BookmarkManagerWnd_openButton_Y,
+			BookmarkManagerWnd_openButton_WIDTH,
+			BookmarkManagerWnd_openButton_HEIGHT, NULL);
+		SetWindowPos(*hCleanButton, HWND_TOP, BookmarkManagerWnd_cleanButton_X,
+			BookmarkManagerWnd_cleanButton_Y,
+			BookmarkManagerWnd_cleanButton_WIDTH,
+			BookmarkManagerWnd_cleanButton_HEIGHT, NULL);
 	}
 }
 
