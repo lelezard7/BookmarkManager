@@ -2,6 +2,9 @@
 #ifndef _BKMDEF_
 #define _BKMDEF_
 
+#include "Debug.h"
+
+
 /*		Application information.		*/
 #define BOOKMARKMANAGER_VERSION					0x0003
 

@@ -18,7 +18,9 @@ set(BKM_COMMON
 			src/Common/BkmDef.h
 			src/Common/PositionAndSizeControls.h
 			src/Common/CommonOperations.h
-			src/Common/CommonOperations.cpp)
+			src/Common/CommonOperations.cpp
+			src/Common/Debug.h
+			src/Common/Debug.cpp)
 
 set(BKM_RESOURCES
 			src/res/Resource.h
@@ -30,8 +32,7 @@ set(BKM_HANDLEMANAGER
 			src/HandleManager/HandleManager.cpp)
 
 set(BKM_OTHER
-			src/BookmarkManager.cpp
-			src_variables.cmake)
+			src/BookmarkManager.cpp)
 
 
 set(BKM_ALL

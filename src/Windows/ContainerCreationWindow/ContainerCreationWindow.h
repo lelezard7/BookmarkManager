@@ -6,8 +6,11 @@
 #pragma once
 #ifndef _ADDITEMSWINDOW_
 #define _ADDITEMSWINDOW_
-#include <Windows.h>
+
+#include "..\..\Common\Debug.h"
 #include "..\..\Archive\Archive.h"
+#include <Windows.h>
+
 
 namespace ContainerCreationWindow
 {
@@ -29,10 +32,10 @@ namespace ContainerCreationWindow
 	*/
 	void fill_container();
 
-	/*		Called 'fill_container' function. Fills the container with data from Text Boxes.		*/
+	//		Called 'fill_container' function. Fills the container with data from Text Boxes.
 	bool setDataFromTextBox(PCWSTR hTextBoxName, ContainerDataTypes dataType, Container& container);
 
-	/*		Resizes and positions controls when the window is resized.		*/
+	//		Resizes and positions controls when the window is resized.
 	void adjustmentOfControls(HWND hWnd);
 }
 

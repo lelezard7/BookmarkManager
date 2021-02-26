@@ -16,6 +16,7 @@
 #define UNICODE
 #endif
 
+#include "Common\Debug.h"
 #include "Windows\BookmarkManagerWindow\BookmarkManagerWindow.h"
 #include "Windows\ContainerCreationWindow\ContainerCreationWindow.h"
 #include "Windows\AboutProgramWindow\AboutProgramWindow.h"
@@ -81,13 +82,6 @@ ErrorCode initialization_commCtrl() //TODO: Вынести общий знаменатель в функцию.
 
 	if (!InitCommonControlsEx(&commonControl))
 		return false;
-
-	///*		List View		*/
-	//commonControl.dwSize = sizeof(INITCOMMONCONTROLSEX);
-	//commonControl.dwICC = ICC_;
-
-	//if (!InitCommonControlsEx(&commonControl))
-	//	return false;
 
 	return true;
 }

@@ -6,7 +6,9 @@
 #ifndef _BOOKMARKMANAGERWINDOW_
 #define _BOOKMARKMANAGERWINDOW_
 
+#include "..\..\Common\Debug.h"
 #include <Windows.h>
+
 
 namespace BookmarkManagerWindow
 {

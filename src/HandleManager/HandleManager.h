@@ -12,6 +12,7 @@
 #ifndef _HANDLEMANAGER_
 #define _HANDLEMANAGER_
 
+#include "..\Common\Debug.h"
 #include <iostream>
 #include <Windows.h>
 #include <map>

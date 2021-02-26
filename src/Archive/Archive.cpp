@@ -160,13 +160,29 @@ void Container::addTag(PCWSTR tag)
 	tags_.push_back(_tag);
 }
 
-void Container::start()
+void Container::setTaskType(TaskTypes taskType)
+{
+	taskType_ = taskType;
+}
+
+void Container::start() //TODO: Test
 {
 	STARTUPINFO startupinfo;
 	ZeroMemory(&startupinfo, sizeof(STARTUPINFO));
 	PROCESS_INFORMATION pi;
-	WCHAR o[]{ L"Z:\\OperaGX\\launcher.exe \"https://github.com/lelezard7/BookmarkManager\"" };
-	PWSTR p = GetCommandLine();
+
+	PWSTR o = nullptr;
+	if (taskType_ == TaskTypes::PROGRAM)
+	{
+		o = task_;
+	}
+	else if (taskType_ == TaskTypes::URL)
+	{
+		o = new WCHAR[600]{ L"Z:\\OperaGX\\launcher.exe" };
+		std::wcscat(o, L" \"");
+		std::wcscat(o, task_);
+		std::wcscat(o, L"\"");
+	}
 
 	//MessageBox(NULL, o, L"", MB_OK);
 	if (CreateProcess(NULL, o, NULL, NULL, false, NULL, NULL, NULL, &startupinfo, &pi))
@@ -175,4 +191,5 @@ void Container::start()
 		//Sleep(1000);
 		//TerminateProcess(pi.hProcess, NO_ERROR);
 	}
+	delete[] o;
 }

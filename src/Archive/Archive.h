@@ -24,6 +24,7 @@
 #ifndef _ARCHIVE_
 #define _ARCHIVE_
 
+#include "..\Common\Debug.h"
 #include <Windows.h>
 #include <iostream>
 #include <vector>
@@ -31,9 +32,11 @@
 
 class Container;
 enum class ContainerDataTypes;
+enum class TaskTypes;
 
 typedef size_t ID;
 typedef std::map<ID, Container> Archive_t;
+
 
 class Archive //TODO: Добавить функцию удаления контейнера
 {
@@ -56,11 +59,11 @@ public:
 };
 
 
-
 class Container //TODO: Перегрузить операторы.
 {
 	PWSTR name_;
 	PWSTR task_;
+	TaskTypes taskType_;
 	std::vector<PWSTR> tags_;
 
 public:
@@ -72,7 +75,7 @@ public:
 	*/
 	~Container();
 
-	/*		Cleans up everything that was created, and then wipes the pointers.		*/
+	//		Cleans up everything that was created, and then wipes the pointers.
 	void clear(); //TODO: Перегрузить для удаления name_/task_ и т.д.
 	void setContent(ContainerDataTypes dataType, PCWSTR content, const size_t length);
 
@@ -83,9 +86,10 @@ public:
 	PWSTR getContent(ContainerDataTypes dataType);
 	std::vector<PWSTR>* getAllTags();
 
-	/*		index - array element.		*/
+	//		index - array element.
 	PWSTR getTag(const size_t index);
 	void addTag(PCWSTR tag);
+	void setTaskType(TaskTypes taskType);
 
 	void start();
 };
@@ -96,5 +100,12 @@ enum class ContainerDataTypes
 	TASK,
 	TAGS
 };
+
+enum class TaskTypes
+{
+	URL,
+	PROGRAM
+};
+
 
 #endif

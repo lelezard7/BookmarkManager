@@ -11,6 +11,7 @@
 #include "..\..\Common\CommonOperations.h"
 #include "..\..\Common\PositionAndSizeControls.h"
 #include <CommCtrl.h>
+#include <Richedit.h>
 
 
 LRESULT CALLBACK ContainerCreationWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam)
@@ -71,6 +72,7 @@ LRESULT CALLBACK ContainerCreationWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg,
 			HandleManager::removeHandleWnd(L"containerCreationWindow_adressTextBox");
 			HandleManager::removeHandleWnd(L"containerCreationWindow_tagsTextBox");
 			HandleManager::removeHandleWnd(L"containerCreationWindow_tagsListView");
+			FreeLibrary(GetModuleHandle(L"Msftedit.dll")); //TODO: Test
 			DestroyWindow(hWnd);
 		}
 		return 0;
@@ -98,6 +100,8 @@ void ContainerCreationWindow::create_containerCreationWindow(HINSTANCE hInstance
 		hInstance,
 		NULL);
 
+	LoadLibrary(L"Msftedit.dll");
+
 	create_taskTypeDropDList(*hWnd, hInstance);
 	create_applyButton(*hWnd, hInstance);
 	create_nameTextBox(*hWnd, hInstance);
@@ -119,9 +123,6 @@ void ContainerCreationWindow::create_taskTypeDropDList(HWND hWndParent, HINSTANC
 
 	HWND* hDropDList = HandleManager::addHandleWnd(L"containerCreationWindow_taskTypeDropDList");
 
-	//hDropDList = HandleManager::addHandleWnd(L"containerCreationWindow_taskTypeDropDList");
-	//TODO: Нужно оповещать разработчиков о повторном создании
-
 	*hDropDList = CreateWindow(
 		L"COMBOBOX",
 		NULL,
@@ -134,6 +135,10 @@ void ContainerCreationWindow::create_taskTypeDropDList(HWND hWndParent, HINSTANC
 		NULL,
 		hInstance,
 		NULL);
+
+	SendMessage(*hDropDList, CB_INSERTSTRING, -1, (LPARAM)L"URL");
+	SendMessage(*hDropDList, CB_INSERTSTRING, -1, (LPARAM)L"Program");
+	SendMessage(*hDropDList, CB_SETCURSEL, 0, NULL);
 }
 
 void ContainerCreationWindow::create_nameTextBox(HWND hWndParent, HINSTANCE hInstance)
@@ -144,9 +149,9 @@ void ContainerCreationWindow::create_nameTextBox(HWND hWndParent, HINSTANCE hIns
 	HWND* hTextBox = HandleManager::addHandleWnd(L"containerCreationWindow_nameTextBox");
 
 	*hTextBox = CreateWindow(
-		L"EDIT",
+		MSFTEDIT_CLASS,
 		NULL,
-		WS_VISIBLE | WS_CHILD | WS_BORDER,
+		WS_VISIBLE | WS_CHILD | WS_HSCROLL | WS_TABSTOP, //TODO: WS_TABSTOP doesn't work
 		ContainerCreationWnd_nameTextBox_X,
 		ContainerCreationWnd_nameTextBox_Y,
 		ContainerCreationWnd_nameTextBox_WIDTH,
@@ -156,8 +161,9 @@ void ContainerCreationWindow::create_nameTextBox(HWND hWndParent, HINSTANCE hIns
 		hInstance,
 		NULL);
 
-	SendMessage(*hTextBox, EM_SETCUEBANNER, false, (LPARAM)L"Название");
-	SendMessage(*hTextBox, EM_SETLIMITTEXT, 640, NULL); //TODO: Test
+	SendMessage(*hTextBox, EM_SHOWSCROLLBAR, SB_HORZ, false);
+	SendMessage(*hTextBox, EM_SETCUEBANNER, false, (LPARAM)L"Название"); //TODO: doesn't work
+
 }
 
 void ContainerCreationWindow::create_adressTextBox(HWND hWndParent, HINSTANCE hInstance)
@@ -168,9 +174,9 @@ void ContainerCreationWindow::create_adressTextBox(HWND hWndParent, HINSTANCE hI
 	HWND* hTextBox = HandleManager::addHandleWnd(L"containerCreationWindow_adressTextBox");
 
 	*hTextBox = CreateWindow(
-		L"EDIT",
+		MSFTEDIT_CLASS,
 		NULL,
-		WS_VISIBLE | WS_CHILD | WS_BORDER,
+		WS_VISIBLE | WS_CHILD | WS_HSCROLL | WS_TABSTOP,
 		ContainerCreationWnd_adressTextBox_X,
 		ContainerCreationWnd_adressTextBox_Y,
 		ContainerCreationWnd_adressTextBox_WIDTH,
@@ -180,7 +186,8 @@ void ContainerCreationWindow::create_adressTextBox(HWND hWndParent, HINSTANCE hI
 		hInstance,
 		NULL);
 
-	SendMessage(*hTextBox, EM_SETCUEBANNER, false, (LPARAM)L"Адрес");
+	SendMessage(*hTextBox, EM_SHOWSCROLLBAR, SB_HORZ, false);
+	SendMessage(*hTextBox, EM_SETCUEBANNER, false, (LPARAM)L"Адрес"); //TODO: doesn't work
 }
 
 void ContainerCreationWindow::create_tagsTextBox(HWND hWndParent, HINSTANCE hInstance)
@@ -259,15 +266,31 @@ void ContainerCreationWindow::create_tagsListView(HWND hWndParent, HINSTANCE hIn
 
 void ContainerCreationWindow::fill_container()
 {
-	HWND*		hWnd = nullptr;
+	HWND*		hWnd = HandleManager::getHandleWnd(L"containerCreationWindow_taskTypeDropDList");
 	Container	container;
 
+	//		We write down the value of the taskTypeDropDList in the container.
+	size_t	length = GetWindowTextLength(*hWnd) + (size_t)1;
+	PWSTR	content = new WCHAR[length];
+	GetWindowText(*hWnd, content, length);
+
+	if (!std::wcscmp(content, L"URL"))
+	{
+		container.setTaskType(TaskTypes::URL);
+	}
+	else if (!std::wcscmp(content, L"Program"))
+	{
+		container.setTaskType(TaskTypes::PROGRAM);
+	}
+	delete[] content;
+
+	//		We write down the values of the nameTextBox and adressTextBox in the container.
 	bool errorCode_nameTB = setDataFromTextBox(L"containerCreationWindow_nameTextBox", ContainerDataTypes::NAME, container);
 	bool errorCode_adressTB = setDataFromTextBox(L"containerCreationWindow_adressTextBox", ContainerDataTypes::TASK, container);
 
 	/*
 	*		If nameTextBox or adressTextBox is not full.
-	*		You can interrupt it this way, just until you add it to the archive.
+	*		You can break the code this way only until you add the container to the archive!
 	*/
 	if (!(errorCode_nameTB && errorCode_adressTB))
 	{

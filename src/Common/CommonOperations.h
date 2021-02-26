@@ -6,9 +6,11 @@
 #ifndef _COMMONOPERATIONS_
 #define _COMMONOPERATIONS_
 
+#include "Debug.h"
 #include <Windows.h>
 
 enum class ClientRectCoordinates;
+
 
 class CommonOperations
 {
@@ -29,6 +31,7 @@ public:
 	*		If the function fails, the return value is zero.
 	*/
 	static LONG getClientRectValue(HWND hWnd, ClientRectCoordinates clientRectCoordinates);
+
 };
 
 enum class ClientRectCoordinates

@@ -6,6 +6,8 @@
 #ifndef _APPLICATIONSETTINGS_
 #define _APPLICATIONSETTINGS_
 
+#include "..\Common\Debug.h"
+
 enum class StartupMethod;
 
 class ApplicationSettings

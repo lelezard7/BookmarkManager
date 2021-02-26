@@ -11,8 +11,7 @@ foreach(i ${BKM_ALL})
 	source_group(${FILE_DIR} FILES ${i})
 endforeach()
 
-
-add_executable(BookmarkManager WIN32 ${BKM_ALL})
+add_executable(BookmarkManager WIN32 ${BKM_ALL} src_variables.cmake)
 
 #			Libraries
 target_link_libraries(BookmarkManager PRIVATE comctl32)

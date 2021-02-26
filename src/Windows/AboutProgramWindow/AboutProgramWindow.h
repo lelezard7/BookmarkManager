@@ -6,6 +6,7 @@
 #ifndef _ABOUTPROGRAMWINDOW_
 #define _ABOUTPROGRAMWINDOW_
 
+#include "..\..\Common\Debug.h"
 #include <Windows.h>
 
 
