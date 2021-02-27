@@ -12,9 +12,7 @@ LRESULT CALLBACK AboutProgramWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg, _In_
 	switch (msg)
 	{
 	case WM_CLOSE: {
-		HWND* hWndParent;
-
-		hWndParent = HandleManager::getHandleWnd(L"bookmarkManagerWindow_wnd");
+		HWND* hWndParent = HandleManager::getHandleWnd(L"bookmarkManagerWindow_wnd");
 		EnableWindow(*hWndParent, true);
 		SetFocus(*hWndParent);
 

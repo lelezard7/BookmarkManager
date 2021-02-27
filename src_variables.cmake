@@ -4,7 +4,9 @@ set(BKM_WINDOWS
 			src/Windows/ContainerCreationWindow/ContainerCreationWindow.h
 			src/Windows/ContainerCreationWindow/ContainerCreationWindow.cpp
 			src/Windows/AboutProgramWindow/AboutProgramWindow.h
-			src/Windows/AboutProgramWindow/AboutProgramWindow.cpp)
+			src/Windows/AboutProgramWindow/AboutProgramWindow.cpp
+			src/Windows/SettingsProgramWindow/SettingsProgramWindow.h
+			src/Windows/SettingsProgramWindow/SettingsProgramWindow.cpp)
 		
 set(BKM_APPLICATIONSETTINGS
 			src/ApplicationSettings/ApplicationSettings.h
@@ -30,6 +32,11 @@ set(BKM_RESOURCES
 set(BKM_HANDLEMANAGER
 			src/HandleManager/HandleManager.h
 			src/HandleManager/HandleManager.cpp)
+			
+set(BKM_HELP
+			help/BookmarkManager.chm)
+set(BKM_HELP_SRC
+			help/src/About_program.htm)
 
 set(BKM_OTHER
 			src/BookmarkManager.cpp)
@@ -42,4 +49,5 @@ set(BKM_ALL
 			${BKM_COMMON}
 			${BKM_RESOURCES}
 			${BKM_HANDLEMANAGER}
+			${BKM_HELP_SRC}
 			${BKM_OTHER})

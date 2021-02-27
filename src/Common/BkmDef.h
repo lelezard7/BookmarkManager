@@ -12,11 +12,13 @@
 #define BOOKMARKMANAGERWND_CLASSNAME			(L"BookmarkManagerWindow")
 #define CONTAINERCREATIONWND_CLASSNAME			(L"ContainerCreationWindow")
 #define ABOUTPROGRAMNWND_CLASSNAME				(L"AboutProgramWindow")
+#define SETTINGSPROGRAMWND_CLASSNAME			(L"SettingsProgramWindow")
 
 /*		Window names.		*/
 #define BOOKMARKMANAGERNWND_WNDNAME				(L"Bookmark Manager")
 #define CONTAINERCREATIONWND_WNDNAME			(L"Bookmark Manager: Add")
 #define ABOUTPROGRAMNWND_WNDNAME				(L"Bookmark Manager: About program")
+#define SETTINGSPROGRAMWND_WNDNAME				(L"Bookmark Manager: Settings")
 
 /*		ID of window buttons.		*/
 #define ID_BOOKMARKMANAGERNWND_ADDBUTTON		11
@@ -27,8 +29,11 @@
 /*		ID of menu bar buttons.		*/
 #define ID_MENU_CLOSEPROGRAM					30
 #define ID_MENU_SETTINGSPROGRAM					31
-#define ID_MENU_HOWTOUSE						32
-#define ID_MENU_ABOUTPROGRAM					33
+#define ID_MENU_NEWFILE							32
+#define ID_MENU_OPENFILE						33
+#define ID_MENU_SAVEFILE						34
+#define ID_MENU_HOWTOUSE						35
+#define ID_MENU_ABOUTPROGRAM					36
 
 /*		User messages.		*/
 #define UM_SHOWCREATEDCONTAINER					(WM_USER + 0x0001)

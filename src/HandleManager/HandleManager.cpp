@@ -17,7 +17,7 @@ HWND* HandleManager::addHandleWnd(cHandleName name)
 	}
 	else
 	{
-		debugMessage(L"Дескриптор " + name + L" уже существует!");
+		debugMessage(L"The " + name + L" handle already exists!");
 		return nullptr;
 	}
 }

@@ -8,13 +8,16 @@
 #include "BookmarkManagerWindow.h"
 #include "..\ContainerCreationWindow\ContainerCreationWindow.h"
 #include "..\AboutProgramWindow\AboutProgramWindow.h"
+#include "..\SettingsProgramWindow\SettingsProgramWindow.h"
 #include "..\..\HandleManager\HandleManager.h"
 #include "..\..\Common\BkmDef.h"
 #include "..\..\ApplicationSettings\ApplicationSettings.h"
 #include "..\..\Common\CommonOperations.h"
 #include "..\..\Archive\Archive.h"
 #include "..\..\Common\PositionAndSizeControls.h"
+#include "..\..\res\Resource.h"
 #include <CommCtrl.h>
+#include <HtmlHelp.h>
 
 
 LRESULT CALLBACK BookmarkManagerWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam)
@@ -61,6 +64,19 @@ LRESULT CALLBACK BookmarkManagerWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg, _
 				AboutProgramWindow::create_aboutProgramWindow(GetModuleHandle(NULL));
 				return 0;
 			}
+
+			case ID_MENU_SETTINGSPROGRAM: {
+				SettingsProgramWindow::create_settingsProgramWindow(GetModuleHandle(NULL));
+				return 0;
+			}
+
+			case ID_MENU_HOWTOUSE: {
+				HWND hHelpWnd = HtmlHelp(hWnd, L"BookmarkManager.chm", HH_DISPLAY_TOPIC, NULL);
+				if (!hHelpWnd)
+					debugMessage(L"Couldn't open .chm file");
+				CommonOperations::moveWindowToCenterScreen(hHelpWnd);
+				return 0;
+			}
 			}
 		}
 		return 0;
@@ -96,7 +112,7 @@ HWND BookmarkManagerWindow::create_bookmarkManagerWindow(HINSTANCE hInstance)
 {
 	HMENU hMenu = create_menu();
 	HWND* hWnd = HandleManager::addHandleWnd(L"bookmarkManagerWindow_wnd");
-
+	
 	*hWnd = CreateWindow(
 		BOOKMARKMANAGERWND_CLASSNAME,
 		BOOKMARKMANAGERNWND_WNDNAME,
@@ -128,6 +144,9 @@ HMENU BookmarkManagerWindow::create_menu()
 
 	AppendMenu(hMenuBar, MF_STRING | MF_POPUP, (UINT)hFilePopupMenu, L"Файл");
 	{
+		AppendMenu(hFilePopupMenu, MF_STRING, ID_MENU_NEWFILE, L"Новый файл");
+		AppendMenu(hFilePopupMenu, MF_STRING, ID_MENU_OPENFILE, L"Открыть файл");
+		AppendMenu(hFilePopupMenu, MF_STRING, ID_MENU_SAVEFILE, L"Сохранить");
 		AppendMenu(hFilePopupMenu, MF_STRING, ID_MENU_SETTINGSPROGRAM, L"Настройка");
 		AppendMenu(hFilePopupMenu, MF_STRING, ID_MENU_CLOSEPROGRAM, L"Закрыть");
 	}

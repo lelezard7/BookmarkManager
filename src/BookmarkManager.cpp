@@ -20,6 +20,7 @@
 #include "Windows\BookmarkManagerWindow\BookmarkManagerWindow.h"
 #include "Windows\ContainerCreationWindow\ContainerCreationWindow.h"
 #include "Windows\AboutProgramWindow\AboutProgramWindow.h"
+#include "Windows\SettingsProgramWindow\SettingsProgramWindow.h"
 #include "Common\BkmDef.h"
 #include "HandleManager\HandleManager.h"
 #include "res\Resource.h"
@@ -118,6 +119,18 @@ ErrorCode register_windowClasses(HINSTANCE hInstance)
 	/*		AboutProgramWindow class.		*/
 	wndClass.lpszClassName = ABOUTPROGRAMNWND_CLASSNAME;
 	wndClass.lpfnWndProc = AboutProgramWindow::WndProc;
+	wndClass.hInstance = hInstance;
+	wndClass.cbSize = sizeof(WNDCLASSEX);
+	wndClass.style = CS_HREDRAW | CS_VREDRAW;
+	wndClass.hbrBackground = CreateSolidBrush(RGB(70, 68, 81));
+	wndClass.hCursor = LoadCursor(hInstance, IDC_ARROW);
+
+	if (!RegisterClassEx(&wndClass))
+		return false;
+
+	/*		SettingsProgramWindow class.		*/
+	wndClass.lpszClassName = SETTINGSPROGRAMWND_CLASSNAME;
+	wndClass.lpfnWndProc = SettingsProgramWindow::WndProc;
 	wndClass.hInstance = hInstance;
 	wndClass.cbSize = sizeof(WNDCLASSEX);
 	wndClass.style = CS_HREDRAW | CS_VREDRAW;

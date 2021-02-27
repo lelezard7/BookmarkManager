@@ -1,0 +1,34 @@
+
+
+
+
+
+
+
+
+[OPTIONS]
+Binary TOC=No
+Binary Index=Yes
+Compiled File=BookmarkManager.chm
+Contents File=BookmarkManager.hhc
+Index File=
+Default Window=main
+Default Topic=src\About_program.htm
+Default Font=
+Full-text search=Yes
+Auto Index=Yes
+Language=
+Title=BookmarkManager: Help
+Create CHI file=No
+Compatibility=1.1 or later
+Error log file=_errorlog.txt
+Full text search stop list file=
+Display compile progress=Yes
+Display compile notes=Yes
+
+[WINDOWS]
+main="BookmarkManager: Help","BookmarkManager.hhc",,"src\About_program.htm","src\About_program.htm",,,,,0x23520,222,0x306E,[10,10,640,450],0xB0000,,,,,,0
+
+[FILES]
+src\About_program.htm
+
