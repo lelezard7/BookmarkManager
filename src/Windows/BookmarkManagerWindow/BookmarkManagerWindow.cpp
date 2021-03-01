@@ -185,6 +185,8 @@ void BookmarkManagerWindow::create_mainListView(HWND hWndParent, HINSTANCE hInst
 	lvcolumn.cx = 250;
 	lvcolumn.pszText = (LPWSTR)L"Name";
 
+	//HandleManager::createHandleWnd(L"bookmarkManagerWindow_mainListView", *hListView);
+
 	ListView_InsertColumn(*hListView, 1, &lvcolumn);
 }
 
@@ -314,6 +316,8 @@ void BookmarkManagerWindow::adjustmentOfControls(HWND hWnd)
 		GetClientRect(hWnd, &rect);
 
 		HWND* hMainListView = HandleManager::getHandleWnd(L"bookmarkManagerWindow_mainListView");
+		//HWND hMainListView = HandleManager::getHandl(L"bookmarkManagerWindow_mainListView");
+
 		HWND* hAddButton = HandleManager::getHandleWnd(L"bookmarkManagerWindow_addButton");
 		HWND* hOpenButton = HandleManager::getHandleWnd(L"bookmarkManagerWindow_openButton");
 		HWND* hCleanButton = HandleManager::getHandleWnd(L"bookmarkManagerWindow_cleanButton");
@@ -322,6 +326,10 @@ void BookmarkManagerWindow::adjustmentOfControls(HWND hWnd)
 			BookmarkManagerWnd_mainListView_Y,
 			BookmarkManagerWnd_mainListView_WIDTH,
 			BookmarkManagerWnd_mainListView_HEIGHT, NULL);
+		//SetWindowPos(hMainListView, HWND_TOP, BookmarkManagerWnd_mainListView_X,
+		//		BookmarkManagerWnd_mainListView_Y,
+		//		BookmarkManagerWnd_mainListView_WIDTH,
+		//		BookmarkManagerWnd_mainListView_HEIGHT, NULL);
 		SetWindowPos(*hAddButton, HWND_TOP, BookmarkManagerWnd_addButton_X,
 			BookmarkManagerWnd_addButton_Y,
 			BookmarkManagerWnd_addButton_WIDTH,

@@ -17,7 +17,7 @@ void CommonOperations::moveWindowToCenterScreen(HWND hWnd, HWND hWndInsertAfter)
 		NULL, NULL, SWP_NOSIZE);
 }
 
-void CommonOperations::setMinimumWindowSize(LONG width, LONG height, LPARAM lParam)
+void CommonOperations::setMinimumWindowSize(const LONG width, const LONG height, LPARAM lParam)
 {
 	LPMINMAXINFO _lpminmaxinfo = (LPMINMAXINFO)lParam;
 	_lpminmaxinfo->ptMinTrackSize.x = width;
@@ -29,7 +29,7 @@ LONG CommonOperations::getClientRectValue(HWND hWnd, ClientRectCoordinates clien
 	RECT _rect;
 
 	if (!GetClientRect(hWnd, &_rect))
-		return false;
+		return 0;
 
 	switch (clientRectCoordinates)
 	{
@@ -50,5 +50,5 @@ LONG CommonOperations::getClientRectValue(HWND hWnd, ClientRectCoordinates clien
 	}
 	}
 
-	return false;
+	return 0;
 }

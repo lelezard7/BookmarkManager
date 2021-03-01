@@ -80,7 +80,12 @@ ErrorCode initialization_commCtrl() //TODO: Вынести общий знаменатель в функцию.
 	/*		List View		*/
 	commonControl.dwSize = sizeof(INITCOMMONCONTROLSEX);
 	commonControl.dwICC = ICC_LISTVIEW_CLASSES;
+	if (!InitCommonControlsEx(&commonControl))
+		return false;
 
+	/*		Tab Control		*/
+	commonControl.dwSize = sizeof(INITCOMMONCONTROLSEX);
+	commonControl.dwICC = ICC_TAB_CLASSES;
 	if (!InitCommonControlsEx(&commonControl))
 		return false;
 

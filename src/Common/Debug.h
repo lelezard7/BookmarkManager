@@ -17,10 +17,10 @@
 * 
 *		debugMessage first calls debugMessage_console, and then debugMessage_messageBox.
 */
-void debugMessage(const std::wstring message);
+void debugMessage(std::wstring message);
 
 //		debugMessage_console adds to the end '\n'.
 void debugMessage_console(std::wstring message);
-void debugMessage_messageBox(std::wstring message);
+void debugMessage_messageBox(const std::wstring message);
 
 #endif

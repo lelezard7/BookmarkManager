@@ -24,6 +24,7 @@ typedef const HandleName cHandleName, *pcHandleName;
 class HandleManager
 {
 	static std::map<HandleName, HWND*> handleContainer_;
+	static std::map<HandleName, HWND> handleContainer_2;
 
 	HandleManager() = delete;
 	
@@ -39,6 +40,8 @@ public:
 	*		If the name already exsist then return false else true.
 	*/
 	static bool addHandleWnd(cHandleName name, HWND*& localHandle);
+	static bool createHandleWnd(cHandleName name, HWND localHandle);
+	static HWND getHandl(cHandleName name);
 
 	/*
 	*		getHandleWnd look for a handle by name.

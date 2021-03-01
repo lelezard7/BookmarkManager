@@ -51,3 +51,4 @@ set(BKM_ALL
 			${BKM_HANDLEMANAGER}
 			${BKM_HELP_SRC}
 			${BKM_OTHER})
+			

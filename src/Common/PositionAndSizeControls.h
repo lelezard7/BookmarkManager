@@ -66,37 +66,74 @@
 
 /*		BookmarkManagerWindow		*/
 
-#define BookmarkManagerWindow_RECT_RIGHT	(CommonOperations::getClientRectValue(\
+#define BookmarkManagerWnd_RECT_RIGHT	(CommonOperations::getClientRectValue(\
 											*HandleManager::getHandleWnd(L"bookmarkManagerWindow_wnd"),\
 											ClientRectCoordinates::RIGHT))
 
-#define BookmarkManagerWindow_RECT_BOTTOM	(CommonOperations::getClientRectValue(\
+#define BookmarkManagerWnd_RECT_BOTTOM	(CommonOperations::getClientRectValue(\
 											*HandleManager::getHandleWnd(L"bookmarkManagerWindow_wnd"),\
 											ClientRectCoordinates::BOTTOM))
 
 //			mainListView
-#define BookmarkManagerWnd_mainListView_X				(5)
-#define BookmarkManagerWnd_mainListView_Y				(5)
-#define BookmarkManagerWnd_mainListView_WIDTH			(BookmarkManagerWindow_RECT_RIGHT - 10)
-#define BookmarkManagerWnd_mainListView_HEIGHT			(BookmarkManagerWindow_RECT_BOTTOM - 50)
+#define BookmarkManagerWnd_mainListView_X			(5)
+#define BookmarkManagerWnd_mainListView_Y			(5)
+#define BookmarkManagerWnd_mainListView_WIDTH		(BookmarkManagerWnd_RECT_RIGHT - 10)
+#define BookmarkManagerWnd_mainListView_HEIGHT		(BookmarkManagerWnd_RECT_BOTTOM - 50)
 
 //			addButton
-#define BookmarkManagerWnd_addButton_X					(BookmarkManagerWindow_RECT_RIGHT - 107)
-#define BookmarkManagerWnd_addButton_Y					(BookmarkManagerWindow_RECT_BOTTOM - 40)
-#define BookmarkManagerWnd_addButton_WIDTH				(100)
-#define BookmarkManagerWnd_addButton_HEIGHT				(25)
+#define BookmarkManagerWnd_addButton_X				(BookmarkManagerWnd_RECT_RIGHT - 107)
+#define BookmarkManagerWnd_addButton_Y				(BookmarkManagerWnd_RECT_BOTTOM - 40)
+#define BookmarkManagerWnd_addButton_WIDTH			(100)
+#define BookmarkManagerWnd_addButton_HEIGHT			(25)
 
 //			openButton
-#define BookmarkManagerWnd_openButton_X					(7)
-#define BookmarkManagerWnd_openButton_Y					(BookmarkManagerWindow_RECT_BOTTOM - 40)
-#define BookmarkManagerWnd_openButton_WIDTH				(100)
-#define BookmarkManagerWnd_openButton_HEIGHT			(25)
+#define BookmarkManagerWnd_openButton_X				(7)
+#define BookmarkManagerWnd_openButton_Y				(BookmarkManagerWnd_RECT_BOTTOM - 40)
+#define BookmarkManagerWnd_openButton_WIDTH			(100)
+#define BookmarkManagerWnd_openButton_HEIGHT		(25)
 
 //			cleanButton
-#define BookmarkManagerWnd_cleanButton_X				(112)
-#define BookmarkManagerWnd_cleanButton_Y				(BookmarkManagerWindow_RECT_BOTTOM - 40)
-#define BookmarkManagerWnd_cleanButton_WIDTH			(100)
-#define BookmarkManagerWnd_cleanButton_HEIGHT			(25)
+#define BookmarkManagerWnd_cleanButton_X			(112)
+#define BookmarkManagerWnd_cleanButton_Y			(BookmarkManagerWnd_RECT_BOTTOM - 40)
+#define BookmarkManagerWnd_cleanButton_WIDTH		(100)
+#define BookmarkManagerWnd_cleanButton_HEIGHT		(25)
+
+
+/*		SettingsProgramWindow		*/
+
+#define SettingsProgramWnd_RECT_RIGHT	(CommonOperations::getClientRectValue(\
+											*HandleManager::getHandleWnd(L"settingsProgramWindow_wnd"),\
+											ClientRectCoordinates::RIGHT))
+
+#define SettingsProgramWnd_RECT_BOTTOM	(CommonOperations::getClientRectValue(\
+											*HandleManager::getHandleWnd(L"settingsProgramWindow_wnd"),\
+											ClientRectCoordinates::BOTTOM))
+
+//			navigationPanel
+#define SettingsProgramWnd_navigationPanel_X				(5)
+#define SettingsProgramWnd_navigationPanel_Y				(5)
+#define SettingsProgramWnd_navigationPanel_WIDTH			(SettingsProgramWnd_RECT_RIGHT - \
+																SettingsProgramWnd_navigationPanel_X - \
+																SettingsProgramWnd_navigationPanel_X)
+#define SettingsProgramWnd_navigationPanel_HEIGHT			(SettingsProgramWnd_RECT_BOTTOM - \
+																SettingsProgramWnd_navigationPanel_Y - \
+																SettingsProgramWnd_navigationPanel_Y)
+
+//			enableTaskTypeCheckBox
+#define SettingsProgramWnd_enableTaskTypeCheckBox_X			(SettingsProgramWnd_navigationPanel_X + 15)
+#define SettingsProgramWnd_enableTaskTypeCheckBox_Y			(SettingsProgramWnd_navigationPanel_Y + 45)
+#define SettingsProgramWnd_enableTaskTypeCheckBox_WIDTH		(200)
+#define SettingsProgramWnd_enableTaskTypeCheckBox_HEIGHT	(20)
+
+//			taskTypeDropDList
+#define SettingsProgramWnd_taskTypeDropDList_X				(SettingsProgramWnd_RECT_RIGHT - \
+																SettingsProgramWnd_navigationPanel_X - 230)
+#define SettingsProgramWnd_taskTypeDropDList_Y				(SettingsProgramWnd_enableTaskTypeCheckBox_Y + \
+																SettingsProgramWnd_enableTaskTypeCheckBox_HEIGHT + 5)
+#define SettingsProgramWnd_taskTypeDropDList_WIDTH			(200)
+#define SettingsProgramWnd_taskTypeDropDList_HEIGHT			(50)
+														
+														
 
 
 #endif

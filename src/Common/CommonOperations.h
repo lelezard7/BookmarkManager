@@ -22,7 +22,7 @@ public:
 	*		The second parameter specifies the location in Z-order.
 	*/
 	static void moveWindowToCenterScreen(HWND hWnd, HWND hWndInsertAfter = HWND_TOP);
-	static void setMinimumWindowSize(LONG width, LONG height, LPARAM lParam);
+	static void setMinimumWindowSize(const LONG width, const LONG height, LPARAM lParam);
 
 	/*		
 	*		Receives the coordinates of the client area and returns the valuespecified

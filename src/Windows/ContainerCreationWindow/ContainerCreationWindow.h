@@ -36,7 +36,7 @@ namespace ContainerCreationWindow
 	bool setDataFromTextBox(PCWSTR hTextBoxName, ContainerDataTypes dataType, Container& container);
 
 	//		Resizes and positions controls when the window is resized.
-	void adjustmentOfControls(HWND hWnd);
+	void adjustmentOfControls();
 }
 
 #endif

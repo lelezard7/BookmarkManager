@@ -29,3 +29,4 @@ add_custom_command(TARGET BookmarkManager POST_BUILD
 					COMMAND ${CMAKE_COMMAND} -E copy_if_different
 					"${CMAKE_CURRENT_SOURCE_DIR}/${BKM_HELP}"
 					"${PROJECT_BINARY_DIR}")
+					

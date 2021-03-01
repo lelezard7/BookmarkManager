@@ -5,6 +5,7 @@
 #include "HandleManager.h"
 
 std::map<HandleName, HWND*> HandleManager::handleContainer_;
+std::map<HandleName, HWND> HandleManager::handleContainer_2;
 
 
 HWND* HandleManager::addHandleWnd(cHandleName name)
@@ -35,6 +36,17 @@ bool HandleManager::addHandleWnd(cHandleName name, HWND*& localHandle)
 	{
 		return false;
 	}
+}
+
+bool HandleManager::createHandleWnd(cHandleName name, HWND localHandle)
+{
+	handleContainer_2.emplace(std::make_pair(name, localHandle));
+	return true;
+}
+
+HWND HandleManager::getHandl(cHandleName name)
+{
+	return handleContainer_2[name];
 }
 
 

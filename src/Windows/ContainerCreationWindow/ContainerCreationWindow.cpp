@@ -30,7 +30,7 @@ LRESULT CALLBACK ContainerCreationWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg,
 
 	case WM_SIZE: {
 		/*		Resizes and positions controls.		*/
-		adjustmentOfControls(hWnd);
+		adjustmentOfControls();
 		return 0;
 	}
 
@@ -118,9 +118,6 @@ void ContainerCreationWindow::create_containerCreationWindow(HINSTANCE hInstance
 
 void ContainerCreationWindow::create_taskTypeDropDList(HWND hWndParent, HINSTANCE hInstance)
 {
-	RECT	rect;
-	GetClientRect(hWndParent, &rect);
-
 	HWND* hDropDList = HandleManager::addHandleWnd(L"containerCreationWindow_taskTypeDropDList");
 
 	*hDropDList = CreateWindow(
@@ -143,9 +140,6 @@ void ContainerCreationWindow::create_taskTypeDropDList(HWND hWndParent, HINSTANC
 
 void ContainerCreationWindow::create_nameTextBox(HWND hWndParent, HINSTANCE hInstance)
 {
-	RECT	rect;
-	GetClientRect(hWndParent, &rect);
-
 	HWND* hTextBox = HandleManager::addHandleWnd(L"containerCreationWindow_nameTextBox");
 
 	*hTextBox = CreateWindow(
@@ -168,9 +162,6 @@ void ContainerCreationWindow::create_nameTextBox(HWND hWndParent, HINSTANCE hIns
 
 void ContainerCreationWindow::create_adressTextBox(HWND hWndParent, HINSTANCE hInstance)
 {
-	RECT	rect;
-	GetClientRect(hWndParent, &rect);
-
 	HWND* hTextBox = HandleManager::addHandleWnd(L"containerCreationWindow_adressTextBox");
 
 	*hTextBox = CreateWindow(
@@ -192,9 +183,6 @@ void ContainerCreationWindow::create_adressTextBox(HWND hWndParent, HINSTANCE hI
 
 void ContainerCreationWindow::create_tagsTextBox(HWND hWndParent, HINSTANCE hInstance)
 {
-	RECT	rect;
-	GetClientRect(hWndParent, &rect);
-
 	HWND* hTextBox = HandleManager::addHandleWnd(L"containerCreationWindow_tagsTextBox");
 
 	*hTextBox = CreateWindow(
@@ -215,9 +203,6 @@ void ContainerCreationWindow::create_tagsTextBox(HWND hWndParent, HINSTANCE hIns
 
 void ContainerCreationWindow::create_applyButton(HWND hWndParent, HINSTANCE hInstance)
 {
-	RECT	rect;
-	GetClientRect(hWndParent, &rect);
-
 	HWND* hButton = HandleManager::addHandleWnd(L"containerCreationWindow_applyButton");
 
 	*hButton = CreateWindow(
@@ -236,9 +221,6 @@ void ContainerCreationWindow::create_applyButton(HWND hWndParent, HINSTANCE hIns
 
 void ContainerCreationWindow::create_tagsListView(HWND hWndParent, HINSTANCE hInstance)
 {
-	RECT	rect;
-	GetClientRect(hWndParent, &rect);
-
 	HWND* hListView = HandleManager::addHandleWnd(L"containerCreationWindow_tagsListView");
 
 	*hListView = CreateWindow(
@@ -321,7 +303,7 @@ bool ContainerCreationWindow::setDataFromTextBox(PCWSTR hTextBoxName, ContainerD
 	return (length == 1)? false : true;
 }
 
-void ContainerCreationWindow::adjustmentOfControls(HWND hWnd)
+void ContainerCreationWindow::adjustmentOfControls()
 {
 	HandleName ñhecklist[]{ L"containerCreationWindow_nameTextBox", L"containerCreationWindow_adressTextBox",
 							L"containerCreationWindow_tagsTextBox", L"containerCreationWindow_applyButton",
@@ -329,9 +311,6 @@ void ContainerCreationWindow::adjustmentOfControls(HWND hWnd)
 	
 	if (HandleManager::checkExistence(ñhecklist))
 	{
-		RECT	rect;
-		GetClientRect(hWnd, &rect);
-		
 		HWND* hApplyButton = HandleManager::getHandleWnd(L"containerCreationWindow_applyButton");
 		HWND* hNameTextBox = HandleManager::getHandleWnd(L"containerCreationWindow_nameTextBox");
 		HWND* hAdressTextBox = HandleManager::getHandleWnd(L"containerCreationWindow_adressTextBox");
