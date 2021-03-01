@@ -38,7 +38,7 @@ typedef size_t ID;
 typedef std::map<ID, Container> Archive_t;
 
 
-class Archive //TODO: Добавить функцию удаления контейнера
+class Archive //TODO: Р”РѕР±Р°РІРёС‚СЊ С„СѓРЅРєС†РёСЋ СѓРґР°Р»РµРЅРёСЏ РєРѕРЅС‚РµР№РЅРµСЂР°
 {
 	/*
 	*		A unique id that is given to each container at the stage of adding
@@ -59,7 +59,7 @@ public:
 };
 
 
-class Container //TODO: Перегрузить операторы.
+class Container //TODO: РџРµСЂРµРіСЂСѓР·РёС‚СЊ РѕРїРµСЂР°С‚РѕСЂС‹.
 {
 	PWSTR name_;
 	PWSTR task_;
@@ -76,7 +76,7 @@ public:
 	~Container();
 
 	//		Cleans up everything that was created, and then wipes the pointers.
-	void clear(); //TODO: Перегрузить для удаления name_/task_ и т.д.
+	void clear(); //TODO: РџРµСЂРµРіСЂСѓР·РёС‚СЊ РґР»СЏ СѓРґР°Р»РµРЅРёСЏ name_/task_ Рё С‚.Рґ.
 	void setContent(ContainerDataTypes dataType, PCWSTR content, const size_t length);
 
 	/*

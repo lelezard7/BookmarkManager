@@ -66,7 +66,7 @@ public:
 	//*		In checkExistence you can transfer both one name and an array of names.
 	//*		You can pass an array to a function in two ways:
 	//*				1) Put at the end of the array '\0'
-	//*					HandleName Òhecklist[]{ L"name_1", L"name_2", L"\0" };
+	//*					HandleName —Åhecklist[]{ L"name_1", L"name_2", L"\0" };
 	//*				2) Specify the size of the array.
 	//*/
 	//static bool checkExistence(cHandleName name);

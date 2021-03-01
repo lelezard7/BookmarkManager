@@ -1,5 +1,4 @@
-//TODO: Ñìåíèòü GetModuleHandle() íà GetModuleHandleEx()
-//TODO: Èçáàâèòüñÿ îò óòå÷åê ïàìÿòè
+//TODO: Ð¸Ð·Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ GetModuleHandle() Ð½Ð° GetModuleHandleEx()
 
 #ifndef UNICODE
 #define UNICODE
@@ -282,13 +281,13 @@ void BookmarkManagerWindow::create_clearButton(HWND hWndParent, HINSTANCE hInsta
 
 void BookmarkManagerWindow::adjustmentOfControls(HWND hWnd)
 {
-	CheckList ñheckList;
-	ñheckList.push_back(NAME_BOOKMARKMANAGERNWND_MainListView);
-	ñheckList.push_back(NAME_BOOKMARKMANAGERNWND_AddButton);
-	ñheckList.push_back(NAME_BOOKMARKMANAGERNWND_OpenButton);
-	ñheckList.push_back(NAME_BOOKMARKMANAGERNWND_ClearButton);
+	CheckList checkList;
+	checkList.push_back(NAME_BOOKMARKMANAGERNWND_MainListView);
+	checkList.push_back(NAME_BOOKMARKMANAGERNWND_AddButton);
+	checkList.push_back(NAME_BOOKMARKMANAGERNWND_OpenButton);
+	checkList.push_back(NAME_BOOKMARKMANAGERNWND_ClearButton);
 
-	if (HandleManager::checkExistence(ñheckList))
+	if (HandleManager::checkExistence(checkList))
 	{
 		HWND hMainListView = HandleManager::getHandleWnd(NAME_BOOKMARKMANAGERNWND_MainListView);
 		HWND hAddButton = HandleManager::getHandleWnd(NAME_BOOKMARKMANAGERNWND_AddButton);

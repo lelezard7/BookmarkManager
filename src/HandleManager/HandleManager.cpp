@@ -144,7 +144,7 @@ bool HandleManager::removeHandleWnd(const HandleName name)
 //
 //bool HandleManager::checkExistence(pcHandleName names)
 //{
-//	for (size_t i = 0; names[i] != L"\0"; i++) //TODO: Если не найдет \0?
+//	for (size_t i = 0; names[i] != L"\0"; i++) //TODO: Р•СЃР»Рё РЅРµ РЅР°Р№РґРµС‚ \0?
 //	{
 //		if (handleContainer_.find(names[i]) == handleContainer_.end())
 //		{

@@ -1,5 +1,3 @@
-//TODO: Написать ошибки для разработчиков define DEBUG
-
 #ifndef UNICODE
 #define UNICODE
 #endif
@@ -156,7 +154,7 @@ LRESULT CALLBACK ContainerCreationWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg,
 //		NULL);
 //
 //	SendMessage(*hTextBox, EM_SHOWSCROLLBAR, SB_HORZ, false);
-//	SendMessage(*hTextBox, EM_SETCUEBANNER, false, (LPARAM)L"Название"); //TODO: doesn't work
+//	SendMessage(*hTextBox, EM_SETCUEBANNER, false, (LPARAM)L"РќР°Р·РІР°РЅРёРµ"); //TODO: doesn't work
 //
 //}
 //
@@ -178,7 +176,7 @@ LRESULT CALLBACK ContainerCreationWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg,
 //		NULL);
 //
 //	SendMessage(*hTextBox, EM_SHOWSCROLLBAR, SB_HORZ, false);
-//	SendMessage(*hTextBox, EM_SETCUEBANNER, false, (LPARAM)L"Адрес"); //TODO: doesn't work
+//	SendMessage(*hTextBox, EM_SETCUEBANNER, false, (LPARAM)L"РђРґСЂРµСЃ"); //TODO: doesn't work
 //}
 //
 //void ContainerCreationWindow::create_tagsTextBox(HWND hWndParent, HINSTANCE hInstance)
@@ -198,7 +196,7 @@ LRESULT CALLBACK ContainerCreationWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg,
 //		hInstance,
 //		NULL);
 //
-//	SendMessage(*hTextBox, EM_SETCUEBANNER, false, (LPARAM)L"Тег");
+//	SendMessage(*hTextBox, EM_SETCUEBANNER, false, (LPARAM)L"РўРµРі");
 //}
 //
 //void ContainerCreationWindow::create_applyButton(HWND hWndParent, HINSTANCE hInstance)
@@ -207,7 +205,7 @@ LRESULT CALLBACK ContainerCreationWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg,
 //
 //	*hButton = CreateWindow(
 //		L"BUTTON",
-//		L"Применить",
+//		L"РџСЂРёРјРµРЅРёС‚СЊ",
 //		WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
 //		ContainerCreationWnd_applyButton_X,
 //		ContainerCreationWnd_applyButton_Y,
@@ -237,9 +235,9 @@ LRESULT CALLBACK ContainerCreationWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg,
 //		NULL);
 //
 //	LVCOLUMN lvcolumn;
-//	lvcolumn.mask = LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM | LVCF_FMT; //TODO: Откорректировать
+//	lvcolumn.mask = LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM | LVCF_FMT; //TODO: РћС‚РєРѕСЂСЂРµРєС‚РёСЂРѕРІР°С‚СЊ
 //	lvcolumn.cx = 250;
-//	lvcolumn.pszText = (LPWSTR)L"Тег";
+//	lvcolumn.pszText = (LPWSTR)L"РўРµРі";
 //	lvcolumn.iSubItem = 12;
 //
 //	ListView_InsertColumn(*hListView, 1, &lvcolumn);
@@ -278,7 +276,7 @@ LRESULT CALLBACK ContainerCreationWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg,
 //	{
 //		container.clear();
 //		hWnd = HandleManager::getHandleWnd(L"containerCreationWindow_wnd");
-//		MessageBox(*hWnd, L"Поля \"Имя\" и \"Задача\" должны быть заполнены!", L"Input Error", MB_OK | MB_ICONWARNING);
+//		MessageBox(*hWnd, L"РџРѕР»СЏ \"РРјСЏ\" Рё \"Р—Р°РґР°С‡Р°\" РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ Р·Р°РїРѕР»РЅРµРЅС‹!", L"Input Error", MB_OK | MB_ICONWARNING);
 //		return;
 //	}
 //
@@ -305,11 +303,11 @@ LRESULT CALLBACK ContainerCreationWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg,
 //
 //void ContainerCreationWindow::adjustmentOfControls()
 //{
-//	HandleName сhecklist[]{ L"containerCreationWindow_nameTextBox", L"containerCreationWindow_adressTextBox",
+//	HandleName СЃhecklist[]{ L"containerCreationWindow_nameTextBox", L"containerCreationWindow_adressTextBox",
 //							L"containerCreationWindow_tagsTextBox", L"containerCreationWindow_applyButton",
 //							L"containerCreationWindow_tagsListView", L"containerCreationWindow_taskTypeDropDList", L"\0" };
 //	
-//	if (HandleManager::checkExistence(сhecklist))
+//	if (HandleManager::checkExistence(СЃhecklist))
 //	{
 //		HWND* hApplyButton = HandleManager::getHandleWnd(L"containerCreationWindow_applyButton");
 //		HWND* hNameTextBox = HandleManager::getHandleWnd(L"containerCreationWindow_nameTextBox");

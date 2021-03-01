@@ -1,4 +1,4 @@
-//TODO: Сделать смену языка
+//TODO: РЎРґРµР»Р°С‚СЊ СЃРјРµРЅСѓ СЏР·С‹РєР°
 //TODO: Add a license
 //TODO: delete 'pragma comment'
 
@@ -48,13 +48,13 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	*/
 	if (!initialization_commCtrl())
 	{
-		MessageBox(NULL, L"Не удалось инициализировать общие элементы управления", L"Error", MB_OK);
+		MessageBox(NULL, L"РќРµ СѓРґР°Р»РѕСЃСЊ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ РѕР±С‰РёРµ СЌР»РµРјРµРЅС‚С‹ СѓРїСЂР°РІР»РµРЅРёСЏ", L"Error", MB_OK);
 		return 1;
 	}
 
 	if (!register_windowClasses(hInstance))
 	{
-		MessageBox(NULL, L"Не удалось зарегистрировать класс окна", L"Error", MB_OK);
+		MessageBox(NULL, L"РќРµ СѓРґР°Р»РѕСЃСЊ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊ РєР»Р°СЃСЃ РѕРєРЅР°", L"Error", MB_OK);
 		return 1;
 	}
 
@@ -73,7 +73,7 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	return (int)msg.wParam;
 }
 
-ErrorCode initialization_commCtrl() //TODO: Вынести общий знаменатель в функцию.
+ErrorCode initialization_commCtrl() //TODO: Р’С‹РЅРµСЃС‚Рё РѕР±С‰РёР№ Р·РЅР°РјРµРЅР°С‚РµР»СЊ РІ С„СѓРЅРєС†РёСЋ.
 {
 	INITCOMMONCONTROLSEX	commonControl;
 
