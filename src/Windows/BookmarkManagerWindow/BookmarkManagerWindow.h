@@ -19,7 +19,7 @@ namespace BookmarkManagerWindow
 	void create_mainListView(HWND hWndParent, HINSTANCE hInstance);
 	void create_addButton(HWND hWndParent, HINSTANCE hInstance);
 	void create_openButton(HWND hWndParent, HINSTANCE hInstance);
-	void create_cleanButton(HWND hWndParent, HINSTANCE hInstance);
+	void create_clearButton(HWND hWndParent, HINSTANCE hInstance);
 
 	void addButton_pressed();
 	void openButton_pressed();

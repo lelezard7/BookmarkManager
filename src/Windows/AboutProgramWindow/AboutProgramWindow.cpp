@@ -12,13 +12,13 @@ LRESULT CALLBACK AboutProgramWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg, _In_
 	switch (msg)
 	{
 	case WM_CLOSE: {
-		HWND* hWndParent = HandleManager::getHandleWnd(L"bookmarkManagerWindow_wnd");
+		/*HWND* hWndParent = HandleManager::getHandleWnd(L"bookmarkManagerWindow_wnd");
 		EnableWindow(*hWndParent, true);
 		SetFocus(*hWndParent);
 
 		HandleManager::removeHandleWnd(L"aboutProgramWindow_wnd");
 		DestroyWindow(hWnd);
-		return 0;
+		return 0;*/
 	}
 
 	default: {
@@ -29,7 +29,7 @@ LRESULT CALLBACK AboutProgramWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg, _In_
 
 void AboutProgramWindow::create_aboutProgramWindow(HINSTANCE hInstance)
 {
-	HWND* hWndParent = HandleManager::getHandleWnd(L"bookmarkManagerWindow_wnd");
+	/*HWND* hWndParent = HandleManager::getHandleWnd(L"bookmarkManagerWindow_wnd");
 	HWND* hWnd = HandleManager::addHandleWnd(L"aboutProgramWindow_wnd");
 
 	*hWnd = CreateWindow(
@@ -46,5 +46,5 @@ void AboutProgramWindow::create_aboutProgramWindow(HINSTANCE hInstance)
 	CommonOperations::moveWindowToCenterScreen(*hWnd);
 
 	ShowWindow(*hWnd, true);
-	EnableWindow(*hWndParent, false);
+	EnableWindow(*hWndParent, false);*/
 }

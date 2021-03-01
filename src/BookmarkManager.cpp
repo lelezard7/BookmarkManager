@@ -22,7 +22,7 @@
 #include "Windows\AboutProgramWindow\AboutProgramWindow.h"
 #include "Windows\SettingsProgramWindow\SettingsProgramWindow.h"
 #include "Common\BkmDef.h"
-#include "HandleManager\HandleManager.h"
+//#include "HandleManager\HandleManager.h"
 #include "res\Resource.h"
 #include <Windows.h>
 #include <CommCtrl.h>
