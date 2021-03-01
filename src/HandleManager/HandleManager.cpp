@@ -60,12 +60,12 @@ HWND HandleManager::getHandleWnd(const HandleName name)
 	}
 	else
 	{
-		debugMessage(L"Handle with the name " + name + L" does not exist!");
+		debugMessage(L"Handle with the name " + std::to_wstring(name) + L" does not exist!");
 		return nullptr;
 	}
 }
 
-bool HandleManager::addHandleWnd(const HandleName name, HWND hWnd)
+bool HandleManager::addHandleWnd(HWND hWnd, const HandleName name)
 {
 	if (handleContainer_.find(name) == handleContainer_.end())
 	{
@@ -74,7 +74,7 @@ bool HandleManager::addHandleWnd(const HandleName name, HWND hWnd)
 	}
 	else
 	{
-		debugMessage(L"The " + name + L" handle already exists!");
+		debugMessage(L"The " + std::to_wstring(name) + L" handle already exists!");
 		return false;
 	}
 }
@@ -105,7 +105,7 @@ bool HandleManager::removeHandleWnd(const HandleName name)
 	}
 	else
 	{
-		debugMessage(L"Handle with name " + name + L" not found!");
+		debugMessage(L"Handle with name " + std::to_wstring(name) + L" not found!");
 		return false;
 	}
 }

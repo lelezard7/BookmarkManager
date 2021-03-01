@@ -27,13 +27,22 @@
 #define ID_CONTAINERCREATIONWND_APPLYBUTTON		14
 
 /*		ID of menu bar buttons.		*/
-#define ID_MENU_CLOSEPROGRAM					30
-#define ID_MENU_SETTINGSPROGRAM					31
-#define ID_MENU_NEWFILE							32
-#define ID_MENU_OPENFILE						33
-#define ID_MENU_SAVEFILE						34
-#define ID_MENU_HOWTOUSE						35
-#define ID_MENU_ABOUTPROGRAM					36
+#define ID_MENU_CLOSEPROGRAM					51
+#define ID_MENU_SETTINGSPROGRAM					52
+#define ID_MENU_NEWFILE							53
+#define ID_MENU_OPENFILE						54
+#define ID_MENU_SAVEFILE						55
+#define ID_MENU_HOWTOUSE						56
+#define ID_MENU_ABOUTPROGRAM					57
+
+/*		Handles names.		*/
+
+//		BookmarkManagerWindow
+#define NAME_BOOKMARKMANAGERNWND_WND			1
+#define NAME_BOOKMARKMANAGERNWND_MainListView	2
+#define NAME_BOOKMARKMANAGERNWND_AddButton		3
+#define NAME_BOOKMARKMANAGERNWND_OpenButton		4
+#define NAME_BOOKMARKMANAGERNWND_ClearButton	5
 
 /*		User messages.		*/
 #define UM_SHOWCREATEDCONTAINER					(WM_USER + 0x0001)

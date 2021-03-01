@@ -67,36 +67,41 @@
 /*		BookmarkManagerWindow		*/
 
 #define BookmarkManagerWnd_RECT_RIGHT	(CommonOperations::getClientRectValue(\
-											HandleManager::getHandleWnd(L"bookmarkManagerWindow_wnd"),\
+											HandleManager::getHandleWnd(NAME_BOOKMARKMANAGERNWND_WND),\
 											ClientRectCoordinates::RIGHT))
 
 #define BookmarkManagerWnd_RECT_BOTTOM	(CommonOperations::getClientRectValue(\
-											HandleManager::getHandleWnd(L"bookmarkManagerWindow_wnd"),\
+											HandleManager::getHandleWnd(NAME_BOOKMARKMANAGERNWND_WND),\
 											ClientRectCoordinates::BOTTOM))
 
 //			mainListView
 #define BookmarkManagerWnd_mainListView_X			(5)
 #define BookmarkManagerWnd_mainListView_Y			(5)
-#define BookmarkManagerWnd_mainListView_WIDTH		(BookmarkManagerWnd_RECT_RIGHT - 10)
+#define BookmarkManagerWnd_mainListView_WIDTH		(BookmarkManagerWnd_RECT_RIGHT - \
+														(BookmarkManagerWnd_mainListView_X * 2))
 #define BookmarkManagerWnd_mainListView_HEIGHT		(BookmarkManagerWnd_RECT_BOTTOM - 50)
 
 //			addButton
-#define BookmarkManagerWnd_addButton_X				(BookmarkManagerWnd_RECT_RIGHT - 107)
-#define BookmarkManagerWnd_addButton_Y				(BookmarkManagerWnd_RECT_BOTTOM - 40)
 #define BookmarkManagerWnd_addButton_WIDTH			(100)
 #define BookmarkManagerWnd_addButton_HEIGHT			(25)
+#define BookmarkManagerWnd_addButton_X				(BookmarkManagerWnd_RECT_RIGHT - \
+														BookmarkManagerWnd_addButton_WIDTH - 7)
+#define BookmarkManagerWnd_addButton_Y				(BookmarkManagerWnd_RECT_BOTTOM - \
+														BookmarkManagerWnd_addButton_HEIGHT - 15)
 
 //			openButton
-#define BookmarkManagerWnd_openButton_X				(7)
-#define BookmarkManagerWnd_openButton_Y				(BookmarkManagerWnd_RECT_BOTTOM - 40)
 #define BookmarkManagerWnd_openButton_WIDTH			(100)
 #define BookmarkManagerWnd_openButton_HEIGHT		(25)
+#define BookmarkManagerWnd_openButton_X				(7)
+#define BookmarkManagerWnd_openButton_Y				(BookmarkManagerWnd_RECT_BOTTOM - \
+														BookmarkManagerWnd_openButton_HEIGHT - 15)
 
 //			cleanButton
-#define BookmarkManagerWnd_cleanButton_X			(112)
-#define BookmarkManagerWnd_cleanButton_Y			(BookmarkManagerWnd_RECT_BOTTOM - 40)
 #define BookmarkManagerWnd_cleanButton_WIDTH		(100)
 #define BookmarkManagerWnd_cleanButton_HEIGHT		(25)
+#define BookmarkManagerWnd_cleanButton_X			(BookmarkManagerWnd_openButton_WIDTH + 12)
+#define BookmarkManagerWnd_cleanButton_Y			(BookmarkManagerWnd_RECT_BOTTOM - \
+														BookmarkManagerWnd_cleanButton_HEIGHT - 15)
 
 
 ///*		SettingsProgramWindow		*/

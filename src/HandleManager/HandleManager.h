@@ -18,7 +18,7 @@
 #include <vector>
 #include <map>
 
-typedef std::wstring HandleName;
+typedef size_t HandleName;
 typedef std::vector<HandleName> CheckList;
 
 class HandleManager
@@ -43,7 +43,7 @@ public:
 	//static HWND* createHandleWnd(cHandleName name);
 
 	static HWND getHandleWnd(const HandleName name);
-	static bool addHandleWnd(const HandleName name, HWND hWnd);
+	static bool addHandleWnd(HWND hWnd, const HandleName name);
 	static bool checkExistence(const HandleName name);
 	static bool checkExistence(const CheckList& checkList);
 	static bool removeHandleWnd(const HandleName name);

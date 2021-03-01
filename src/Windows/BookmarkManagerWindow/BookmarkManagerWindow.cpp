@@ -110,7 +110,7 @@ HWND BookmarkManagerWindow::create_bookmarkManagerWindow(HINSTANCE hInstance)
 		hInstance,
 		NULL);
 
-	HandleManager::addHandleWnd(L"bookmarkManagerWindow_wnd", hWnd);
+	HandleManager::addHandleWnd(hWnd, NAME_BOOKMARKMANAGERNWND_WND);
 
 	HMENU hMenu = create_menu();
 	SetMenu(hWnd, hMenu);
@@ -165,7 +165,7 @@ void BookmarkManagerWindow::create_mainListView(HWND hWndParent, HINSTANCE hInst
 		hInstance,
 		NULL);
 
-	HandleManager::addHandleWnd(L"bookmarkManagerWindow_mainListView", hWnd);
+	HandleManager::addHandleWnd(hWnd, NAME_BOOKMARKMANAGERNWND_MainListView);
 
 	LVCOLUMN lvcolumn;
 	lvcolumn.mask = LVCF_WIDTH | LVCF_TEXT;
@@ -190,7 +190,7 @@ void BookmarkManagerWindow::create_addButton(HWND hWndParent, HINSTANCE hInstanc
 		hInstance,
 		NULL);
 
-	HandleManager::addHandleWnd(L"bookmarkManagerWindow_addButton", hWnd);
+	HandleManager::addHandleWnd(hWnd, NAME_BOOKMARKMANAGERNWND_AddButton);
 }
 
 void BookmarkManagerWindow::create_openButton(HWND hWndParent, HINSTANCE hInstance)
@@ -208,7 +208,7 @@ void BookmarkManagerWindow::create_openButton(HWND hWndParent, HINSTANCE hInstan
 		hInstance,
 		NULL);
 
-	HandleManager::addHandleWnd(L"bookmarkManagerWindow_openButton", hWnd);
+	HandleManager::addHandleWnd(hWnd, NAME_BOOKMARKMANAGERNWND_OpenButton);
 }
 
 void BookmarkManagerWindow::create_clearButton(HWND hWndParent, HINSTANCE hInstance)
@@ -226,7 +226,7 @@ void BookmarkManagerWindow::create_clearButton(HWND hWndParent, HINSTANCE hInsta
 		hInstance,
 		NULL);
 
-	HandleManager::addHandleWnd(L"bookmarkManagerWindow_clearButton", hWnd);
+	HandleManager::addHandleWnd(hWnd, NAME_BOOKMARKMANAGERNWND_ClearButton);
 }
 
 
@@ -283,17 +283,17 @@ void BookmarkManagerWindow::create_clearButton(HWND hWndParent, HINSTANCE hInsta
 void BookmarkManagerWindow::adjustmentOfControls(HWND hWnd)
 {
 	CheckList ñheckList;
-	ñheckList.push_back(L"bookmarkManagerWindow_mainListView");
-	ñheckList.push_back(L"bookmarkManagerWindow_addButton");
-	ñheckList.push_back(L"bookmarkManagerWindow_openButton");
-	ñheckList.push_back(L"bookmarkManagerWindow_clearButton");
+	ñheckList.push_back(NAME_BOOKMARKMANAGERNWND_MainListView);
+	ñheckList.push_back(NAME_BOOKMARKMANAGERNWND_AddButton);
+	ñheckList.push_back(NAME_BOOKMARKMANAGERNWND_OpenButton);
+	ñheckList.push_back(NAME_BOOKMARKMANAGERNWND_ClearButton);
 
 	if (HandleManager::checkExistence(ñheckList))
 	{
-		HWND hMainListView = HandleManager::getHandleWnd(L"bookmarkManagerWindow_mainListView");
-		HWND hAddButton = HandleManager::getHandleWnd(L"bookmarkManagerWindow_addButton");
-		HWND hOpenButton = HandleManager::getHandleWnd(L"bookmarkManagerWindow_openButton");
-		HWND hCleanButton = HandleManager::getHandleWnd(L"bookmarkManagerWindow_clearButton");
+		HWND hMainListView = HandleManager::getHandleWnd(NAME_BOOKMARKMANAGERNWND_MainListView);
+		HWND hAddButton = HandleManager::getHandleWnd(NAME_BOOKMARKMANAGERNWND_AddButton);
+		HWND hOpenButton = HandleManager::getHandleWnd(NAME_BOOKMARKMANAGERNWND_OpenButton);
+		HWND hCleanButton = HandleManager::getHandleWnd(NAME_BOOKMARKMANAGERNWND_ClearButton);
 
 		SetWindowPos(hMainListView, HWND_TOP, BookmarkManagerWnd_mainListView_X,
 			BookmarkManagerWnd_mainListView_Y,
