@@ -1,4 +1,4 @@
-//{{NO_DEPENDENCIES}}
+﻿//{{NO_DEPENDENCIES}}
 // включаемый файл, созданный в Microsoft Visual C++.
 // используется Z:\Project\CMake\Applications\BookmarkManager\BookmarkManager\res\Resource.rc
 //

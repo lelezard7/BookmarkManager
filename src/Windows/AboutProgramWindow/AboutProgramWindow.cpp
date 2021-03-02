@@ -1,6 +1,4 @@
-#ifndef UNICODE
-#define UNICODE
-#endif
+﻿#define UNICODE
 
 #include "AboutProgramWindow.h"
 #include "..\..\HandleManager\HandleManager.h"
@@ -12,13 +10,7 @@ LRESULT CALLBACK AboutProgramWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg, _In_
 	switch (msg)
 	{
 	case WM_CLOSE: {
-		/*HWND* hWndParent = HandleManager::getHandleWnd(L"bookmarkManagerWindow_wnd");
-		EnableWindow(*hWndParent, true);
-		SetFocus(*hWndParent);
-
-		HandleManager::removeHandleWnd(L"aboutProgramWindow_wnd");
-		DestroyWindow(hWnd);
-		return 0;*/
+		return close_window(hWnd);
 	}
 
 	default: {
@@ -29,22 +21,34 @@ LRESULT CALLBACK AboutProgramWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg, _In_
 
 void AboutProgramWindow::create_aboutProgramWindow(HINSTANCE hInstance)
 {
-	/*HWND* hWndParent = HandleManager::getHandleWnd(L"bookmarkManagerWindow_wnd");
-	HWND* hWnd = HandleManager::addHandleWnd(L"aboutProgramWindow_wnd");
+	HWND hWndParent = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERNWND_WND);
 
-	*hWnd = CreateWindow(
-		ABOUTPROGRAMNWND_CLASSNAME,
-		ABOUTPROGRAMNWND_WNDNAME,
-		WS_OVERLAPPEDWINDOW,
+	HWND hWnd = CreateWindow(
+		CLASSNAME_ABOUTPROGRAMNWND,
+		WNDNAME_ABOUTPROGRAMNWND,
+		WS_SYSMENU | WS_CAPTION,
 		CW_USEDEFAULT, CW_USEDEFAULT,
-		600, 500,
-		*hWndParent,
+		450, 200,
+		hWndParent,
 		NULL,
 		hInstance,
 		NULL);
 
-	CommonOperations::moveWindowToCenterScreen(*hWnd);
+	HandleManager::addHandleWnd(hWnd, HNAME_ABOUTPROGRAMWND_WND);
+	CommonOperations::moveWindowToCenterScreen(hWnd);
 
-	ShowWindow(*hWnd, true);
-	EnableWindow(*hWndParent, false);*/
+	ShowWindow(hWnd, true);
+	EnableWindow(hWndParent, false);
+}
+
+
+LRESULT AboutProgramWindow::close_window(HWND hWnd)
+{
+	HWND hWndParent = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERNWND_WND);
+	EnableWindow(hWndParent, true);
+	SetFocus(hWndParent);
+
+	HandleManager::removeHandleWnd(HNAME_ABOUTPROGRAMWND_WND);
+	DestroyWindow(hWnd);
+	return 0;
 }

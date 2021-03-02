@@ -1,4 +1,4 @@
-/*
+﻿/*
 *		Common operations on window and controls are descrided here.
 */
 
@@ -31,7 +31,6 @@ public:
 	*		If the function fails, the return value is zero.
 	*/
 	static LONG getClientRectValue(HWND hWnd, ClientRectCoordinates clientRectCoordinates);
-
 };
 
 enum class ClientRectCoordinates

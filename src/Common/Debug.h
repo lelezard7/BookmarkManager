@@ -1,4 +1,4 @@
-/*
+﻿/*
 *		This header connects to all other files. Here you can write everything that will help in debugging.
 */
 

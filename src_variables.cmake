@@ -1,4 +1,4 @@
-set(BKM_WINDOWS
+﻿set(BKM_WINDOWS
 			src/Windows/BookmarkManagerWindow/BookmarkManagerWindow.h
 			src/Windows/BookmarkManagerWindow/BookmarkManagerWindow.cpp
 			src/Windows/ContainerCreationWindow/ContainerCreationWindow.h

@@ -1,4 +1,4 @@
-/*
+﻿/*
 *		bookmarkManagerWindow is the main window of the application.
 */
 
