@@ -1,6 +1,4 @@
-﻿#ifndef UNICODE
-#define UNICODE
-#endif
+﻿#define UNICODE
 
 #include "ApplicationSettings.h"
 
