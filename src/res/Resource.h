@@ -1,6 +1,6 @@
-//{{NO_DEPENDENCIES}}
-// Включаемый файл, созданный в Microsoft Visual C++.
-// Используется Z:\Project\CMake\Applications\BookmarkManager\BookmarkManager\res\Resource.rc
+п»ї//{{NO_DEPENDENCIES}}
+// РІРєР»СЋС‡Р°РµРјС‹Р№ С„Р°Р№Р», СЃРѕР·РґР°РЅРЅС‹Р№ РІ Microsoft Visual C++.
+// РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ Z:\Project\CMake\Applications\BookmarkManager\BookmarkManager\res\Resource.rc
 //
 #define BKM_ICON_1                      101
 

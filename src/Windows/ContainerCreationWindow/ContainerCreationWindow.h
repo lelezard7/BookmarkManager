@@ -1,4 +1,4 @@
-/*
+﻿/*
 *		ContainerCreationWindow is the window in which the user creates the container.
 *		What is a container and what is included in it, see Archive.h (src/Archive/Archive.h)											
 */
@@ -9,6 +9,7 @@
 
 #include "..\..\Common\Debug.h"
 #include "..\..\Archive\Archive.h"
+#include "..\..\HandleManager\HandleManager.h"
 #include <Windows.h>
 
 
@@ -33,10 +34,11 @@ namespace ContainerCreationWindow
 	void fill_container();
 
 	//		Called 'fill_container' function. Fills the container with data from Text Boxes.
-	bool setDataFromTextBox(PCWSTR hTextBoxName, ContainerDataTypes dataType, Container& container);
+	bool setDataFromTextBox(HandleName hTextBoxName, ContainerDataTypes dataType, Container& container);
 
 	//		Resizes and positions controls when the window is resized.
 	void adjustmentOfControls();
+	LRESULT close_window(HWND hWnd);
 }
 
 #endif

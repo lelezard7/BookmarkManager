@@ -1,35 +1,18 @@
-//TODO: Õ‡ÔËÒ‡Ú¸ Ó¯Ë·ÍË ‰Îˇ ‡Á‡·ÓÚ˜ËÍÓ‚ define DEBUG
-
-#ifndef UNICODE
-#define UNICODE
-#endif
+Ôªø#define UNICODE
 
 #include "ContainerCreationWindow.h"
-#include "..\..\HandleManager\HandleManager.h"
 #include "..\..\Common\BkmDef.h"
 #include "..\..\ApplicationSettings\ApplicationSettings.h"
 #include "..\..\Common\CommonOperations.h"
 #include "..\..\Common\PositionAndSizeControls.h"
 #include <CommCtrl.h>
-#include <Richedit.h>
 
 
 LRESULT CALLBACK ContainerCreationWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam)
 {
-	HDC			hDC;
-	PAINTSTRUCT	paintstruct;
-
 	switch (msg)
 	{
-	case WM_PAINT: {
-		hDC = BeginPaint(hWnd, &paintstruct);
-
-		EndPaint(hWnd, &paintstruct);
-		return 0;
-	}
-
 	case WM_SIZE: {
-		/*		Resizes and positions controls.		*/
 		adjustmentOfControls();
 		return 0;
 	}
@@ -54,28 +37,7 @@ LRESULT CALLBACK ContainerCreationWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg,
 	}
 
 	case WM_CLOSE: {
-		HWND* hWndParent;
-
-		hWndParent = HandleManager::getHandleWnd(L"bookmarkManagerWindow_wnd");
-		EnableWindow(*hWndParent, true);
-		SetFocus(*hWndParent);
-
-		if (ApplicationSettings::getStartupMethodContainerCreationWindow() == StartupMethod::SHOW_CLOSED_WINDOW)
-		{
-			ShowWindow(hWnd, false);
-		}
-		else
-		{
-			HandleManager::removeHandleWnd(L"containerCreationWindow_wnd");
-			HandleManager::removeHandleWnd(L"containerCreationWindow_nameTextBox");
-			HandleManager::removeHandleWnd(L"containerCreationWindow_applyButton");
-			HandleManager::removeHandleWnd(L"containerCreationWindow_adressTextBox");
-			HandleManager::removeHandleWnd(L"containerCreationWindow_tagsTextBox");
-			HandleManager::removeHandleWnd(L"containerCreationWindow_tagsListView");
-			FreeLibrary(GetModuleHandle(L"Msftedit.dll")); //TODO: Test
-			DestroyWindow(hWnd);
-		}
-		return 0;
+		return close_window(hWnd);
 	}
 
 	default: {
@@ -86,41 +48,38 @@ LRESULT CALLBACK ContainerCreationWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg,
 
 void ContainerCreationWindow::create_containerCreationWindow(HINSTANCE hInstance)
 {
-	HWND* hWndParent = HandleManager::getHandleWnd(L"bookmarkManagerWindow_wnd");
-	HWND* hWnd = HandleManager::addHandleWnd(L"containerCreationWindow_wnd");
+	HWND hWndParent = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERNWND_WND);
 
-	*hWnd = CreateWindow(
-		CONTAINERCREATIONWND_CLASSNAME,
-		CONTAINERCREATIONWND_WNDNAME,
+	HWND hWnd = CreateWindow(
+		CLASSNAME_CONTAINERCREATIONWND,
+		WNDNAME_CONTAINERCREATIONWND,
 		WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT, CW_USEDEFAULT,
 		600, 500,
-		*hWndParent,
+		hWndParent,
 		NULL,
 		hInstance,
 		NULL);
 
-	LoadLibrary(L"Msftedit.dll");
+	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_WND);
 
-	create_taskTypeDropDList(*hWnd, hInstance);
-	create_applyButton(*hWnd, hInstance);
-	create_nameTextBox(*hWnd, hInstance);
-	create_adressTextBox(*hWnd, hInstance);
-	create_tagsTextBox(*hWnd, hInstance);
-	create_tagsListView(*hWnd, hInstance);
+	create_taskTypeDropDList(hWnd, hInstance);
+	create_applyButton(hWnd, hInstance);
+	create_nameTextBox(hWnd, hInstance);
+	create_adressTextBox(hWnd, hInstance);
+	create_tagsTextBox(hWnd, hInstance);
+	create_tagsListView(hWnd, hInstance);
 
-	CommonOperations::moveWindowToCenterScreen(*hWnd);
+	CommonOperations::moveWindowToCenterScreen(hWnd);
 
-	ShowWindow(*hWnd, true);
-	EnableWindow(*hWndParent, false);
+	ShowWindow(hWnd, true);
+	EnableWindow(hWndParent, false);
 }
 
 
 void ContainerCreationWindow::create_taskTypeDropDList(HWND hWndParent, HINSTANCE hInstance)
 {
-	HWND* hDropDList = HandleManager::addHandleWnd(L"containerCreationWindow_taskTypeDropDList");
-
-	*hDropDList = CreateWindow(
+	HWND hWnd = CreateWindow(
 		L"COMBOBOX",
 		NULL,
 		WS_VISIBLE | WS_CHILD | CBS_DROPDOWNLIST,
@@ -133,19 +92,20 @@ void ContainerCreationWindow::create_taskTypeDropDList(HWND hWndParent, HINSTANC
 		hInstance,
 		NULL);
 
-	SendMessage(*hDropDList, CB_INSERTSTRING, -1, (LPARAM)L"URL");
-	SendMessage(*hDropDList, CB_INSERTSTRING, -1, (LPARAM)L"Program");
-	SendMessage(*hDropDList, CB_SETCURSEL, 0, NULL);
+	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_TaskTypeDropDList);
+
+	SendMessage(hWnd, CB_INSERTSTRING, -1, (LPARAM)L"URL");
+	SendMessage(hWnd, CB_INSERTSTRING, -1, (LPARAM)L"Program");
+	//SendMessage(hWnd, CB_SETCURSEL, 0, NULL); //TODO: –°–¥–µ–ª–∞—Ç—å –∑–∞–≤–∏—Å–∏–º–æ—Å—Ç—å –æ—Ç –Ω–∞—Å—Ç—Ä–æ–µ–∫ –∏ –±–ª–æ–∫–∏—Ä–æ–≤–∫—É
+	//–∫–Ω–æ–ø–∫–∏ –ü—Ä–∏–Ω—è—Ç—å –≤ —Å–ª—É—á–∞–µ –Ω—É–ª–µ–≤–æ–≥–æ –≤—ã–±–æ—Ä–∞.
 }
 
 void ContainerCreationWindow::create_nameTextBox(HWND hWndParent, HINSTANCE hInstance)
 {
-	HWND* hTextBox = HandleManager::addHandleWnd(L"containerCreationWindow_nameTextBox");
-
-	*hTextBox = CreateWindow(
-		MSFTEDIT_CLASS,
+	HWND hWnd = CreateWindow(
+		L"EDIT",
 		NULL,
-		WS_VISIBLE | WS_CHILD | WS_HSCROLL | WS_TABSTOP, //TODO: WS_TABSTOP doesn't work
+		WS_VISIBLE | WS_CHILD | ES_AUTOHSCROLL | WS_TABSTOP, //TODO: WS_TABSTOP –Ω–µ —Ä–∞–±–æ—Ç–∞–µ—Ç
 		ContainerCreationWnd_nameTextBox_X,
 		ContainerCreationWnd_nameTextBox_Y,
 		ContainerCreationWnd_nameTextBox_WIDTH,
@@ -155,19 +115,17 @@ void ContainerCreationWindow::create_nameTextBox(HWND hWndParent, HINSTANCE hIns
 		hInstance,
 		NULL);
 
-	SendMessage(*hTextBox, EM_SHOWSCROLLBAR, SB_HORZ, false);
-	SendMessage(*hTextBox, EM_SETCUEBANNER, false, (LPARAM)L"Õ‡Á‚‡ÌËÂ"); //TODO: doesn't work
+	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_NameTextBox);
 
+	SendMessage(hWnd, EM_SETCUEBANNER, false, (LPARAM)L"Name");
 }
 
 void ContainerCreationWindow::create_adressTextBox(HWND hWndParent, HINSTANCE hInstance)
 {
-	HWND* hTextBox = HandleManager::addHandleWnd(L"containerCreationWindow_adressTextBox");
-
-	*hTextBox = CreateWindow(
-		MSFTEDIT_CLASS,
+	HWND hWnd = CreateWindow(
+		L"EDIT",
 		NULL,
-		WS_VISIBLE | WS_CHILD | WS_HSCROLL | WS_TABSTOP,
+		WS_VISIBLE | WS_CHILD | ES_AUTOHSCROLL | WS_TABSTOP,
 		ContainerCreationWnd_adressTextBox_X,
 		ContainerCreationWnd_adressTextBox_Y,
 		ContainerCreationWnd_adressTextBox_WIDTH,
@@ -177,18 +135,18 @@ void ContainerCreationWindow::create_adressTextBox(HWND hWndParent, HINSTANCE hI
 		hInstance,
 		NULL);
 
-	SendMessage(*hTextBox, EM_SHOWSCROLLBAR, SB_HORZ, false);
-	SendMessage(*hTextBox, EM_SETCUEBANNER, false, (LPARAM)L"¿‰ÂÒ"); //TODO: doesn't work
+	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_AdressTextBox);
+
+	SendMessage(hWnd, EM_SETLIMITTEXT, 0, NULL);
+	SendMessage(hWnd, EM_SETCUEBANNER, false, (LPARAM)L"Adress");
 }
 
 void ContainerCreationWindow::create_tagsTextBox(HWND hWndParent, HINSTANCE hInstance)
 {
-	HWND* hTextBox = HandleManager::addHandleWnd(L"containerCreationWindow_tagsTextBox");
-
-	*hTextBox = CreateWindow(
+	HWND hWnd = CreateWindow(
 		L"EDIT",
 		NULL,
-		WS_VISIBLE | WS_CHILD | WS_BORDER,
+		WS_VISIBLE | WS_CHILD | ES_AUTOHSCROLL,
 		ContainerCreationWnd_tagsTextBox_X,
 		ContainerCreationWnd_tagsTextBox_Y,
 		ContainerCreationWnd_tagsTextBox_WIDTH,
@@ -198,16 +156,16 @@ void ContainerCreationWindow::create_tagsTextBox(HWND hWndParent, HINSTANCE hIns
 		hInstance,
 		NULL);
 
-	SendMessage(*hTextBox, EM_SETCUEBANNER, false, (LPARAM)L"“Â„");
+	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_TagsTextBox);
+
+	SendMessage(hWnd, EM_SETCUEBANNER, false, (LPARAM)L"Tag");
 }
 
 void ContainerCreationWindow::create_applyButton(HWND hWndParent, HINSTANCE hInstance)
 {
-	HWND* hButton = HandleManager::addHandleWnd(L"containerCreationWindow_applyButton");
-
-	*hButton = CreateWindow(
+	HWND hWnd = CreateWindow(
 		L"BUTTON",
-		L"œËÏÂÌËÚ¸",
+		L"Apply",
 		WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
 		ContainerCreationWnd_applyButton_X,
 		ContainerCreationWnd_applyButton_Y,
@@ -217,16 +175,16 @@ void ContainerCreationWindow::create_applyButton(HWND hWndParent, HINSTANCE hIns
 		(HMENU)ID_CONTAINERCREATIONWND_APPLYBUTTON,
 		hInstance,
 		NULL);
+
+	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_ApplyButton);
 }
 
 void ContainerCreationWindow::create_tagsListView(HWND hWndParent, HINSTANCE hInstance)
 {
-	HWND* hListView = HandleManager::addHandleWnd(L"containerCreationWindow_tagsListView");
-
-	*hListView = CreateWindow(
+	HWND hWnd = CreateWindow(
 		WC_LISTVIEW,
 		NULL,
-		WS_CHILD | WS_VISIBLE | LVS_EDITLABELS | LVS_REPORT, //TODO: delete LVS_EDITLABELS
+		WS_CHILD | WS_VISIBLE | LVS_EDITLABELS | LVS_REPORT, //TODO: –£–¥–∞–ª–∏—Ç—å LVS_EDITLABELS ?
 		ContainerCreationWnd_tagsListView_X,
 		ContainerCreationWnd_tagsListView_Y,
 		ContainerCreationWnd_tagsListView_WIDTH,
@@ -236,25 +194,26 @@ void ContainerCreationWindow::create_tagsListView(HWND hWndParent, HINSTANCE hIn
 		hInstance,
 		NULL);
 
-	LVCOLUMN lvcolumn;
-	lvcolumn.mask = LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM | LVCF_FMT; //TODO: ŒÚÍÓÂÍÚËÓ‚‡Ú¸
-	lvcolumn.cx = 250;
-	lvcolumn.pszText = (LPWSTR)L"“Â„";
-	lvcolumn.iSubItem = 12;
+	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_TagsListView);
 
-	ListView_InsertColumn(*hListView, 1, &lvcolumn);
+	LVCOLUMN lvcolumn;
+	lvcolumn.mask = LVCF_WIDTH | LVCF_TEXT;
+	lvcolumn.cx = 250;
+	lvcolumn.pszText = (LPWSTR)L"Tag";
+
+	ListView_InsertColumn(hWnd, 1, &lvcolumn);
 }
 
 
 void ContainerCreationWindow::fill_container()
 {
-	HWND*		hWnd = HandleManager::getHandleWnd(L"containerCreationWindow_taskTypeDropDList");
+	HWND	hWnd = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TaskTypeDropDList);
 	Container	container;
 
 	//		We write down the value of the taskTypeDropDList in the container.
-	size_t	length = GetWindowTextLength(*hWnd) + (size_t)1;
+	size_t	length = GetWindowTextLength(hWnd) + (size_t)1;
 	PWSTR	content = new WCHAR[length];
-	GetWindowText(*hWnd, content, length);
+	GetWindowText(hWnd, content, length);
 
 	if (!std::wcscmp(content, L"URL"))
 	{
@@ -265,10 +224,11 @@ void ContainerCreationWindow::fill_container()
 		container.setTaskType(TaskTypes::PROGRAM);
 	}
 	delete[] content;
+	content = nullptr;
 
 	//		We write down the values of the nameTextBox and adressTextBox in the container.
-	bool errorCode_nameTB = setDataFromTextBox(L"containerCreationWindow_nameTextBox", ContainerDataTypes::NAME, container);
-	bool errorCode_adressTB = setDataFromTextBox(L"containerCreationWindow_adressTextBox", ContainerDataTypes::TASK, container);
+	bool errorCode_nameTB = setDataFromTextBox(HNAME_CONTAINERCREATIONWND_NameTextBox, ContainerDataTypes::NAME, container);
+	bool errorCode_adressTB = setDataFromTextBox(HNAME_CONTAINERCREATIONWND_AdressTextBox, ContainerDataTypes::TASK, container);
 
 	/*
 	*		If nameTextBox or adressTextBox is not full.
@@ -277,26 +237,26 @@ void ContainerCreationWindow::fill_container()
 	if (!(errorCode_nameTB && errorCode_adressTB))
 	{
 		container.clear();
-		hWnd = HandleManager::getHandleWnd(L"containerCreationWindow_wnd");
-		MessageBox(*hWnd, L"œÓÎˇ \"»Ïˇ\" Ë \"«‡‰‡˜‡\" ‰ÓÎÊÌ˚ ·˚Ú¸ Á‡ÔÓÎÌÂÌ˚!", L"Input Error", MB_OK | MB_ICONWARNING);
+		hWnd = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_WND);
+		MessageBox(NULL, L"The \"Name\" and \"Task\" fields must be filled!", L"Input Error", MB_OK | MB_ICONWARNING);
 		return;
 	}
 
 	ID id = Archive::addContainer(container);
 
-	hWnd = HandleManager::getHandleWnd(L"bookmarkManagerWindow_wnd");
-	SendMessage(*hWnd, UM_SHOWCREATEDCONTAINER, NULL, id);
-	hWnd = HandleManager::getHandleWnd(L"containerCreationWindow_wnd");
-	SendMessage(*hWnd, WM_CLOSE, NULL, NULL);
+	hWnd = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERNWND_WND);
+	SendMessage(hWnd, UM_SHOWCREATEDCONTAINER, NULL, id);
+	hWnd = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_WND);
+	SendMessage(hWnd, WM_CLOSE, NULL, NULL);
 }
 
-bool ContainerCreationWindow::setDataFromTextBox(PCWSTR hTextBoxName, ContainerDataTypes dataType, Container& container)
+bool ContainerCreationWindow::setDataFromTextBox(HandleName hTextBoxName, ContainerDataTypes dataType, Container& container)
 {
-	HWND*	hWnd = HandleManager::getHandleWnd(hTextBoxName);
-	size_t	length = GetWindowTextLength(*hWnd) + (size_t)1;
+	HWND	hWnd = HandleManager::getHandleWnd(hTextBoxName);
+	size_t	length = GetWindowTextLength(hWnd) + (size_t)1;
 	PWSTR	content = new WCHAR[length];
 
-	GetWindowText(*hWnd, content, length);
+	GetWindowText(hWnd, content, length);
 	container.setContent(dataType, content, length);
 	delete[] content;
 
@@ -305,42 +265,70 @@ bool ContainerCreationWindow::setDataFromTextBox(PCWSTR hTextBoxName, ContainerD
 
 void ContainerCreationWindow::adjustmentOfControls()
 {
-	HandleName Òhecklist[]{ L"containerCreationWindow_nameTextBox", L"containerCreationWindow_adressTextBox",
-							L"containerCreationWindow_tagsTextBox", L"containerCreationWindow_applyButton",
-							L"containerCreationWindow_tagsListView", L"containerCreationWindow_taskTypeDropDList", L"\0" };
+	CheckList —ÅheckList;
+	—ÅheckList.push_back(HNAME_CONTAINERCREATIONWND_NameTextBox);
+	—ÅheckList.push_back(HNAME_CONTAINERCREATIONWND_AdressTextBox);
+	—ÅheckList.push_back(HNAME_CONTAINERCREATIONWND_TagsTextBox);
+	—ÅheckList.push_back(HNAME_CONTAINERCREATIONWND_ApplyButton);
+	—ÅheckList.push_back(HNAME_CONTAINERCREATIONWND_TagsListView);
+	—ÅheckList.push_back(HNAME_CONTAINERCREATIONWND_TaskTypeDropDList);
 	
-	if (HandleManager::checkExistence(Òhecklist))
+	if (HandleManager::checkExistence(—ÅheckList))
 	{
-		HWND* hApplyButton = HandleManager::getHandleWnd(L"containerCreationWindow_applyButton");
-		HWND* hNameTextBox = HandleManager::getHandleWnd(L"containerCreationWindow_nameTextBox");
-		HWND* hAdressTextBox = HandleManager::getHandleWnd(L"containerCreationWindow_adressTextBox");
-		HWND* hTagsTextBox = HandleManager::getHandleWnd(L"containerCreationWindow_tagsTextBox");
-		HWND* hTagsListView = HandleManager::getHandleWnd(L"containerCreationWindow_tagsListView");
-		HWND* hTaskTypeDropDList = HandleManager::getHandleWnd(L"containerCreationWindow_taskTypeDropDList");
+		HWND hApplyButton = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_ApplyButton);
+		HWND hNameTextBox = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_NameTextBox);
+		HWND hAdressTextBox = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_AdressTextBox);
+		HWND hTagsTextBox = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TagsTextBox);
+		HWND hTagsListView = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TagsListView);
+		HWND hTaskTypeDropDList = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TaskTypeDropDList);
 
-		SetWindowPos(*hApplyButton, HWND_TOP, ContainerCreationWnd_applyButton_X,
+		SetWindowPos(hApplyButton, HWND_TOP, ContainerCreationWnd_applyButton_X,
 			ContainerCreationWnd_applyButton_Y,
 			ContainerCreationWnd_applyButton_WIDTH,
 			ContainerCreationWnd_applyButton_HEIGHT, NULL);
-		SetWindowPos(*hNameTextBox, HWND_TOP, ContainerCreationWnd_nameTextBox_X,
+		SetWindowPos(hNameTextBox, HWND_TOP, ContainerCreationWnd_nameTextBox_X,
 			ContainerCreationWnd_nameTextBox_Y,
 			ContainerCreationWnd_nameTextBox_WIDTH,
 			ContainerCreationWnd_nameTextBox_HEIGHT, NULL);
-		SetWindowPos(*hAdressTextBox, HWND_TOP, ContainerCreationWnd_adressTextBox_X,
+		SetWindowPos(hAdressTextBox, HWND_TOP, ContainerCreationWnd_adressTextBox_X,
 			ContainerCreationWnd_adressTextBox_Y,
 			ContainerCreationWnd_adressTextBox_WIDTH,
 			ContainerCreationWnd_adressTextBox_HEIGHT, NULL);
-		SetWindowPos(*hTagsTextBox, HWND_TOP, ContainerCreationWnd_tagsTextBox_X,
+		SetWindowPos(hTagsTextBox, HWND_TOP, ContainerCreationWnd_tagsTextBox_X,
 			ContainerCreationWnd_tagsTextBox_Y,
 			ContainerCreationWnd_tagsTextBox_WIDTH,
 			ContainerCreationWnd_tagsTextBox_HEIGHT, NULL);
-		SetWindowPos(*hTagsListView, HWND_TOP, ContainerCreationWnd_tagsListView_X,
+		SetWindowPos(hTagsListView, HWND_TOP, ContainerCreationWnd_tagsListView_X,
 			ContainerCreationWnd_tagsListView_Y,
 			ContainerCreationWnd_tagsListView_WIDTH,
 			ContainerCreationWnd_tagsListView_HEIGHT, NULL);
-		SetWindowPos(*hTaskTypeDropDList, HWND_TOP, ContainerCreationWnd_taskTypeDropDList_X,
+		SetWindowPos(hTaskTypeDropDList, HWND_TOP, ContainerCreationWnd_taskTypeDropDList_X,
 			ContainerCreationWnd_taskTypeDropDList_Y,
 			ContainerCreationWnd_taskTypeDropDList_WIDTH,
 			ContainerCreationWnd_taskTypeDropDList_HEIGHT, NULL);
 	}
+}
+
+LRESULT ContainerCreationWindow::close_window(HWND hWnd)
+{
+	HWND hWndParent = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERNWND_WND);
+	EnableWindow(hWndParent, true);
+	SetFocus(hWndParent);
+
+	if (ApplicationSettings::getStartupMethodContainerCreationWindow() == StartupMethod::SHOW_CLOSED_WINDOW)
+	{
+		ShowWindow(hWnd, false);
+	}
+	else
+	{
+		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_TaskTypeDropDList);
+		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_NameTextBox);
+		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_ApplyButton);
+		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_AdressTextBox);
+		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_TagsTextBox);
+		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_TagsListView);
+		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_WND);
+		DestroyWindow(hWnd);
+	}
+	return 0;
 }

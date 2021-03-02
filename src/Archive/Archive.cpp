@@ -1,6 +1,4 @@
-#ifndef UNICODE
-#define UNICODE
-#endif
+﻿#define UNICODE
 
 #include "Archive.h"
 #include <wchar.h>

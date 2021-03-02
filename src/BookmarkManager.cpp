@@ -1,5 +1,4 @@
-//TODO: Сделать смену языка
-//TODO: Add a license
+п»ї//TODO: Add a license
 //TODO: delete 'pragma comment'
 
 /*
@@ -12,9 +11,7 @@
 *		Then creates the main window and displays it. Finally, it triggers a message loop.
 */
 
-#ifndef UNICODE
 #define UNICODE
-#endif
 
 #include "Common\Debug.h"
 #include "Windows\BookmarkManagerWindow\BookmarkManagerWindow.h"
@@ -22,7 +19,6 @@
 #include "Windows\AboutProgramWindow\AboutProgramWindow.h"
 #include "Windows\SettingsProgramWindow\SettingsProgramWindow.h"
 #include "Common\BkmDef.h"
-#include "HandleManager\HandleManager.h"
 #include "res\Resource.h"
 #include <Windows.h>
 #include <CommCtrl.h>
@@ -48,13 +44,13 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	*/
 	if (!initialization_commCtrl())
 	{
-		MessageBox(NULL, L"Не удалось инициализировать общие элементы управления", L"Error", MB_OK);
+		MessageBox(NULL, L"РќРµ СѓРґР°Р»РѕСЃСЊ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ РѕР±С‰РёРµ СЌР»РµРјРµРЅС‚С‹ СѓРїСЂР°РІР»РµРЅРёСЏ", L"Error", MB_OK);
 		return 1;
 	}
 
 	if (!register_windowClasses(hInstance))
 	{
-		MessageBox(NULL, L"Не удалось зарегистрировать класс окна", L"Error", MB_OK);
+		MessageBox(NULL, L"РќРµ СѓРґР°Р»РѕСЃСЊ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊ РєР»Р°СЃСЃ РѕРєРЅР°", L"Error", MB_OK);
 		return 1;
 	}
 
@@ -66,14 +62,17 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	MSG	msg;
 	while (GetMessage(&msg, NULL, NULL, NULL))
 	{
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
+		if (!IsDialogMessage(hWnd, &msg))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
 	}
 
 	return (int)msg.wParam;
 }
 
-ErrorCode initialization_commCtrl() //TODO: Вынести общий знаменатель в функцию.
+ErrorCode initialization_commCtrl() //TODO: Р’С‹РЅРµСЃС‚Рё РѕР±С‰РёР№ Р·РЅР°РјРµРЅР°С‚РµР»СЊ РІ С„СѓРЅРєС†РёСЋ.
 {
 	INITCOMMONCONTROLSEX	commonControl;
 
@@ -97,7 +96,7 @@ ErrorCode register_windowClasses(HINSTANCE hInstance)
 	WNDCLASSEX	wndClass = { NULL };
 
 	/*		BookmarkManagerWindow class.		*/
-	wndClass.lpszClassName = BOOKMARKMANAGERWND_CLASSNAME;
+	wndClass.lpszClassName = CLASSNAME_BOOKMARKMANAGERWND;
 	wndClass.lpfnWndProc = BookmarkManagerWindow::WndProc;
 	wndClass.hInstance = hInstance;
 	wndClass.cbSize = sizeof(WNDCLASSEX);
@@ -110,7 +109,7 @@ ErrorCode register_windowClasses(HINSTANCE hInstance)
 		return false;
 
 	/*		ContainerCreationWindow class.		*/
-	wndClass.lpszClassName = CONTAINERCREATIONWND_CLASSNAME;
+	wndClass.lpszClassName = CLASSNAME_CONTAINERCREATIONWND;
 	wndClass.lpfnWndProc = ContainerCreationWindow::WndProc;
 	wndClass.hInstance = hInstance;
 	wndClass.cbSize = sizeof(WNDCLASSEX);
@@ -122,7 +121,7 @@ ErrorCode register_windowClasses(HINSTANCE hInstance)
 		return false;
 
 	/*		AboutProgramWindow class.		*/
-	wndClass.lpszClassName = ABOUTPROGRAMNWND_CLASSNAME;
+	wndClass.lpszClassName = CLASSNAME_ABOUTPROGRAMNWND;
 	wndClass.lpfnWndProc = AboutProgramWindow::WndProc;
 	wndClass.hInstance = hInstance;
 	wndClass.cbSize = sizeof(WNDCLASSEX);
@@ -134,7 +133,7 @@ ErrorCode register_windowClasses(HINSTANCE hInstance)
 		return false;
 
 	/*		SettingsProgramWindow class.		*/
-	wndClass.lpszClassName = SETTINGSPROGRAMWND_CLASSNAME;
+	wndClass.lpszClassName = CLASSNAME_SETTINGSPROGRAMWND;
 	wndClass.lpfnWndProc = SettingsProgramWindow::WndProc;
 	wndClass.hInstance = hInstance;
 	wndClass.cbSize = sizeof(WNDCLASSEX);

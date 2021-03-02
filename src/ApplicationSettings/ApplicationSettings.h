@@ -1,4 +1,4 @@
-/*
+﻿/*
 *		ApplicationSettings sets and stores application settings.
 */
 
