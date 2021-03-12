@@ -32,11 +32,19 @@
 
 class Container;
 enum class ContainerDataTypes;
-enum class TaskTypes;
+//enum class TaskTypes;
 
 typedef size_t ID;
 typedef std::map<ID, Container> Archive_t;
+typedef int	TaskTypes_ID;
+typedef std::map<TaskTypes_ID, PWSTR> TaskTypes_t;
 
+
+/*
+*
+*/
+void addTaskType(const PWSTR name);
+void createTaskTypesCB(HWND hWnd);
 
 class Archive //TODO: Добавить функцию удаления контейнера
 {
@@ -63,7 +71,7 @@ class Container //TODO: Перегрузить операторы.
 {
 	PWSTR name_;
 	PWSTR task_;
-	TaskTypes taskType_;
+	PWSTR taskType_;
 	std::vector<PWSTR> tags_;
 
 public:
@@ -89,7 +97,7 @@ public:
 	//		index - array element.
 	PWSTR getTag(const size_t index);
 	void addTag(PCWSTR tag);
-	void setTaskType(TaskTypes taskType);
+	void setTaskType(TaskTypes_ID id);
 
 	void start();
 };
@@ -101,11 +109,11 @@ enum class ContainerDataTypes
 	TAGS
 };
 
-enum class TaskTypes
-{
-	URL,
-	PROGRAM
-};
+//enum class TaskTypes
+//{
+//	URL,
+//	PROGRAM
+//};
 
 
 #endif

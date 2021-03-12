@@ -1,195 +1,226 @@
 ﻿#define UNICODE
 
-#include "SettingsProgramWindow.h"
-#include "..\..\HandleManager\HandleManager.h"
-#include "..\..\Common\BkmDef.h"
-#include "..\..\Common\CommonOperations.h"
-#include "..\..\Common\PositionAndSizeControls.h"
 #include "..\..\ApplicationSettings\ApplicationSettings.h"
+#include "..\..\Common\PositionAndSizeControls.h"
+#include "..\..\res\res.h"
+#include "..\..\Archive\Archive.h"
+#include "SettingsProgramWindow.h"
 #include <CommCtrl.h>
+#include <prsht.h>
 
-LRESULT CALLBACK SettingsProgramWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam)
+INT_PTR CALLBACK ProgramProc(HWND, UINT, WPARAM, LPARAM);
+INT_PTR CALLBACK NetworkProc(HWND, UINT, WPARAM, LPARAM);
+
+
+void SettingsProgramWindow::create_settingsProgramWindow(HINSTANCE hInstance, HWND hWndParent)
+{
+	PROPSHEETPAGE propsheetpage[2];
+	PROPSHEETHEADER propsheethead;
+
+	propsheetpage[0].dwFlags = PSP_USETITLE;
+	propsheetpage[0].dwSize = sizeof(PROPSHEETPAGE);
+	propsheetpage[0].pszTemplate = MAKEINTRESOURCE(BKM_SETTINGSPROGRAMWND_PROPPAGE_1);
+	propsheetpage[0].hInstance = hInstance;
+	propsheetpage[0].pfnDlgProc = ProgramProc;
+	propsheetpage[0].pszTitle = L"Program";
+
+	//propsheetpage[1].dwFlags = PSP_USETITLE;
+	//propsheetpage[1].dwSize = sizeof(PROPSHEETPAGE);
+	//propsheetpage[1].pszTemplate = MAKEINTRESOURCE(BKM_SETTINGSPROGRAMWND_PROPPAGE_2);
+	//propsheetpage[1].hInstance = hInstance;
+	//propsheetpage[1].pfnDlgProc = NetworkProc;
+	//propsheetpage[1].pszTitle = L"Network";
+
+
+	propsheethead.dwFlags = PSH_PROPSHEETPAGE | PSH_NOCONTEXTHELP;
+	propsheethead.dwSize = sizeof(PROPSHEETHEADER);
+	propsheethead.hInstance = hInstance;
+	propsheethead.hwndParent = hWndParent;
+	propsheethead.pszCaption = L"Bookmark Manager: Settings";
+	propsheethead.nPages = 1;
+	propsheethead.pStartPage = 0;
+	propsheethead.ppsp = (LPCPROPSHEETPAGE)&propsheetpage;
+	
+	PropertySheet(&propsheethead);
+}
+
+
+//INT_PTR CALLBACK NetworkProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
+//{
+//	switch (msg)
+//	{
+//	default: {
+//		return FALSE;
+//	}
+//	}
+//}
+
+
+//------------------------------
+
+
+void addcontainerwndbehavior_1(HWND);
+INT_PTR initialization(HWND);
+INT_PTR applySettings(HWND);
+
+INT_PTR CALLBACK ProgramProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
+	case WM_INITDIALOG: {
+		return initialization(hDlg);
+	}
+
 	case WM_COMMAND: {
-		if (IsDlgButtonChecked(hWnd, 3222)) {
-			CheckDlgButton(hWnd, 3222, BST_UNCHECKED);
-			HWND hDropDList = HandleManager::getHandleWnd(HNAME_SETTINGSPROGRAMWND_TaskTypeDropDList);
-			EnableWindow(hDropDList, false);
+		switch (LOWORD(wParam))
+		{
+		case BKM_DEFAULTTASKTYPE_CKB: {
+			HWND hTaskType = GetDlgItem(hDlg, BKM_DEFAULTTASKTYPE);
+			if (hTaskType)
+			{
+				bool check = IsDlgButtonChecked(hDlg, BKM_DEFAULTTASKTYPE_CKB) == BST_CHECKED;
+				EnableWindow(hTaskType, check);
+				PropSheet_Changed(GetParent(hDlg), hDlg);
+			}
+			return TRUE;
 		}
-		else {
-			CheckDlgButton(hWnd, 3222, BST_CHECKED);
-			HWND hDropDList = HandleManager::getHandleWnd(HNAME_SETTINGSPROGRAMWND_TaskTypeDropDList);
-			EnableWindow(hDropDList, true);
+
+		case BKM_ADDCONTAINERWNDBEHAVIOR_1: {
+			addcontainerwndbehavior_1(hDlg);
+			PropSheet_Changed(GetParent(hDlg), hDlg);
+			return TRUE;
 		}
-		return 0;
+
+		case BKM_ADDCONTAINERWNDBEHAVIOR_2:
+		case BKM_ADDCONTAINERWNDBEHAVIOR_3:
+		case BKM_DEFAULTTASKTYPE: {
+			PropSheet_Changed(GetParent(hDlg), hDlg);
+			return TRUE;
+		}
+
+		default: {
+			return TRUE;
+		}
+		}
 	}
 
 	case WM_NOTIFY: {
 		switch (((LPNMHDR)lParam)->code)
 		{
-		case TCN_SELCHANGE: {
-			int curPage = TabCtrl_GetCurSel(((LPNMHDR)lParam)->hwndFrom);
-			HWND hDropDList = HandleManager::getHandleWnd(HNAME_SETTINGSPROGRAMWND_TaskTypeDropDList);
-			HWND hCheckBox = HandleManager::getHandleWnd(HNAME_SETTINGSPROGRAMWND_EnableTaskTypeCheckBox);
-			
-			if (curPage == 0)
-			{
-				ShowWindow(hCheckBox, true);
-				ShowWindow(hDropDList, true);
-			}
-			else
-			{
-				ShowWindow(hCheckBox, false);
-				ShowWindow(hDropDList, false);
-			}
+		case PSN_KILLACTIVE: {
+			return applySettings(hDlg);
+		}
+
+		default: {
+			return TRUE;
 		}
 		}
-		return 0;
-	}
-
-	case WM_SIZE: {
-		adjustmentOfControls();
-		return 0;
-	}
-
-	case WM_CLOSE: {
-		return close_window(hWnd);
 	}
 
 	default: {
-		return DefWindowProc(hWnd, msg, wParam, lParam);
+		return FALSE;
 	}
 	}
 }
 
-void SettingsProgramWindow::create_settingsProgramWindow(HINSTANCE hInstance)
+void addcontainerwndbehavior_1(HWND hDlg)
 {
-	HWND hWndParent = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERNWND_WND);
-
-	HWND hWnd = CreateWindow(
-		CLASSNAME_SETTINGSPROGRAMWND,
-		WNDNAME_SETTINGSPROGRAMWND,
-		WS_SYSMENU | WS_CAPTION,
-		CW_USEDEFAULT, CW_USEDEFAULT,
-		600, 500,
-		hWndParent,
-		NULL,
-		hInstance,
-		NULL);
-
-	HandleManager::addHandleWnd(hWnd, HNAME_SETTINGSPROGRAMWND_WND);
-
-	HWND hNavPanel = create_navigationPanel(hWnd, hInstance);
+	HWND hRadioB1 = GetDlgItem(hDlg, BKM_ADDCONTAINERWNDBEHAVIOR_2);
+	HWND hRadioB2 = GetDlgItem(hDlg, BKM_ADDCONTAINERWNDBEHAVIOR_3);
+	if (hRadioB1 != NULL && hRadioB2 != NULL)
 	{
-		create_enableTaskTypeCheckBox(hNavPanel, hInstance);
-		create_taskTypeDropDList(hNavPanel, hInstance);
+		bool check = IsDlgButtonChecked(hDlg, BKM_ADDCONTAINERWNDBEHAVIOR_1) == BST_UNCHECKED;
+		EnableWindow(hRadioB1, check);
+		EnableWindow(hRadioB2, check);
+	}
+}
+
+INT_PTR initialization(HWND hDlg)
+{
+	HWND hTaskType = GetDlgItem(hDlg, BKM_DEFAULTTASKTYPE);
+	if (hTaskType) {
+		createTaskTypesCB(hTaskType);
+	}
+	else {
+		return TRUE;
 	}
 
-	CommonOperations::moveWindowToCenterScreen(hWnd);
-
-	ShowWindow(hWnd, true);
-	EnableWindow(hWndParent, false);
-}
-
-
-HWND SettingsProgramWindow::create_navigationPanel(HWND hWndParent, HINSTANCE hInstance)
-{
-	HWND hWnd = CreateWindow(
-		WC_TABCONTROL,
-		NULL,
-		WS_VISIBLE | WS_CHILD,
-		SettingsProgramWnd_navigationPanel_X,
-		SettingsProgramWnd_navigationPanel_Y,
-		SettingsProgramWnd_navigationPanel_WIDTH,
-		SettingsProgramWnd_navigationPanel_HEIGHT,
-		hWndParent,
-		NULL,
-		hInstance,
-		NULL);
-
-	HandleManager::addHandleWnd(hWnd, HNAME_SETTINGSPROGRAMWND_NavigationPanel);
-
-	TCITEM tcitem;
-	tcitem.mask = TCIF_TEXT;
-
-	tcitem.pszText = (LPWSTR)L"General settings";
-	TabCtrl_InsertItem(hWnd, 1, &tcitem);
-
-	tcitem.pszText = (LPWSTR)L"Internet";
-	TabCtrl_InsertItem(hWnd, 2, &tcitem);
-
-	return hWnd;
-}
-
-void SettingsProgramWindow::create_taskTypeDropDList(HWND hWndParent, HINSTANCE hInstance)
-{
-	HWND hWnd = CreateWindow(
-		L"COMBOBOX",
-		NULL,
-		WS_VISIBLE | WS_CHILD | CBS_DROPDOWNLIST,
-		SettingsProgramWnd_taskTypeDropDList_X,
-		SettingsProgramWnd_taskTypeDropDList_Y,
-		SettingsProgramWnd_taskTypeDropDList_WIDTH,
-		SettingsProgramWnd_taskTypeDropDList_HEIGHT,
-		hWndParent,
-		NULL,
-		hInstance,
-		NULL);
-
-	HandleManager::addHandleWnd(hWnd, HNAME_SETTINGSPROGRAMWND_TaskTypeDropDList);
-
-	SendMessage(hWnd, CB_INSERTSTRING, -1, (LPARAM)L"URL");
-	SendMessage(hWnd, CB_INSERTSTRING, -1, (LPARAM)L"Program");
-	EnableWindow(hWnd, false);
-}
-
-void SettingsProgramWindow::create_enableTaskTypeCheckBox(HWND hWndParent, HINSTANCE hInstance)
-{
-	HWND hWnd = CreateWindow(
-		L"BUTTON",
-		L"Set the default task type",
-		WS_VISIBLE | WS_CHILD | BS_CHECKBOX,
-		SettingsProgramWnd_enableTaskTypeCheckBox_X,
-		SettingsProgramWnd_enableTaskTypeCheckBox_Y,
-		SettingsProgramWnd_enableTaskTypeCheckBox_WIDTH,
-		SettingsProgramWnd_enableTaskTypeCheckBox_HEIGHT,
-		GetParent(hWndParent), //TODO: Сделать красиво
-		(HMENU)3222, //TODO: Сделать красиво
-		hInstance,
-		NULL);
-
-	HandleManager::addHandleWnd(hWnd, HNAME_SETTINGSPROGRAMWND_EnableTaskTypeCheckBox);
-}
-
-
-void SettingsProgramWindow::adjustmentOfControls()
-{
-	CheckList checkList;
-	checkList.push_back(HNAME_SETTINGSPROGRAMWND_NavigationPanel);
-
-	if (HandleManager::checkExistence(checkList))
+	if (ApplicationSettings::getDefaultTaskType() != TASKT_NOTSPECIFIED)
 	{
-		HWND hNavPanel = HandleManager::getHandleWnd(HNAME_SETTINGSPROGRAMWND_NavigationPanel);
+		CheckDlgButton(hDlg, BKM_DEFAULTTASKTYPE_CKB, true);
+		EnableWindow(hTaskType, true);
+		SendMessage(hTaskType, CB_SETCURSEL, ApplicationSettings::getDefaultTaskType(), NULL);
+	}
 
-		SetWindowPos(hNavPanel, HWND_TOP, SettingsProgramWnd_navigationPanel_X,
-			SettingsProgramWnd_navigationPanel_Y,
-			SettingsProgramWnd_navigationPanel_WIDTH,
-			SettingsProgramWnd_navigationPanel_HEIGHT, NULL);
+
+	if (ApplicationSettings::getStartupMethodContainerCreationWindow() == StartupMethod::SHOW_CLOSED_WINDOW)
+	{
+		CheckDlgButton(hDlg, BKM_ADDCONTAINERWNDBEHAVIOR_1, BST_CHECKED);
+	}
+	else
+	{
+		addcontainerwndbehavior_1(hDlg);
+
+		if (ApplicationSettings::getStartupMethodContainerCreationWindow() == StartupMethod::CREATE_NEW_WINDOW) {
+			CheckDlgButton(hDlg, BKM_ADDCONTAINERWNDBEHAVIOR_2, BST_CHECKED);
+		}
+		else if (ApplicationSettings::getStartupMethodContainerCreationWindow() == StartupMethod::CONTINUE_UNFINISHED_CREATION) {
+			CheckDlgButton(hDlg, BKM_ADDCONTAINERWNDBEHAVIOR_3, BST_CHECKED);
+		}
+	}
+
+	return TRUE;
+}
+
+
+void changeDefaultTaskType(HWND);
+void changeStartupMethod(HWND);
+
+INT_PTR applySettings(HWND hDlg)
+{
+	changeDefaultTaskType(hDlg);
+	changeStartupMethod(hDlg);
+	
+	return TRUE;
+}
+
+void changeDefaultTaskType(HWND hDlg)
+{
+	HWND hTaskType = GetDlgItem(hDlg, BKM_DEFAULTTASKTYPE);
+	if (hTaskType)
+	{
+		if (IsDlgButtonChecked(hDlg, BKM_DEFAULTTASKTYPE_CKB) == BST_CHECKED)
+		{
+			int index = SendMessage(hTaskType, CB_GETCURSEL, NULL, NULL);
+			ApplicationSettings::setDefaultTaskType(index);
+		}
+		else
+		{
+			ApplicationSettings::setDefaultTaskType(TASKT_NOTSPECIFIED);
+		}
 	}
 }
 
-LRESULT SettingsProgramWindow::close_window(HWND hWnd)
+void changeStartupMethod(HWND hDlg)
 {
-	HWND hWndParent = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERNWND_WND);
-	EnableWindow(hWndParent, true);
-	SetFocus(hWndParent);
+	if (IsDlgButtonChecked(hDlg, BKM_ADDCONTAINERWNDBEHAVIOR_1) == BST_CHECKED)
+	{
+		ApplicationSettings::setStartupMethodContainerCreationWindow(StartupMethod::SHOW_CLOSED_WINDOW);
+		return;
+	}
 
-	HandleManager::removeHandleWnd(HNAME_SETTINGSPROGRAMWND_EnableTaskTypeCheckBox);
-	HandleManager::removeHandleWnd(HNAME_SETTINGSPROGRAMWND_TaskTypeDropDList);
-	HandleManager::removeHandleWnd(HNAME_SETTINGSPROGRAMWND_NavigationPanel);
-	HandleManager::removeHandleWnd(HNAME_SETTINGSPROGRAMWND_WND);
-	DestroyWindow(hWnd);
-	return 0;
+	if (IsDlgButtonChecked(hDlg, BKM_ADDCONTAINERWNDBEHAVIOR_2) == BST_CHECKED)
+	{
+		ApplicationSettings::setStartupMethodContainerCreationWindow(StartupMethod::CREATE_NEW_WINDOW);
+
+		if (HandleManager::checkExistence(HNAME_CONTAINERCREATIONWND_WND))
+		{
+			HWND hWnd = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_WND);
+			SendMessage(hWnd, WM_CLOSE, NULL, NULL);
+		}
+	}
+	else if (IsDlgButtonChecked(hDlg, BKM_ADDCONTAINERWNDBEHAVIOR_3) == BST_CHECKED)
+	{
+		ApplicationSettings::setStartupMethodContainerCreationWindow(StartupMethod::CONTINUE_UNFINISHED_CREATION);
+	}
 }

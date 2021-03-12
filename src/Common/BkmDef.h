@@ -6,19 +6,16 @@
 
 
 /*		Application information.		*/
-#define BOOKMARKMANAGER_VERSION								0x0003
+#define BOOKMARKMANAGER_VERSION								0004
+#define BOOKMARKMANAGER_VERSIONNAME							(L"0.0.0.4")
 
 /*		Class names.		*/
 #define CLASSNAME_BOOKMARKMANAGERWND						(L"BookmarkManagerWindow")
 #define CLASSNAME_CONTAINERCREATIONWND						(L"ContainerCreationWindow")
-#define CLASSNAME_ABOUTPROGRAMNWND							(L"AboutProgramWindow")
-#define CLASSNAME_SETTINGSPROGRAMWND						(L"SettingsProgramWindow")
 
 /*		Window names.		*/
 #define WNDNAME_BOOKMARKMANAGERNWND							(L"Bookmark Manager")
 #define WNDNAME_CONTAINERCREATIONWND						(L"Bookmark Manager: Add")
-#define WNDNAME_ABOUTPROGRAMNWND							(L"About Bookmark Manager")
-#define WNDNAME_SETTINGSPROGRAMWND							(L"Bookmark Manager: Settings")
 
 /*		ID of window buttons.		*/
 #define ID_BOOKMARKMANAGERNWND_ADDBUTTON					11
@@ -45,24 +42,14 @@
 #define HNAME_BOOKMARKMANAGERNWND_OpenButton				4
 #define HNAME_BOOKMARKMANAGERNWND_ClearButton				5
 
-//		AboutProgramWindow
-#define HNAME_ABOUTPROGRAMWND_WND							51
-
 //		ContainerCreationWindow
-#define HNAME_CONTAINERCREATIONWND_WND						101
-#define HNAME_CONTAINERCREATIONWND_TaskTypeDropDList		102
-#define HNAME_CONTAINERCREATIONWND_NameTextBox				103
-#define HNAME_CONTAINERCREATIONWND_AdressTextBox			104
-#define HNAME_CONTAINERCREATIONWND_TagsTextBox				105
-#define HNAME_CONTAINERCREATIONWND_ApplyButton				106
-#define HNAME_CONTAINERCREATIONWND_TagsListView				107
-
-//		SettingsProgramWindow
-#define HNAME_SETTINGSPROGRAMWND_WND						151
-#define HNAME_SETTINGSPROGRAMWND_NavigationPanel			152
-#define HNAME_SETTINGSPROGRAMWND_EnableTaskTypeCheckBox		153
-#define HNAME_SETTINGSPROGRAMWND_TaskTypeDropDList			154
-
+#define HNAME_CONTAINERCREATIONWND_WND						51
+#define HNAME_CONTAINERCREATIONWND_TaskTypeDropDList		52
+#define HNAME_CONTAINERCREATIONWND_NameTextBox				53
+#define HNAME_CONTAINERCREATIONWND_AdressTextBox			54
+#define HNAME_CONTAINERCREATIONWND_TagsTextBox				55
+#define HNAME_CONTAINERCREATIONWND_ApplyButton				56
+#define HNAME_CONTAINERCREATIONWND_TagsListView				57
 
 /*		User messages.		*/
 #define UM_SHOWCREATEDCONTAINER								(WM_USER + 0x0002)

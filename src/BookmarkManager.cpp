@@ -19,7 +19,8 @@
 #include "Windows\AboutProgramWindow\AboutProgramWindow.h"
 #include "Windows\SettingsProgramWindow\SettingsProgramWindow.h"
 #include "Common\BkmDef.h"
-#include "res\Resource.h"
+#include "res\res.h"
+#include "Archive\Archive.h"
 #include <Windows.h>
 #include <CommCtrl.h>
 
@@ -54,6 +55,9 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 		return 1;
 	}
 
+	addTaskType(L"URL");
+	addTaskType(L"Program");
+
 	/*		Create the main window and show it.		*/
 	HWND hWnd = BookmarkManagerWindow::create_bookmarkManagerWindow(hInstance);
 	ShowWindow(hWnd, true);
@@ -72,19 +76,19 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	return (int)msg.wParam;
 }
 
-ErrorCode initialization_commCtrl() //TODO: Вынести общий знаменатель в функцию.
+ErrorCode initialization_commCtrl()
 {
 	INITCOMMONCONTROLSEX	commonControl;
 
-	/*		List View		*/
+	/*		ListView Control		*/
 	commonControl.dwSize = sizeof(INITCOMMONCONTROLSEX);
 	commonControl.dwICC = ICC_LISTVIEW_CLASSES;
 	if (!InitCommonControlsEx(&commonControl))
 		return false;
 
-	/*		Tab Control		*/
+	/*		SysLink Control		*/
 	commonControl.dwSize = sizeof(INITCOMMONCONTROLSEX);
-	commonControl.dwICC = ICC_TAB_CLASSES;
+	commonControl.dwICC = ICC_LINK_CLASS;
 	if (!InitCommonControlsEx(&commonControl))
 		return false;
 
@@ -111,30 +115,6 @@ ErrorCode register_windowClasses(HINSTANCE hInstance)
 	/*		ContainerCreationWindow class.		*/
 	wndClass.lpszClassName = CLASSNAME_CONTAINERCREATIONWND;
 	wndClass.lpfnWndProc = ContainerCreationWindow::WndProc;
-	wndClass.hInstance = hInstance;
-	wndClass.cbSize = sizeof(WNDCLASSEX);
-	wndClass.style = CS_HREDRAW | CS_VREDRAW;
-	wndClass.hbrBackground = CreateSolidBrush(RGB(70, 68, 81));
-	wndClass.hCursor = LoadCursor(hInstance, IDC_ARROW);
-
-	if (!RegisterClassEx(&wndClass))
-		return false;
-
-	/*		AboutProgramWindow class.		*/
-	wndClass.lpszClassName = CLASSNAME_ABOUTPROGRAMNWND;
-	wndClass.lpfnWndProc = AboutProgramWindow::WndProc;
-	wndClass.hInstance = hInstance;
-	wndClass.cbSize = sizeof(WNDCLASSEX);
-	wndClass.style = CS_HREDRAW | CS_VREDRAW;
-	wndClass.hbrBackground = CreateSolidBrush(RGB(70, 68, 81));
-	wndClass.hCursor = LoadCursor(hInstance, IDC_ARROW);
-
-	if (!RegisterClassEx(&wndClass))
-		return false;
-
-	/*		SettingsProgramWindow class.		*/
-	wndClass.lpszClassName = CLASSNAME_SETTINGSPROGRAMWND;
-	wndClass.lpfnWndProc = SettingsProgramWindow::WndProc;
 	wndClass.hInstance = hInstance;
 	wndClass.cbSize = sizeof(WNDCLASSEX);
 	wndClass.style = CS_HREDRAW | CS_VREDRAW;

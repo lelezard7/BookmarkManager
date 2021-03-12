@@ -37,7 +37,7 @@ LRESULT CALLBACK ContainerCreationWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg,
 	}
 
 	case WM_CLOSE: {
-		return close_window(hWnd);
+		return close_window(hWnd, lParam);
 	}
 
 	default: {
@@ -94,10 +94,13 @@ void ContainerCreationWindow::create_taskTypeDropDList(HWND hWndParent, HINSTANC
 
 	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_TaskTypeDropDList);
 
-	SendMessage(hWnd, CB_INSERTSTRING, -1, (LPARAM)L"URL");
-	SendMessage(hWnd, CB_INSERTSTRING, -1, (LPARAM)L"Program");
-	//SendMessage(hWnd, CB_SETCURSEL, 0, NULL); //TODO: Сделать зависимость от настроек и блокировку
-	//кнопки Принять в случае нулевого выбора.
+	createTaskTypesCB(hWnd);
+
+	TaskTypes_ID DefaultTaskType = ApplicationSettings::getDefaultTaskType();
+	if (DefaultTaskType != TASKT_NOTSPECIFIED)
+	{
+		SendMessage(hWnd, CB_SETCURSEL, DefaultTaskType, NULL);
+	}
 }
 
 void ContainerCreationWindow::create_nameTextBox(HWND hWndParent, HINSTANCE hInstance)
@@ -210,21 +213,16 @@ void ContainerCreationWindow::fill_container()
 	HWND	hWnd = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TaskTypeDropDList);
 	Container	container;
 
-	//		We write down the value of the taskTypeDropDList in the container.
-	size_t	length = GetWindowTextLength(hWnd) + (size_t)1;
-	PWSTR	content = new WCHAR[length];
-	GetWindowText(hWnd, content, length);
-
-	if (!std::wcscmp(content, L"URL"))
+	int index = SendMessage(hWnd, CB_GETCURSEL, NULL, NULL);
+	if (index != -1)
 	{
-		container.setTaskType(TaskTypes::URL);
+		container.setTaskType(index);
 	}
-	else if (!std::wcscmp(content, L"Program"))
+	else
 	{
-		container.setTaskType(TaskTypes::PROGRAM);
+		MessageBox(hWnd, L"Task type not selected", L"Input Error", MB_OK | MB_ICONWARNING);
+		return;
 	}
-	delete[] content;
-	content = nullptr;
 
 	//		We write down the values of the nameTextBox and adressTextBox in the container.
 	bool errorCode_nameTB = setDataFromTextBox(HNAME_CONTAINERCREATIONWND_NameTextBox, ContainerDataTypes::NAME, container);
@@ -238,7 +236,7 @@ void ContainerCreationWindow::fill_container()
 	{
 		container.clear();
 		hWnd = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_WND);
-		MessageBox(NULL, L"The \"Name\" and \"Task\" fields must be filled!", L"Input Error", MB_OK | MB_ICONWARNING);
+		MessageBox(hWnd, L"The \"Name\" and \"Task\" fields must be filled!", L"Input Error", MB_OK | MB_ICONWARNING);
 		return;
 	}
 
@@ -247,7 +245,7 @@ void ContainerCreationWindow::fill_container()
 	hWnd = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERNWND_WND);
 	SendMessage(hWnd, UM_SHOWCREATEDCONTAINER, NULL, id);
 	hWnd = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_WND);
-	SendMessage(hWnd, WM_CLOSE, NULL, NULL);
+	SendMessage(hWnd, WM_CLOSE, NULL, true);
 }
 
 bool ContainerCreationWindow::setDataFromTextBox(HandleName hTextBoxName, ContainerDataTypes dataType, Container& container)
@@ -309,18 +307,16 @@ void ContainerCreationWindow::adjustmentOfControls()
 	}
 }
 
-LRESULT ContainerCreationWindow::close_window(HWND hWnd)
+LRESULT ContainerCreationWindow::close_window(HWND hWnd, LPARAM lParam)
 {
-	HWND hWndParent = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERNWND_WND);
-	EnableWindow(hWndParent, true);
-	SetFocus(hWndParent);
+	if (ApplicationSettings::getStartupMethodContainerCreationWindow() == StartupMethod::CREATE_NEW_WINDOW
+		|| (lParam == true
+			&& ApplicationSettings::getStartupMethodContainerCreationWindow() == StartupMethod::CONTINUE_UNFINISHED_CREATION))
+	{
+		HWND hWndParent = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERNWND_WND);
+		EnableWindow(hWndParent, true);
+		SetFocus(hWndParent);
 
-	if (ApplicationSettings::getStartupMethodContainerCreationWindow() == StartupMethod::SHOW_CLOSED_WINDOW)
-	{
-		ShowWindow(hWnd, false);
-	}
-	else
-	{
 		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_TaskTypeDropDList);
 		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_NameTextBox);
 		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_ApplyButton);
@@ -330,5 +326,14 @@ LRESULT ContainerCreationWindow::close_window(HWND hWnd)
 		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_WND);
 		DestroyWindow(hWnd);
 	}
+	else
+	{
+		HWND hWndParent = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERNWND_WND);
+		EnableWindow(hWndParent, true);
+		SetFocus(hWndParent);
+
+		ShowWindow(hWnd, false);
+	}
+
 	return 0;
 }

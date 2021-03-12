@@ -25,8 +25,9 @@ set(BKM_COMMON
 			src/Common/Debug.cpp)
 
 set(BKM_RESOURCES
-			src/res/Resource.h
+			res/Resource.h
 			res/Resource.rc
+			src/res/res.h
 			res/icon/BKM_Icon_1.ico)
 
 set(BKM_HANDLEMANAGER

@@ -7,6 +7,10 @@
 #define _APPLICATIONSETTINGS_
 
 #include "..\Common\Debug.h"
+#include "..\Archive\Archive.h"
+#include <Windows.h>
+
+#define TASKT_NOTSPECIFIED (-1)
 
 enum class StartupMethod;
 
@@ -17,12 +21,17 @@ class ApplicationSettings
 	*		Launch options are listed in 'enum class StartupMethod'.
 	*/
 	static StartupMethod runContainerCreationWindow_;
+	static TaskTypes_ID defaultTaskType;
+
 	ApplicationSettings() = delete;
 
 public:
 	/*		Sets and gets the launch method for ContainerCreationWindow.		*/
 	static void setStartupMethodContainerCreationWindow(StartupMethod startupMethod);
 	static StartupMethod getStartupMethodContainerCreationWindow();
+
+	static void setDefaultTaskType(TaskTypes_ID id);
+	static TaskTypes_ID getDefaultTaskType();
 };
 
 /*
@@ -34,6 +43,8 @@ public:
 *				2) SHOW_CLOSED_WINDOW (default) - when ContainerCreationWindow is
 *					closed the window is not destroyed but hides and when it is called
 *					again it is shown.
+*				3) CONTINUE_UNFINISHED_CREATION - a new window will be created only if the
+*					user clicks "Apply" and the container is successfully created.
 *		
 *		If the user wants to close ContainerCreationWindow, and so that the data that he
 *		entered in ContainerCreationWindow is saved, he must specify SHOW_CLOSED_WINDOW
@@ -42,7 +53,8 @@ public:
 enum class StartupMethod
 {
 	CREATE_NEW_WINDOW,
-	SHOW_CLOSED_WINDOW
+	SHOW_CLOSED_WINDOW,
+	CONTINUE_UNFINISHED_CREATION
 };
 
 #endif

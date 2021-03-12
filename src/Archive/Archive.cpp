@@ -9,6 +9,10 @@
 ID Archive::id_ = 0;
 Archive_t Archive::archive_;
 
+static TaskTypes_ID TaskTypes_id = 0;
+static TaskTypes_t TaskTypes;
+
+
 ID Archive::addContainer(const Container container)
 {
 	archive_.emplace(std::make_pair(id_, container));
@@ -158,9 +162,12 @@ void Container::addTag(PCWSTR tag)
 	tags_.push_back(_tag);
 }
 
-void Container::setTaskType(TaskTypes taskType)
+void Container::setTaskType(TaskTypes_ID id)
 {
-	taskType_ = taskType;
+	if (TaskTypes.find(id) != TaskTypes.end())
+	{
+		taskType_ = TaskTypes[id];
+	}
 }
 
 void Container::start() //TODO: Test
@@ -170,11 +177,11 @@ void Container::start() //TODO: Test
 	PROCESS_INFORMATION pi;
 
 	PWSTR o = nullptr;
-	if (taskType_ == TaskTypes::PROGRAM)
+	if (taskType_ == L"Program")
 	{
 		o = task_;
 	}
-	else if (taskType_ == TaskTypes::URL)
+	else if (taskType_ == L"URL")
 	{
 		o = new WCHAR[600]{ L"Z:\\OperaGX\\launcher.exe" };
 		std::wcscat(o, L" \"");
@@ -190,4 +197,18 @@ void Container::start() //TODO: Test
 		//TerminateProcess(pi.hProcess, NO_ERROR);
 	}
 	delete[] o;
+}
+
+void addTaskType(const PWSTR name)
+{
+	TaskTypes.emplace(std::make_pair(TaskTypes_id, name));
+	TaskTypes_id++;
+}
+
+void createTaskTypesCB(HWND hWnd)
+{
+	for (auto i : TaskTypes)
+	{
+		SendMessage(hWnd, CB_INSERTSTRING, -1, (LPARAM)i.second);
+	}
 }

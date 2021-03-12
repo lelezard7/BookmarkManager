@@ -15,15 +15,15 @@
 
 namespace ContainerCreationWindow
 {
-	LRESULT CALLBACK WndProc(_In_ HWND hWnd, _In_ UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam);
-	void create_containerCreationWindow(HINSTANCE hInstance);
+	LRESULT CALLBACK WndProc(_In_ HWND, _In_ UINT, _In_ WPARAM, _In_ LPARAM);
+	void create_containerCreationWindow(HINSTANCE);
 
-	void create_taskTypeDropDList(HWND hWndParent, HINSTANCE hInstance);
-	void create_nameTextBox(HWND hWndParent, HINSTANCE hInstance);
-	void create_adressTextBox(HWND hWndParent, HINSTANCE hInstance);
-	void create_tagsTextBox(HWND hWndParent, HINSTANCE hInstance);
-	void create_applyButton(HWND hWndParent, HINSTANCE hInstance);
-	void create_tagsListView(HWND hWndParent, HINSTANCE hInstance);
+	void create_taskTypeDropDList(HWND, HINSTANCE);
+	void create_nameTextBox(HWND, HINSTANCE);
+	void create_adressTextBox(HWND, HINSTANCE);
+	void create_tagsTextBox(HWND, HINSTANCE);
+	void create_applyButton(HWND, HINSTANCE);
+	void create_tagsListView(HWND, HINSTANCE);
 
 	/*
 	*		Creates a container, fills it, adds it to Archive and
@@ -38,7 +38,7 @@ namespace ContainerCreationWindow
 
 	//		Resizes and positions controls when the window is resized.
 	void adjustmentOfControls();
-	LRESULT close_window(HWND hWnd);
+	LRESULT close_window(HWND, LPARAM);
 }
 
 #endif

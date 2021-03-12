@@ -121,38 +121,4 @@
 #define BookmarkManagerWnd_cleanButton_Y			(BookmarkManagerWnd_RECT_BOTTOM - \
 														15 - BookmarkManagerWnd_cleanButton_HEIGHT)
 
-
-/*		SettingsProgramWindow		*/
-
-#define SettingsProgramWnd_RECT_RIGHT	(CommonOperations::getClientRectValue(\
-											HandleManager::getHandleWnd(HNAME_SETTINGSPROGRAMWND_WND),\
-											ClientRectCoordinates::RIGHT))
-
-#define SettingsProgramWnd_RECT_BOTTOM	(CommonOperations::getClientRectValue(\
-											HandleManager::getHandleWnd(HNAME_SETTINGSPROGRAMWND_WND),\
-											ClientRectCoordinates::BOTTOM))
-
-//			navigationPanel
-#define SettingsProgramWnd_navigationPanel_X				(5)
-#define SettingsProgramWnd_navigationPanel_Y				(5)
-#define SettingsProgramWnd_navigationPanel_WIDTH			(SettingsProgramWnd_RECT_RIGHT - \
-																(2 * SettingsProgramWnd_navigationPanel_X))
-#define SettingsProgramWnd_navigationPanel_HEIGHT			(SettingsProgramWnd_RECT_BOTTOM - \
-																(2 * SettingsProgramWnd_navigationPanel_Y))
-
-//			enableTaskTypeCheckBox
-#define SettingsProgramWnd_enableTaskTypeCheckBox_WIDTH		(200)
-#define SettingsProgramWnd_enableTaskTypeCheckBox_HEIGHT	(20)
-#define SettingsProgramWnd_enableTaskTypeCheckBox_X			(15 + SettingsProgramWnd_navigationPanel_X)
-#define SettingsProgramWnd_enableTaskTypeCheckBox_Y			(45 + SettingsProgramWnd_navigationPanel_Y)
-
-//			taskTypeDropDList
-#define SettingsProgramWnd_taskTypeDropDList_WIDTH			(200)
-#define SettingsProgramWnd_taskTypeDropDList_HEIGHT			(50)
-#define SettingsProgramWnd_taskTypeDropDList_X				(SettingsProgramWnd_RECT_RIGHT - \
-																30 - SettingsProgramWnd_navigationPanel_X - \
-																SettingsProgramWnd_taskTypeDropDList_WIDTH)
-#define SettingsProgramWnd_taskTypeDropDList_Y				(5 + SettingsProgramWnd_enableTaskTypeCheckBox_Y + \
-																SettingsProgramWnd_enableTaskTypeCheckBox_HEIGHT)
-
 #endif

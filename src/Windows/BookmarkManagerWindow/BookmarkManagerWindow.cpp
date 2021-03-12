@@ -12,7 +12,7 @@
 #include "..\..\Common\CommonOperations.h"
 #include "..\..\Archive\Archive.h"
 #include "..\..\Common\PositionAndSizeControls.h"
-#include "..\..\res\Resource.h"
+#include "..\..\res\res.h"
 #include <CommCtrl.h>
 #include <HtmlHelp.h>
 
@@ -47,12 +47,12 @@ LRESULT CALLBACK BookmarkManagerWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg, _
 			}
 
 			case ID_MENU_ABOUTPROGRAM: {
-				AboutProgramWindow::create_aboutProgramWindow(GetModuleHandle(NULL));
+				DialogBox(GetModuleHandle(NULL), MAKEINTRESOURCE(BKM_ABOUTWND), hWnd, AboutProgramWindow::DlgProc);
 				return 0;
 			}
 
 			case ID_MENU_SETTINGSPROGRAM: {
-				SettingsProgramWindow::create_settingsProgramWindow(GetModuleHandle(NULL));
+				SettingsProgramWindow::create_settingsProgramWindow(GetModuleHandle(NULL), hWnd);
 				return 0;
 			}
 
@@ -229,7 +229,8 @@ void BookmarkManagerWindow::create_clearButton(HWND hWndParent, HINSTANCE hInsta
 
 void BookmarkManagerWindow::addButton_pressed()
 {
-	if (ApplicationSettings::getStartupMethodContainerCreationWindow() == StartupMethod::SHOW_CLOSED_WINDOW)
+	if (ApplicationSettings::getStartupMethodContainerCreationWindow() == StartupMethod::SHOW_CLOSED_WINDOW
+		|| ApplicationSettings::getStartupMethodContainerCreationWindow() == StartupMethod::CONTINUE_UNFINISHED_CREATION)
 	{
 		if (HandleManager::checkExistence(HNAME_CONTAINERCREATIONWND_WND))
 		{
