@@ -6,6 +6,7 @@
 #define BKM_ABOUTWND                    102
 #define BKM_SETTINGSPROGRAMWND_PROPPAGE_1 103
 #define BKM_SETTINGSPROGRAMWND_PROPPAGE_2 104
+#define BKM_MENU                        105
 #define ABOUTWND_OK                     1001
 #define ABOUTWND_SYSLINK_1              1002
 #define ABOUTWND_TEXT_1                 1003
@@ -15,13 +16,20 @@
 #define BKM_ADDCONTAINERWNDBEHAVIOR_1   1007
 #define BKM_ADDCONTAINERWNDBEHAVIOR_2   1008
 #define BKM_ADDCONTAINERWNDBEHAVIOR_3   1009
+#define ID_HELP_HOWTOUSE                40001
+#define ID_HELP_ABOUTBOOKMARKMANAGER    40002
+#define ID_FILE_NEW                     40003
+#define ID_FILE_OPEN                    40004
+#define ID_FILE_SAVE                    40005
+#define ID_FILE_SETTINGS                40006
+#define ID_FILE_CLOSE                   40007
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        105
-#define _APS_NEXT_COMMAND_VALUE         40001
+#define _APS_NEXT_RESOURCE_VALUE        106
+#define _APS_NEXT_COMMAND_VALUE         40008
 #define _APS_NEXT_CONTROL_VALUE         1010
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

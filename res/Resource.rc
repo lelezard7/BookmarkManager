@@ -103,6 +103,16 @@ END
 
 #endif    // APSTUDIO_INVOKED
 
+#endif    // Русский (Россия) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Английский (США) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -118,6 +128,14 @@ BEGIN
 
     BKM_SETTINGSPROGRAMWND_PROPPAGE_2, DIALOG
     BEGIN
+    END
+
+    BKM_ABOUTWND, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 314
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 94
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -151,6 +169,18 @@ FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
 END
 
+BKM_ABOUTWND DIALOGEX 0, 0, 321, 101
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About Bookmark Manager"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",ABOUTWND_OK,264,80,50,14
+    CONTROL         "   <a href=""https://github.com/lelezard7/BookmarkManager"">GitHub</a>",ABOUTWND_SYSLINK_1,
+                    "SysLink",WS_TABSTOP,61,22,32,10
+    LTEXT           "Bookmark Manager: version ",ABOUTWND_TEXT_1,7,7,307,8
+    LTEXT           "Repository: ",ABOUTWND_TEXT_2,21,23,40,8
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -163,6 +193,11 @@ BEGIN
 END
 
 BKM_SETTINGSPROGRAMWND_PROPPAGE_2 AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+BKM_ABOUTWND AFX_DIALOG_LAYOUT
 BEGIN
     0
 END
@@ -182,62 +217,28 @@ BEGIN
     0
 END
 
-#endif    // Русский (Россия) resources
-/////////////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////////////
-// Английский (США) resources
-
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
-LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
-#pragma code_page(1252)
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// DESIGNINFO
+// Menu
 //
 
-#ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO
+BKM_MENU MENU
 BEGIN
-    BKM_ABOUTWND, DIALOG
+    POPUP "File"
     BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 314
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 94
+        MENUITEM "New",                         ID_FILE_NEW
+        MENUITEM "Open...",                     ID_FILE_OPEN
+        MENUITEM "Save",                        ID_FILE_SAVE
+        MENUITEM SEPARATOR
+        MENUITEM "Settings",                    ID_FILE_SETTINGS
+        MENUITEM "Close",                       ID_FILE_CLOSE
     END
-END
-#endif    // APSTUDIO_INVOKED
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Dialog
-//
-
-BKM_ABOUTWND DIALOGEX 0, 0, 321, 101
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "About Bookmark Manager"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    DEFPUSHBUTTON   "OK",ABOUTWND_OK,264,80,50,14
-    CONTROL         "   <a href=""https://github.com/lelezard7/BookmarkManager"">GitHub</a>",ABOUTWND_SYSLINK_1,
-                    "SysLink",WS_TABSTOP,61,22,32,10
-    LTEXT           "Bookmark Manager: version ",ABOUTWND_TEXT_1,7,7,307,8
-    LTEXT           "Repository: ",ABOUTWND_TEXT_2,21,23,40,8
-END
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// AFX_DIALOG_LAYOUT
-//
-
-BKM_ABOUTWND AFX_DIALOG_LAYOUT
-BEGIN
-    0
+    POPUP "Help"
+    BEGIN
+        MENUITEM "How to use",                  ID_HELP_HOWTOUSE
+        MENUITEM "About Bookmark Manager",      ID_HELP_ABOUTBOOKMARKMANAGER
+    END
 END
 
 #endif    // Английский (США) resources

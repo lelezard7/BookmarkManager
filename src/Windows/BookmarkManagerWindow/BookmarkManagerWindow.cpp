@@ -41,22 +41,22 @@ LRESULT CALLBACK BookmarkManagerWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg, _
 				return 0;
 			}
 
-			case ID_MENU_CLOSEPROGRAM: {
+			case ID_FILE_CLOSE: {
 				PostMessage(hWnd, WM_CLOSE, NULL, NULL);
 				return 0;
 			}
 
-			case ID_MENU_ABOUTPROGRAM: {
+			case ID_HELP_ABOUTBOOKMARKMANAGER: {
 				DialogBox(GetModuleHandle(NULL), MAKEINTRESOURCE(BKM_ABOUTWND), hWnd, AboutProgramWindow::DlgProc);
 				return 0;
 			}
 
-			case ID_MENU_SETTINGSPROGRAM: {
+			case ID_FILE_SETTINGS: {
 				SettingsProgramWindow::create_settingsProgramWindow(GetModuleHandle(NULL), hWnd);
 				return 0;
 			}
 
-			case ID_MENU_HOWTOUSE: {
+			case ID_HELP_HOWTOUSE: {
 				HWND hHelpWnd = HtmlHelp(hWnd, L"BookmarkManager.chm", HH_DISPLAY_TOPIC, NULL);
 				if (!hHelpWnd)
 					debugMessage(L"Couldn't open .chm file");
@@ -109,7 +109,7 @@ HWND BookmarkManagerWindow::create_bookmarkManagerWindow(HINSTANCE hInstance)
 
 	HandleManager::addHandleWnd(hWnd, HNAME_BOOKMARKMANAGERNWND_WND);
 
-	HMENU hMenu = create_menu();
+	HMENU hMenu = LoadMenu(hInstance, MAKEINTRESOURCE(BKM_MENU));
 	SetMenu(hWnd, hMenu);
 
 	create_mainListView(hWnd, hInstance);
@@ -122,30 +122,6 @@ HWND BookmarkManagerWindow::create_bookmarkManagerWindow(HINSTANCE hInstance)
 	return hWnd;
 }
 
-
-HMENU BookmarkManagerWindow::create_menu()
-{
-	HMENU	hMenuBar = CreateMenu();
-	HMENU	hFilePopupMenu = CreatePopupMenu();
-	HMENU	hHelpPopupMenu = CreatePopupMenu();
-
-	AppendMenu(hMenuBar, MF_STRING | MF_POPUP, (UINT)hFilePopupMenu, L"File");
-	{
-		AppendMenu(hFilePopupMenu, MF_STRING, ID_MENU_NEWFILE, L"New");
-		AppendMenu(hFilePopupMenu, MF_STRING, ID_MENU_OPENFILE, L"Open...");
-		AppendMenu(hFilePopupMenu, MF_STRING, ID_MENU_SAVEFILE, L"Save");
-		AppendMenu(hFilePopupMenu, MF_STRING, ID_MENU_SETTINGSPROGRAM, L"Settings");
-		AppendMenu(hFilePopupMenu, MF_STRING, ID_MENU_CLOSEPROGRAM, L"Close");
-	}
-
-	AppendMenu(hMenuBar, MF_STRING | MF_POPUP, (UINT)hHelpPopupMenu, L"Help");
-	{
-		AppendMenu(hHelpPopupMenu, MF_STRING, ID_MENU_HOWTOUSE, L"How to use");
-		AppendMenu(hHelpPopupMenu, MF_STRING, ID_MENU_ABOUTPROGRAM, L"About Bookmark Manager");
-	}
-
-	return hMenuBar;
-}
 
 void BookmarkManagerWindow::create_mainListView(HWND hWndParent, HINSTANCE hInstance)
 {

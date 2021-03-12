@@ -15,7 +15,6 @@ namespace BookmarkManagerWindow
 	LRESULT CALLBACK WndProc(_In_ HWND hWnd, _In_ UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam);
 	HWND create_bookmarkManagerWindow(HINSTANCE hInstance);
 
-	HMENU create_menu();
 	void create_mainListView(HWND hWndParent, HINSTANCE hInstance);
 	void create_addButton(HWND hWndParent, HINSTANCE hInstance);
 	void create_openButton(HWND hWndParent, HINSTANCE hInstance);

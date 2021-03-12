@@ -23,15 +23,6 @@
 #define ID_BOOKMARKMANAGERNWND_CLEANBUTTON					13
 #define ID_CONTAINERCREATIONWND_APPLYBUTTON					14
 
-/*		ID of menu bar buttons.		*/
-#define ID_MENU_CLOSEPROGRAM								51
-#define ID_MENU_SETTINGSPROGRAM								52
-#define ID_MENU_NEWFILE										53
-#define ID_MENU_OPENFILE									54
-#define ID_MENU_SAVEFILE									55
-#define ID_MENU_HOWTOUSE									56
-#define ID_MENU_ABOUTPROGRAM								57
-
 
 /*		Handles names.		*/
 
