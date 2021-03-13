@@ -24,6 +24,7 @@ namespace ContainerCreationWindow
 	void create_tagsTextBox(HWND, HINSTANCE);
 	void create_applyButton(HWND, HINSTANCE);
 	void create_tagsListView(HWND, HINSTANCE);
+	void create_applyTagButton(HWND, HINSTANCE);
 
 	/*
 	*		Creates a container, fills it, adds it to Archive and
@@ -35,6 +36,8 @@ namespace ContainerCreationWindow
 
 	//		Called 'fill_container' function. Fills the container with data from Text Boxes.
 	bool setDataFromTextBox(HandleName hTextBoxName, ContainerDataTypes dataType, Container& container);
+
+	void applyTag();
 
 	//		Resizes and positions controls when the window is resized.
 	void adjustmentOfControls();

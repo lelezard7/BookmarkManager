@@ -12,6 +12,20 @@ LRESULT CALLBACK ContainerCreationWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg,
 {
 	switch (msg)
 	{
+	case WM_KEYDOWN: {
+		switch (wParam)
+		{
+		case VK_RETURN: {
+			debugMessage(L"ddddddd");
+			return 0;
+		}
+
+		default: {
+			return 0;
+		}
+		}
+	}
+
 	case WM_SIZE: {
 		adjustmentOfControls();
 		return 0;
@@ -29,6 +43,11 @@ LRESULT CALLBACK ContainerCreationWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg,
 			{
 			case ID_CONTAINERCREATIONWND_APPLYBUTTON: {
 				fill_container();
+				return 0;
+			}
+
+			case ID_CONTAINERCREATIONWND_APPLYTAGBUTTON: {
+				applyTag();
 				return 0;
 			}
 			}
@@ -69,6 +88,7 @@ void ContainerCreationWindow::create_containerCreationWindow(HINSTANCE hInstance
 	create_adressTextBox(hWnd, hInstance);
 	create_tagsTextBox(hWnd, hInstance);
 	create_tagsListView(hWnd, hInstance);
+	create_applyTagButton(hWnd, hInstance);
 
 	CommonOperations::moveWindowToCenterScreen(hWnd);
 
@@ -207,12 +227,31 @@ void ContainerCreationWindow::create_tagsListView(HWND hWndParent, HINSTANCE hIn
 	ListView_InsertColumn(hWnd, 1, &lvcolumn);
 }
 
+void ContainerCreationWindow::create_applyTagButton(HWND hWndParent, HINSTANCE hInstance)
+{
+	HWND hWnd = CreateWindow(
+		L"BUTTON",
+		L">>",
+		WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
+		ContainerCreationWnd_applyTagButton_X,
+		ContainerCreationWnd_applyTagButton_Y,
+		ContainerCreationWnd_applyTagButton_WIDTH,
+		ContainerCreationWnd_applyTagButton_HEIGHT,
+		hWndParent,
+		(HMENU)ID_CONTAINERCREATIONWND_APPLYTAGBUTTON,
+		hInstance,
+		NULL);
+
+	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_ApplyTagButton);
+}
+
 
 void ContainerCreationWindow::fill_container()
 {
 	HWND	hWnd = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TaskTypeDropDList);
 	Container	container;
 
+	//Checks if the issue type is set.
 	int index = SendMessage(hWnd, CB_GETCURSEL, NULL, NULL);
 	if (index != -1)
 	{
@@ -223,6 +262,7 @@ void ContainerCreationWindow::fill_container()
 		MessageBox(hWnd, L"Task type not selected", L"Input Error", MB_OK | MB_ICONWARNING);
 		return;
 	}
+
 
 	//		We write down the values of the nameTextBox and adressTextBox in the container.
 	bool errorCode_nameTB = setDataFromTextBox(HNAME_CONTAINERCREATIONWND_NameTextBox, ContainerDataTypes::NAME, container);
@@ -238,6 +278,21 @@ void ContainerCreationWindow::fill_container()
 		hWnd = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_WND);
 		MessageBox(hWnd, L"The \"Name\" and \"Task\" fields must be filled!", L"Input Error", MB_OK | MB_ICONWARNING);
 		return;
+	} //TODO: Возможен ввод пробелов. Исправить.
+	
+
+	HWND hTagsListView = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TagsListView);
+	int tagsCount = ListView_GetItemCount(hTagsListView);
+	WCHAR buffer[1000];
+	LVITEM lvitem;
+	lvitem.mask = LVIF_TEXT;
+	lvitem.pszText = buffer;
+	lvitem.cchTextMax = 1000;
+	for (size_t i = 0; i < tagsCount; i++)
+	{
+		lvitem.iItem = i;
+		ListView_GetItem(hTagsListView, &lvitem);
+		container.addTag(lvitem.pszText);
 	}
 
 	ID id = Archive::addContainer(container);
@@ -261,6 +316,23 @@ bool ContainerCreationWindow::setDataFromTextBox(HandleName hTextBoxName, Contai
 	return (length == 1)? false : true;
 }
 
+void ContainerCreationWindow::applyTag()
+{
+	HWND hTagsTextBox = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TagsTextBox);
+	size_t	length = GetWindowTextLength(hTagsTextBox) + (size_t)1;
+	PWSTR buffer = new WCHAR[length];
+
+	GetWindowText(hTagsTextBox, buffer, length);
+
+	HWND hTagsListView = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TagsListView);
+	LVITEM lvitem = { NULL };
+	lvitem.mask = LVIF_TEXT;
+	lvitem.pszText = buffer;
+
+	ListView_InsertItem(hTagsListView, &lvitem);
+	delete[] buffer;
+}
+
 void ContainerCreationWindow::adjustmentOfControls()
 {
 	CheckList сheckList;
@@ -270,6 +342,7 @@ void ContainerCreationWindow::adjustmentOfControls()
 	сheckList.push_back(HNAME_CONTAINERCREATIONWND_ApplyButton);
 	сheckList.push_back(HNAME_CONTAINERCREATIONWND_TagsListView);
 	сheckList.push_back(HNAME_CONTAINERCREATIONWND_TaskTypeDropDList);
+	сheckList.push_back(HNAME_CONTAINERCREATIONWND_ApplyTagButton);
 	
 	if (HandleManager::checkExistence(сheckList))
 	{
@@ -279,6 +352,7 @@ void ContainerCreationWindow::adjustmentOfControls()
 		HWND hTagsTextBox = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TagsTextBox);
 		HWND hTagsListView = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TagsListView);
 		HWND hTaskTypeDropDList = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TaskTypeDropDList);
+		HWND hApplyTagButton = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_ApplyTagButton);
 
 		SetWindowPos(hApplyButton, HWND_TOP, ContainerCreationWnd_applyButton_X,
 			ContainerCreationWnd_applyButton_Y,
@@ -304,6 +378,10 @@ void ContainerCreationWindow::adjustmentOfControls()
 			ContainerCreationWnd_taskTypeDropDList_Y,
 			ContainerCreationWnd_taskTypeDropDList_WIDTH,
 			ContainerCreationWnd_taskTypeDropDList_HEIGHT, NULL);
+		SetWindowPos(hApplyTagButton, HWND_TOP, ContainerCreationWnd_applyTagButton_X,
+			ContainerCreationWnd_applyTagButton_Y,
+			ContainerCreationWnd_applyTagButton_WIDTH,
+			ContainerCreationWnd_applyTagButton_HEIGHT, NULL);
 	}
 }
 
