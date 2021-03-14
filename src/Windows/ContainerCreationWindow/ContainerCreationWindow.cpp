@@ -12,11 +12,16 @@ LRESULT CALLBACK ContainerCreationWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg,
 {
 	switch (msg)
 	{
-	case WM_KEYDOWN: {
+	case WM_CHAR: {
 		switch (wParam)
 		{
 		case VK_RETURN: {
 			debugMessage(L"ddddddd");
+			return 0;
+		}
+
+		case 0x56: {
+			debugMessage(L"kkkkk");
 			return 0;
 		}
 

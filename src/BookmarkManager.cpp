@@ -64,13 +64,17 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	UpdateWindow(hWnd);
 
 	MSG	msg;
+	CreateAcceleratorTable(IDR_ACCELERATOR1)
+	HACCEL accel = LoadAccelerators();
 	while (GetMessage(&msg, NULL, NULL, NULL))
 	{
-		TranslateMessage(&msg);
-		if (!IsDialogMessage(hWnd, &msg))
+		if (TranslateAccelerator(hWnd, , &msg) == 0)
 		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
+			if (!IsDialogMessage(hWnd, &msg))
+			{
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+			}
 		}
 	}
 
