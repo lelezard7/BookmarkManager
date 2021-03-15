@@ -207,7 +207,6 @@ void Container::start() //TODO: Test
 		std::wcscat(o, L"\"");
 	}
 
-	//MessageBox(NULL, o, L"", MB_OK);
 	if (CreateProcess(NULL, o, NULL, NULL, false, NULL, NULL, NULL, &startupinfo, &pi))
 	{
 		//CreateProcess(L"Z:\\OperaGX\\launcher.exe", NULL, NULL, NULL, false, NULL, NULL, NULL, &startupinfo, &pi)

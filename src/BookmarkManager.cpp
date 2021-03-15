@@ -65,7 +65,6 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 
 	MSG	msg;
 	HACCEL accel = LoadAccelerators(hInstance, MAKEINTRESOURCE(BKM_ACCELERATOR));
-	//HWND rtr = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_MainListView);
 	while (GetMessage(&msg, NULL, NULL, NULL))
 	{
 		if (HandleManager::checkExistence(HNAME_CONTAINERCREATIONWND_WND))
