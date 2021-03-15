@@ -5,32 +5,18 @@
 #include "..\..\ApplicationSettings\ApplicationSettings.h"
 #include "..\..\Common\CommonOperations.h"
 #include "..\..\Common\PositionAndSizeControls.h"
+#include "..\..\res\res.h"
 #include <CommCtrl.h>
+
+#define COLORBK			(RGB(70, 68, 81))
+#define COLORText		(RGB(255, 255, 250))
+HBRUSH staticBK;
 
 
 LRESULT CALLBACK ContainerCreationWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam)
 {
 	switch (msg)
 	{
-	case WM_CHAR: {
-		switch (wParam)
-		{
-		case VK_RETURN: {
-			debugMessage(L"ddddddd");
-			return 0;
-		}
-
-		case 0x56: {
-			debugMessage(L"kkkkk");
-			return 0;
-		}
-
-		default: {
-			return 0;
-		}
-		}
-	}
-
 	case WM_SIZE: {
 		adjustmentOfControls();
 		return 0;
@@ -42,22 +28,51 @@ LRESULT CALLBACK ContainerCreationWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg,
 	}
 
 	case WM_COMMAND: {
-		if (HIWORD(wParam) == 0)
+		switch (LOWORD(wParam))
 		{
-			switch (LOWORD(wParam))
-			{
-			case ID_CONTAINERCREATIONWND_APPLYBUTTON: {
-				fill_container();
-				return 0;
-			}
+		case BKM_ID_ENTER: {
+			HWND currentFocus = GetFocus();
 
-			case ID_CONTAINERCREATIONWND_APPLYTAGBUTTON: {
+			if (currentFocus == HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TagsTextBox))
 				applyTag();
-				return 0;
-			}
-			}
+			else
+				fill_container();
+
+			return 0;
+		}
+
+		case BKM_ID_TAB: {
+			HWND currentFocus = GetFocus();
+
+			if (currentFocus == HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_NameTextBox))
+				SetFocus(HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_AdressTextBox));
+			else if (currentFocus == HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_AdressTextBox))
+				SetFocus(HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TaskTypeDropDList));
+			else if (currentFocus == HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TaskTypeDropDList))
+				SetFocus(HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TagsTextBox));
+			else if (currentFocus == HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TagsTextBox))
+				SetFocus(HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_ApplyButton));
+				
+			return 0;
+		}
+
+		case ID_CONTAINERCREATIONWND_APPLYBUTTON: {
+			fill_container();
+			return 0;
+		}
+
+		case ID_CONTAINERCREATIONWND_APPLYTAGBUTTON: {
+			applyTag();
+			return 0;
+		}
 		}
 		return 0;
+	}
+
+	case WM_CTLCOLORSTATIC: {
+		SetBkColor((HDC)wParam, COLORBK);
+		SetTextColor((HDC)wParam, COLORText);
+		return (LRESULT)staticBK;
 	}
 
 	case WM_CLOSE: {
@@ -72,7 +87,7 @@ LRESULT CALLBACK ContainerCreationWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg,
 
 void ContainerCreationWindow::create_containerCreationWindow(HINSTANCE hInstance)
 {
-	HWND hWndParent = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERNWND_WND);
+	HWND hWndParent = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_WND);
 
 	HWND hWnd = CreateWindow(
 		CLASSNAME_CONTAINERCREATIONWND,
@@ -86,14 +101,16 @@ void ContainerCreationWindow::create_containerCreationWindow(HINSTANCE hInstance
 		NULL);
 
 	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_WND);
+	staticBK = CreateSolidBrush(COLORBK);
 
 	create_taskTypeDropDList(hWnd, hInstance);
-	create_applyButton(hWnd, hInstance);
 	create_nameTextBox(hWnd, hInstance);
 	create_adressTextBox(hWnd, hInstance);
 	create_tagsTextBox(hWnd, hInstance);
+	create_applyButton(hWnd, hInstance);
 	create_tagsListView(hWnd, hInstance);
 	create_applyTagButton(hWnd, hInstance);
+	create_taskTypeHelpText(hWnd, hInstance);
 
 	CommonOperations::moveWindowToCenterScreen(hWnd);
 
@@ -133,7 +150,7 @@ void ContainerCreationWindow::create_nameTextBox(HWND hWndParent, HINSTANCE hIns
 	HWND hWnd = CreateWindow(
 		L"EDIT",
 		NULL,
-		WS_VISIBLE | WS_CHILD | ES_AUTOHSCROLL | WS_TABSTOP, //TODO: WS_TABSTOP не работает
+		WS_VISIBLE | WS_CHILD | ES_AUTOHSCROLL,
 		ContainerCreationWnd_nameTextBox_X,
 		ContainerCreationWnd_nameTextBox_Y,
 		ContainerCreationWnd_nameTextBox_WIDTH,
@@ -153,7 +170,7 @@ void ContainerCreationWindow::create_adressTextBox(HWND hWndParent, HINSTANCE hI
 	HWND hWnd = CreateWindow(
 		L"EDIT",
 		NULL,
-		WS_VISIBLE | WS_CHILD | ES_AUTOHSCROLL | WS_TABSTOP,
+		WS_VISIBLE | WS_CHILD | ES_AUTOHSCROLL,
 		ContainerCreationWnd_adressTextBox_X,
 		ContainerCreationWnd_adressTextBox_Y,
 		ContainerCreationWnd_adressTextBox_WIDTH,
@@ -250,6 +267,24 @@ void ContainerCreationWindow::create_applyTagButton(HWND hWndParent, HINSTANCE h
 	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_ApplyTagButton);
 }
 
+void ContainerCreationWindow::create_taskTypeHelpText(HWND hWndParent, HINSTANCE hInstance)
+{
+	HWND hWnd = CreateWindow(
+		L"STATIC",
+		L"Task Type:",
+		WS_VISIBLE | WS_CHILD,
+		ContainerCreationWnd_taskTypeHelpText_X,
+		ContainerCreationWnd_taskTypeHelpText_Y,
+		ContainerCreationWnd_taskTypeHelpText_WIDTH,
+		ContainerCreationWnd_taskTypeHelpText_HEIGHT,
+		hWndParent,
+		NULL,
+		hInstance,
+		NULL);
+
+	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_TaskTypeHelpText);
+}
+
 
 void ContainerCreationWindow::fill_container()
 {
@@ -302,7 +337,7 @@ void ContainerCreationWindow::fill_container()
 
 	ID id = Archive::addContainer(container);
 
-	hWnd = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERNWND_WND);
+	hWnd = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_WND);
 	SendMessage(hWnd, UM_SHOWCREATEDCONTAINER, NULL, id);
 	hWnd = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_WND);
 	SendMessage(hWnd, WM_CLOSE, NULL, true);
@@ -348,6 +383,7 @@ void ContainerCreationWindow::adjustmentOfControls()
 	сheckList.push_back(HNAME_CONTAINERCREATIONWND_TagsListView);
 	сheckList.push_back(HNAME_CONTAINERCREATIONWND_TaskTypeDropDList);
 	сheckList.push_back(HNAME_CONTAINERCREATIONWND_ApplyTagButton);
+	сheckList.push_back(HNAME_CONTAINERCREATIONWND_TaskTypeHelpText);
 	
 	if (HandleManager::checkExistence(сheckList))
 	{
@@ -358,6 +394,7 @@ void ContainerCreationWindow::adjustmentOfControls()
 		HWND hTagsListView = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TagsListView);
 		HWND hTaskTypeDropDList = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TaskTypeDropDList);
 		HWND hApplyTagButton = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_ApplyTagButton);
+		HWND hTaskTypeHelpText = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TaskTypeHelpText);
 
 		SetWindowPos(hApplyButton, HWND_TOP, ContainerCreationWnd_applyButton_X,
 			ContainerCreationWnd_applyButton_Y,
@@ -387,16 +424,21 @@ void ContainerCreationWindow::adjustmentOfControls()
 			ContainerCreationWnd_applyTagButton_Y,
 			ContainerCreationWnd_applyTagButton_WIDTH,
 			ContainerCreationWnd_applyTagButton_HEIGHT, NULL);
+		SetWindowPos(hTaskTypeHelpText, HWND_TOP, ContainerCreationWnd_taskTypeHelpText_X,
+			ContainerCreationWnd_taskTypeHelpText_Y,
+			ContainerCreationWnd_taskTypeHelpText_WIDTH,
+			ContainerCreationWnd_taskTypeHelpText_HEIGHT, NULL);
 	}
 }
 
 LRESULT ContainerCreationWindow::close_window(HWND hWnd, LPARAM lParam)
 {
-	if (ApplicationSettings::getStartupMethodContainerCreationWindow() == StartupMethod::CREATE_NEW_WINDOW
-		|| (lParam == true
-			&& ApplicationSettings::getStartupMethodContainerCreationWindow() == StartupMethod::CONTINUE_UNFINISHED_CREATION))
+	StartupMethod startupmethod = ApplicationSettings::getStartupMethodContainerCreationWindow();
+
+	if (startupmethod == StartupMethod::CREATE_NEW_WINDOW
+		|| (lParam == true && startupmethod == StartupMethod::CONTINUE_UNFINISHED_CREATION))
 	{
-		HWND hWndParent = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERNWND_WND);
+		HWND hWndParent = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_WND);
 		EnableWindow(hWndParent, true);
 		SetFocus(hWndParent);
 
@@ -406,12 +448,15 @@ LRESULT ContainerCreationWindow::close_window(HWND hWnd, LPARAM lParam)
 		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_AdressTextBox);
 		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_TagsTextBox);
 		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_TagsListView);
+		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_ApplyTagButton);
+		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_TaskTypeHelpText);
 		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_WND);
 		DestroyWindow(hWnd);
+		DeleteObject(staticBK);
 	}
 	else
 	{
-		HWND hWndParent = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERNWND_WND);
+		HWND hWndParent = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_WND);
 		EnableWindow(hWndParent, true);
 		SetFocus(hWndParent);
 

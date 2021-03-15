@@ -27,43 +27,71 @@ LRESULT CALLBACK BookmarkManagerWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg, _
 	}
 
 	case WM_COMMAND: {
-		if (HIWORD(wParam) == 0)
+		switch (LOWORD(wParam))
 		{
-			switch (LOWORD(wParam))
+		case BKM_ID_DELETE: {
+			HWND hMainLV = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_MainListView);
+			int lvIndex = ListView_GetNextItem(hMainLV, -1, LVNI_SELECTED);
+			if (lvIndex != -1)
 			{
-			case ID_BOOKMARKMANAGERNWND_ADDBUTTON: {
-				addButton_pressed();
-				return 0;
+				if (Archive::delContainerByIndex(lvIndex))
+					ListView_DeleteItem(hMainLV, lvIndex);
+				else
+					debugMessage(L"Failed to delete container");
 			}
 
-			case ID_BOOKMARKMANAGERNWND_OPENBUTTON: {
-				openButton_pressed();
-				return 0;
-			}
+			return 0;
+		}
 
-			case ID_FILE_CLOSE: {
-				PostMessage(hWnd, WM_CLOSE, NULL, NULL);
-				return 0;
-			}
+		case ID_BOOKMARKMANAGERWND_CLEARBUTTON: {
+			HWND hMainListView = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_MainListView);
 
-			case ID_HELP_ABOUTBOOKMARKMANAGER: {
-				DialogBox(GetModuleHandle(NULL), MAKEINTRESOURCE(BKM_ABOUTWND), hWnd, AboutProgramWindow::DlgProc);
-				return 0;
-			}
+			if (ListView_GetItemCount(hMainListView) != 0)
+			{
+				if (MessageBox(hWnd, L"Do you really want to clear the list? This will remove all items!",
+					L"Remove All", MB_OKCANCEL | MB_ICONWARNING) == IDOK)
+				{
 
-			case ID_FILE_SETTINGS: {
-				SettingsProgramWindow::create_settingsProgramWindow(GetModuleHandle(NULL), hWnd);
-				return 0;
+					ListView_DeleteAllItems(hMainListView);
+					Archive::clear();
+				}
 			}
+			return 0;
+		}
 
-			case ID_HELP_HOWTOUSE: {
-				HWND hHelpWnd = HtmlHelp(hWnd, L"BookmarkManager.chm", HH_DISPLAY_TOPIC, NULL);
-				if (!hHelpWnd)
-					debugMessage(L"Couldn't open .chm file");
-				CommonOperations::moveWindowToCenterScreen(hHelpWnd);
-				return 0;
-			}
-			}
+		case ID_BOOKMARKMANAGERWND_ADDBUTTON: {
+			addButton_pressed();
+			return 0;
+		}
+
+		case ID_BOOKMARKMANAGERWND_OPENBUTTON: {
+			openButton_pressed();
+			return 0;
+		}
+
+		case ID_FILE_CLOSE: {
+			PostMessage(hWnd, WM_CLOSE, NULL, NULL);
+			return 0;
+		}
+
+		case ID_HELP_ABOUTBOOKMARKMANAGER: {
+			DialogBox(GetModuleHandle(NULL), MAKEINTRESOURCE(BKM_ABOUTWND), hWnd, AboutProgramWindow::DlgProc);
+			return 0;
+		}
+
+		case ID_FILE_SETTINGS: {
+			SettingsProgramWindow::create_settingsProgramWindow(GetModuleHandle(NULL), hWnd);
+			return 0;
+		}
+
+		case ID_HELP_HOWTOUSE: {
+			HWND hHelpWnd = HtmlHelp(hWnd, L"BookmarkManager.chm", HH_DISPLAY_TOPIC, NULL);
+			if (!hHelpWnd)
+				debugMessage(L"Couldn't open .chm file");
+			CommonOperations::moveWindowToCenterScreen(hHelpWnd);
+			return 0;
+		}
+
 		}
 		return 0;
 	}
@@ -107,7 +135,7 @@ HWND BookmarkManagerWindow::create_bookmarkManagerWindow(HINSTANCE hInstance)
 		hInstance,
 		NULL);
 
-	HandleManager::addHandleWnd(hWnd, HNAME_BOOKMARKMANAGERNWND_WND);
+	HandleManager::addHandleWnd(hWnd, HNAME_BOOKMARKMANAGERWND_WND);
 
 	HMENU hMenu = LoadMenu(hInstance, MAKEINTRESOURCE(BKM_MENU));
 	SetMenu(hWnd, hMenu);
@@ -138,7 +166,7 @@ void BookmarkManagerWindow::create_mainListView(HWND hWndParent, HINSTANCE hInst
 		hInstance,
 		NULL);
 
-	HandleManager::addHandleWnd(hWnd, HNAME_BOOKMARKMANAGERNWND_MainListView);
+	HandleManager::addHandleWnd(hWnd, HNAME_BOOKMARKMANAGERWND_MainListView);
 
 	LVCOLUMN lvcolumn;
 	lvcolumn.mask = LVCF_WIDTH | LVCF_TEXT;
@@ -159,11 +187,11 @@ void BookmarkManagerWindow::create_addButton(HWND hWndParent, HINSTANCE hInstanc
 		BookmarkManagerWnd_addButton_WIDTH,
 		BookmarkManagerWnd_addButton_HEIGHT,
 		hWndParent,
-		(HMENU)ID_BOOKMARKMANAGERNWND_ADDBUTTON,
+		(HMENU)ID_BOOKMARKMANAGERWND_ADDBUTTON,
 		hInstance,
 		NULL);
 
-	HandleManager::addHandleWnd(hWnd, HNAME_BOOKMARKMANAGERNWND_AddButton);
+	HandleManager::addHandleWnd(hWnd, HNAME_BOOKMARKMANAGERWND_AddButton);
 }
 
 void BookmarkManagerWindow::create_openButton(HWND hWndParent, HINSTANCE hInstance)
@@ -177,11 +205,11 @@ void BookmarkManagerWindow::create_openButton(HWND hWndParent, HINSTANCE hInstan
 		BookmarkManagerWnd_openButton_WIDTH,
 		BookmarkManagerWnd_openButton_HEIGHT,
 		hWndParent,
-		(HMENU)ID_BOOKMARKMANAGERNWND_OPENBUTTON,
+		(HMENU)ID_BOOKMARKMANAGERWND_OPENBUTTON,
 		hInstance,
 		NULL);
 
-	HandleManager::addHandleWnd(hWnd, HNAME_BOOKMARKMANAGERNWND_OpenButton);
+	HandleManager::addHandleWnd(hWnd, HNAME_BOOKMARKMANAGERWND_OpenButton);
 }
 
 void BookmarkManagerWindow::create_clearButton(HWND hWndParent, HINSTANCE hInstance)
@@ -195,11 +223,11 @@ void BookmarkManagerWindow::create_clearButton(HWND hWndParent, HINSTANCE hInsta
 		BookmarkManagerWnd_cleanButton_WIDTH,
 		BookmarkManagerWnd_cleanButton_HEIGHT,
 		hWndParent,
-		(HMENU)ID_BOOKMARKMANAGERNWND_CLEANBUTTON,
+		(HMENU)ID_BOOKMARKMANAGERWND_CLEARBUTTON,
 		hInstance,
 		NULL);
 
-	HandleManager::addHandleWnd(hWnd, HNAME_BOOKMARKMANAGERNWND_ClearButton);
+	HandleManager::addHandleWnd(hWnd, HNAME_BOOKMARKMANAGERWND_ClearButton);
 }
 
 
@@ -214,7 +242,7 @@ void BookmarkManagerWindow::addButton_pressed()
 
 			hWnd = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_WND);
 			ShowWindow(hWnd, true);
-			hWnd = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERNWND_WND);
+			hWnd = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_WND);
 			EnableWindow(hWnd, false);
 			return;
 		}
@@ -228,13 +256,14 @@ void BookmarkManagerWindow::openButton_pressed()
 	PWSTR lvText = new WCHAR[30000];
 	LVITEM lvitem;
 
-	HWND hWnd = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERNWND_MainListView);
+	HWND hWnd = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_MainListView);
 	int lvIndex = ListView_GetNextItem(hWnd, -1, LVNI_SELECTED);
 	ListView_GetItemText(hWnd, lvIndex, NULL, lvText, 30000);
 
 	for (size_t i = 0; i < Archive::size(); i++)
 	{
-		auto container = Archive::getContainerByIndex(i);
+		auto container = Archive::getContainerByIndex(i); //TODO: Если есть два контейнера с одинаковыми именами
+		//то будет выбран первый попавшийся элемент.
 		std::wstring taskName(container->getContent(ContainerDataTypes::NAME));
 		std::wstring selectedName(lvText);
 
@@ -251,17 +280,17 @@ void BookmarkManagerWindow::openButton_pressed()
 void BookmarkManagerWindow::adjustmentOfControls(HWND hWnd)
 {
 	CheckList checkList;
-	checkList.push_back(HNAME_BOOKMARKMANAGERNWND_MainListView);
-	checkList.push_back(HNAME_BOOKMARKMANAGERNWND_AddButton);
-	checkList.push_back(HNAME_BOOKMARKMANAGERNWND_OpenButton);
-	checkList.push_back(HNAME_BOOKMARKMANAGERNWND_ClearButton);
+	checkList.push_back(HNAME_BOOKMARKMANAGERWND_MainListView);
+	checkList.push_back(HNAME_BOOKMARKMANAGERWND_AddButton);
+	checkList.push_back(HNAME_BOOKMARKMANAGERWND_OpenButton);
+	checkList.push_back(HNAME_BOOKMARKMANAGERWND_ClearButton);
 
 	if (HandleManager::checkExistence(checkList))
 	{
-		HWND hMainListView = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERNWND_MainListView);
-		HWND hAddButton = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERNWND_AddButton);
-		HWND hOpenButton = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERNWND_OpenButton);
-		HWND hCleanButton = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERNWND_ClearButton);
+		HWND hMainListView = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_MainListView);
+		HWND hAddButton = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_AddButton);
+		HWND hOpenButton = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_OpenButton);
+		HWND hCleanButton = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_ClearButton);
 
 		SetWindowPos(hMainListView, HWND_TOP, BookmarkManagerWnd_mainListView_X,
 			BookmarkManagerWnd_mainListView_Y,
@@ -290,6 +319,6 @@ void BookmarkManagerWindow::showCreatedContainer(LPARAM lParam)
 	Container* container = Archive::getContainerByID(lParam);
 	lvitem.pszText = container->getContent(ContainerDataTypes::NAME);
 
-	HWND hWnd = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERNWND_MainListView);
+	HWND hWnd = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_MainListView);
 	ListView_InsertItem(hWnd, &lvitem);
 }

@@ -25,6 +25,7 @@ namespace ContainerCreationWindow
 	void create_applyButton(HWND, HINSTANCE);
 	void create_tagsListView(HWND, HINSTANCE);
 	void create_applyTagButton(HWND, HINSTANCE);
+	void create_taskTypeHelpText(HWND, HINSTANCE);
 
 	/*
 	*		Creates a container, fills it, adds it to Archive and

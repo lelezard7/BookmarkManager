@@ -63,6 +63,8 @@ public:
 	/*		If it fails, the function returns nullptr.		*/
 	static Container* getContainerByID(const ID id);
 	static Container* getContainerByIndex(const size_t index);
+	static void clear();
+	static bool delContainerByIndex(const size_t index);
 	static size_t size();
 };
 

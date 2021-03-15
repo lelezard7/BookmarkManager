@@ -39,6 +39,23 @@ Container* Archive::getContainerByIndex(const size_t index)
 	return &_iterator->second;
 }
 
+void Archive::clear()
+{
+	archive_.clear();
+}
+
+bool Archive::delContainerByIndex(const size_t index)
+{
+	if (index > archive_.size() - 1) {
+		return false;
+	}
+
+	Archive_t::iterator _iterator = archive_.begin();
+	std::advance(_iterator, index);
+	archive_.erase(_iterator->first);
+	return true;
+}
+
 size_t Archive::size()
 {
 	return archive_.size();
@@ -50,6 +67,7 @@ Container::Container()
 {
 	name_ = nullptr;
 	task_ = nullptr;
+	taskType_ = nullptr;
 }
 
 Container::~Container()
@@ -177,11 +195,11 @@ void Container::start() //TODO: Test
 	PROCESS_INFORMATION pi;
 
 	PWSTR o = nullptr;
-	if (taskType_ == L"Program")
+	if (!wcscmp(taskType_, L"Program"))
 	{
 		o = task_;
 	}
-	else if (taskType_ == L"URL")
+	else if (!wcscmp(taskType_, L"URL"))
 	{
 		o = new WCHAR[600]{ L"Z:\\OperaGX\\launcher.exe" };
 		std::wcscat(o, L" \"");

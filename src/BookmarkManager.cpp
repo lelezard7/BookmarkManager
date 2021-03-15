@@ -64,18 +64,24 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	UpdateWindow(hWnd);
 
 	MSG	msg;
-	CreateAcceleratorTable(IDR_ACCELERATOR1)
-	HACCEL accel = LoadAccelerators();
+	HACCEL accel = LoadAccelerators(hInstance, MAKEINTRESOURCE(BKM_ACCELERATOR));
+	//HWND rtr = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_MainListView);
 	while (GetMessage(&msg, NULL, NULL, NULL))
 	{
-		if (TranslateAccelerator(hWnd, , &msg) == 0)
+		if (HandleManager::checkExistence(HNAME_CONTAINERCREATIONWND_WND))
 		{
-			if (!IsDialogMessage(hWnd, &msg))
-			{
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
-			}
+			HWND hCrtCntrWnd = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_WND);
+
+			if (GetActiveWindow() == hCrtCntrWnd)
+				if (TranslateAccelerator(hCrtCntrWnd, accel, &msg))
+					continue;
 		}
+
+		if (TranslateAccelerator(hWnd, accel, &msg))
+			continue;
+
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
 	}
 
 	return (int)msg.wParam;

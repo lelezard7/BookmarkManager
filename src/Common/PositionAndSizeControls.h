@@ -44,6 +44,14 @@
 														    6 - ContainerCreationWnd_taskTypeDropDList_WIDTH)
 #define ContainerCreationWnd_taskTypeDropDList_Y		(10)
 
+//			taskTypeHelpText
+#define ContainerCreationWnd_taskTypeHelpText_WIDTH		(80)
+#define ContainerCreationWnd_taskTypeHelpText_HEIGHT	(ContainerCreationWnd_taskTypeDropDList_HEIGHT)
+#define ContainerCreationWnd_taskTypeHelpText_X			(ContainerCreationWnd_taskTypeDropDList_X - \
+															(5 + ContainerCreationWnd_taskTypeHelpText_WIDTH))
+#define ContainerCreationWnd_taskTypeHelpText_Y			(ContainerCreationWnd_taskTypeDropDList_Y + \
+															((ContainerCreationWnd_taskTypeDropDList_Y / 2) / 2))
+
 //			nameTextBox
 #define ContainerCreationWnd_nameTextBox_WIDTH			((ContainerCreationWnd_RECT_RIGHT / 2) - 4)
 #define ContainerCreationWnd_nameTextBox_HEIGHT			(23)
@@ -93,11 +101,11 @@
 /*		BookmarkManagerWindow		*/
 
 #define BookmarkManagerWnd_RECT_RIGHT	(CommonOperations::getClientRectValue(\
-											HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERNWND_WND),\
+											HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_WND),\
 											ClientRectCoordinates::RIGHT))
 
 #define BookmarkManagerWnd_RECT_BOTTOM	(CommonOperations::getClientRectValue(\
-											HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERNWND_WND),\
+											HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_WND),\
 											ClientRectCoordinates::BOTTOM))
 
 //			mainListView
