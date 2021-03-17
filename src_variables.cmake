@@ -14,7 +14,9 @@ set(BKM_APPLICATIONSETTINGS
 
 set(BKM_ARCHIVE
 			src/Archive/Archive.h
-			src/Archive/Archive.cpp)
+			src/Archive/Archive.cpp
+			src/Archive/Container.h
+			src/Archive/Container.cpp)
 		
 set(BKM_COMMON
 			src/Common/BkmDef.h

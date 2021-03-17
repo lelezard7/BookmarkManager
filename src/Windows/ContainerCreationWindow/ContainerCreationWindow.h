@@ -11,10 +11,14 @@
 #include "..\..\Archive\Archive.h"
 #include "..\..\HandleManager\HandleManager.h"
 #include <Windows.h>
+#include <functional>
 
 
 namespace ContainerCreationWindow
 {
+	//using Content = std::function<void(const PWSTR)>;
+
+
 	LRESULT CALLBACK WndProc(_In_ HWND, _In_ UINT, _In_ WPARAM, _In_ LPARAM);
 	void create_containerCreationWindow(HINSTANCE);
 
@@ -35,8 +39,11 @@ namespace ContainerCreationWindow
 	*/
 	void fill_container();
 
+	bool setDataFromTextBox(HandleName hTextBoxName, Content content, Container& container);
+
+
 	//		Called 'fill_container' function. Fills the container with data from Text Boxes.
-	bool setDataFromTextBox(HandleName hTextBoxName, ContainerDataTypes dataType, Container& container);
+	//bool setDataFromTextBox(HandleName hTextBoxName, ContainerDataTypes dataType, Container& container);
 
 	void applyTag();
 

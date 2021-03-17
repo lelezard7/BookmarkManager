@@ -253,27 +253,27 @@ void BookmarkManagerWindow::addButton_pressed()
 
 void BookmarkManagerWindow::openButton_pressed()
 {
-	PWSTR lvText = new WCHAR[30000];
-	LVITEM lvitem;
+	//PWSTR lvText = new WCHAR[30000];
+	//LVITEM lvitem;
 
-	HWND hWnd = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_MainListView);
-	int lvIndex = ListView_GetNextItem(hWnd, -1, LVNI_SELECTED);
-	ListView_GetItemText(hWnd, lvIndex, NULL, lvText, 30000);
+	//HWND hWnd = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_MainListView);
+	//int lvIndex = ListView_GetNextItem(hWnd, -1, LVNI_SELECTED);
+	//ListView_GetItemText(hWnd, lvIndex, NULL, lvText, 30000);
 
-	for (size_t i = 0; i < Archive::size(); i++)
-	{
-		auto container = Archive::getContainerByIndex(i); //TODO: Если есть два контейнера с одинаковыми именами
-		//то будет выбран первый попавшийся элемент.
-		std::wstring taskName(container->getContent(ContainerDataTypes::NAME));
-		std::wstring selectedName(lvText);
+	//for (size_t i = 0; i < Archive::size(); i++)
+	//{
+	//	auto container = Archive::getContainerByIndex(i); //TODO: Если есть два контейнера с одинаковыми именами
+	//	//то будет выбран первый попавшийся элемент.
+	//	std::wstring taskName(container->getContent(ContainerDataTypes::NAME));
+	//	std::wstring selectedName(lvText);
 
-		if (taskName == selectedName)
-		{
-			container->start();
-		}
-	}
+	//	if (taskName == selectedName)
+	//	{
+	//		container->start();
+	//	}
+	//}
 
-	delete[] lvText;
+	//delete[] lvText;
 }
 
 
@@ -313,12 +313,12 @@ void BookmarkManagerWindow::adjustmentOfControls(HWND hWnd)
 
 void BookmarkManagerWindow::showCreatedContainer(LPARAM lParam)
 {
-	LVITEM lvitem = { NULL };
-	lvitem.mask = LVIF_TEXT;
+	//LVITEM lvitem = { NULL };
+	//lvitem.mask = LVIF_TEXT;
 
-	Container* container = Archive::getContainerByID(lParam);
-	lvitem.pszText = container->getContent(ContainerDataTypes::NAME);
+	//Container* container = Archive::getContainerByID(lParam);
+	//lvitem.pszText = container->getContent(ContainerDataTypes::NAME);
 
-	HWND hWnd = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_MainListView);
-	ListView_InsertItem(hWnd, &lvitem);
+	//HWND hWnd = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_MainListView);
+	//ListView_InsertItem(hWnd, &lvitem);
 }
