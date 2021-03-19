@@ -20,6 +20,7 @@
 #include "Windows\SettingsProgramWindow\SettingsProgramWindow.h"
 #include "Common\BkmDef.h"
 #include "Common\CommonOperations.h"
+#include "HandleManager\HandleManager.h"
 #include "res\res.h"
 #include <Windows.h>
 #include <CommCtrl.h>
@@ -56,7 +57,7 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	}
 
 	TaskTypesCollection::addTaskType(L"URL");
-	TaskTypesCollection::addTaskType(L"Program");
+	TaskTypesCollection::addTaskType(L"Программа");
 
 	/*		Create the main window and show it.		*/
 	HWND hWnd = BookmarkManagerWindow::create_bookmarkManagerWindow(hInstance);
@@ -124,7 +125,7 @@ ErrorCode register_windowClasses(HINSTANCE hInstance)
 
 	/*		ContainerCreationWindow class.		*/
 	wndClass.lpszClassName = CLASSNAME_CONTAINERCREATIONWND;
-	wndClass.lpfnWndProc = ContainerCreationWindow::WndProc;
+	wndClass.lpfnWndProc = ContainerCreatProc;
 	wndClass.hInstance = hInstance;
 	wndClass.cbSize = sizeof(WNDCLASSEX);
 	wndClass.style = CS_HREDRAW | CS_VREDRAW;

@@ -7,14 +7,14 @@ Container::Container()
 {
 	name_ = nullptr;
 	task_ = nullptr;
-	taskType_ = TASKT_NOTSPECIFIED;
+	taskType_ = TASKTTYPE_NOTSPECIFIED;
 }
 
 Container::~Container()
 {
 	name_ = nullptr;
 	task_ = nullptr;
-	taskType_ = TASKT_NOTSPECIFIED;
+	taskType_ = TASKTTYPE_NOTSPECIFIED;
 	tags_.clear();
 }
 
@@ -46,7 +46,7 @@ void Container::erase(ContainerDataTypes dataTypes)
 
 	case ContainerDataTypes::TASK_TYPE:
 		if (taskType_) {
-			taskType_ = TASKT_NOTSPECIFIED;
+			taskType_ = TASKTTYPE_NOTSPECIFIED;
 		}
 		break;
 
@@ -130,6 +130,6 @@ void Container::start()
 	if(!wcscmp(_taskType, L"URL"))
 		ShellExecute(NULL, L"open", task_, NULL, NULL, SW_SHOW);
 
-	else if (!wcscmp(_taskType, L"Program"))
-		ShellExecute(NULL, L"open", task_, NULL, NULL, SW_SHOW); //Сделать возможность задавать параметры запуска.
+	else if (!wcscmp(_taskType, L"Программа"))
+		ShellExecute(NULL, L"open", task_, NULL, NULL, SW_SHOW); //TODO: Сделать возможность задавать параметры запуска.
 }

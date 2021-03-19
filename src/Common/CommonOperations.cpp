@@ -43,11 +43,12 @@ void moveWindowToCenterScreen(HWND hWnd, HWND hWndInsertAfter)
 		NULL, NULL, SWP_NOSIZE);
 }
 
-void setMinimumWindowSize(const LONG width, const LONG height, LPARAM lParam)
+bool setMinimumWindowSize(const LONG width, const LONG height, LPARAM lParam)
 {
 	LPMINMAXINFO _lpminmaxinfo = (LPMINMAXINFO)lParam;
 	_lpminmaxinfo->ptMinTrackSize.x = width;
 	_lpminmaxinfo->ptMinTrackSize.y = height;
+	return true;
 }
 
 LONG getClientRectValue(HWND hWnd, ClientRectCoordinates clientRectCoordinates)

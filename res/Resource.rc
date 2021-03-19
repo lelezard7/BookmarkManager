@@ -116,16 +116,6 @@ END
 
 #endif    // APSTUDIO_INVOKED
 
-#endif    // Русский (Россия) resources
-/////////////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////////////
-// Английский (США) resources
-
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
-LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
-#pragma code_page(1252)
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -164,15 +154,15 @@ STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Program"
 FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
-    CONTROL         "Set the default task type",BKM_DEFAULTTASKTYPE_CKB,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,10,9,96,10
-    COMBOBOX        BKM_DEFAULTTASKTYPE,121,26,119,30,CBS_DROPDOWNLIST | CBS_SORT | WS_DISABLED | WS_VSCROLL | WS_TABSTOP
-    CONTROL         "Open an existing 'add container' window",BKM_ADDCONTAINERWNDBEHAVIOR_1,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,10,61,145,10
-    CONTROL         "Always create a new 'add container' window",BKM_ADDCONTAINERWNDBEHAVIOR_2,
-                    "Button",BS_AUTORADIOBUTTON | WS_DISABLED,29,77,157,10
-    CONTROL         "Continue unfinished container creation",BKM_ADDCONTAINERWNDBEHAVIOR_3,
-                    "Button",BS_AUTORADIOBUTTON | WS_DISABLED,29,92,139,10
+    CONTROL         "Задать тип задачи по умолчанию",BKM_DEFAULTTASKTYPE_CHECKBOX,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,10,9,131,10
+    COMBOBOX        BKM_DEFAULTTASKTYPE_COMBOBOX,121,26,119,30,CBS_DROPDOWNLIST | CBS_SORT | WS_DISABLED | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Открывать существующее окно создания контейнера",BKM_ADDCONTAINERWNDBEHAVIOR_1,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,10,61,203,10
+    CONTROL         "Всегда создавать новое окно создания контейнера",BKM_ADDCONTAINERWNDBEHAVIOR_2,
+                    "Button",BS_AUTORADIOBUTTON | WS_DISABLED,29,77,192,10
+    CONTROL         "Сохранять незаконченное создание контейнера",BKM_ADDCONTAINERWNDBEHAVIOR_3,
+                    "Button",BS_AUTORADIOBUTTON | WS_DISABLED,29,92,181,10
 END
 
 BKM_SETTINGSPROGRAMWND_PROPPAGE_2 DIALOGEX 0, 0, 251, 200
@@ -184,14 +174,14 @@ END
 
 BKM_ABOUTWND DIALOGEX 0, 0, 321, 101
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "About Bookmark Manager"
+CAPTION "О программе Bookmark Manager"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "OK",ABOUTWND_OK,264,80,50,14
     CONTROL         "   <a href=""https://github.com/lelezard7/BookmarkManager"">GitHub</a>",ABOUTWND_SYSLINK_1,
-                    "SysLink",WS_TABSTOP,61,22,32,10
-    LTEXT           "Bookmark Manager: version ",ABOUTWND_TEXT_1,7,7,307,8
-    LTEXT           "Repository: ",ABOUTWND_TEXT_2,21,23,40,8
+                    "SysLink",WS_TABSTOP,74,22,32,10
+    LTEXT           "Bookmark Manager: версия ",ABOUTWND_TEXT_1,7,7,307,8
+    LTEXT           "Репозиторий: ",ABOUTWND_TEXT_2,21,23,49,8
 END
 
 
@@ -223,9 +213,9 @@ END
 
 BKM_SETTINGSPROGRAMWND_PROPPAGE_1 DLGINIT
 BEGIN
-    BKM_DEFAULTTASKTYPE, 0x403, 4, 0
+    BKM_DEFAULTTASKTYPE_COMBOBOX, 0x403, 4, 0
 0x5255, 0x004c, 
-    BKM_DEFAULTTASKTYPE, 0x403, 9, 0
+    BKM_DEFAULTTASKTYPE_COMBOBOX, 0x403, 9, 0
 0x5020, 0x6f72, 0x7267, 0x6d61, "\000" 
     0
 END
@@ -238,23 +228,23 @@ END
 
 BKM_MENU MENU
 BEGIN
-    POPUP "File"
+    POPUP "Файл"
     BEGIN
-        MENUITEM "New",                         ID_FILE_NEW
-        MENUITEM "Open...",                     ID_FILE_OPEN
-        MENUITEM "Save",                        ID_FILE_SAVE
+        MENUITEM "Новый",                       ID_FILE_NEW
+        MENUITEM "Открыть...",                  ID_FILE_OPEN
+        MENUITEM "Сохранить",                   ID_FILE_SAVE
         MENUITEM SEPARATOR
-        MENUITEM "Settings",                    ID_FILE_SETTINGS
-        MENUITEM "Close",                       ID_FILE_CLOSE
+        MENUITEM "Настройки",                   ID_FILE_SETTINGS
+        MENUITEM "Выход",                       ID_FILE_CLOSE
     END
-    POPUP "Help"
+    POPUP "Справка"
     BEGIN
-        MENUITEM "How to use",                  ID_HELP_HOWTOUSE
-        MENUITEM "About Bookmark Manager",      ID_HELP_ABOUTBOOKMARKMANAGER
+        MENUITEM "Как использовать",            ID_HELP_HOWTOUSE
+        MENUITEM "О программе Bookmark Manager", ID_HELP_ABOUTBOOKMARKMANAGER
     END
 END
 
-#endif    // Английский (США) resources
+#endif    // Русский (Россия) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

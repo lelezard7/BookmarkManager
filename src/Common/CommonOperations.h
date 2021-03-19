@@ -28,7 +28,7 @@ public:
 
 void fillComboBoxTaskTypes(HWND hWnd);
 void moveWindowToCenterScreen(HWND hWnd, HWND hWndInsertAfter = HWND_TOP);
-void setMinimumWindowSize(const LONG width, const LONG height, LPARAM lParam);
+bool setMinimumWindowSize(const LONG width, const LONG height, LPARAM lParam);
 
 /*		
 *		Receives the coordinates of the client area and returns the valuespecified

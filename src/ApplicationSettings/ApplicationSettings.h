@@ -10,7 +10,7 @@
 #include "..\Common\CommonOperations.h"
 #include <Windows.h>
 
-#define TASKT_NOTSPECIFIED (-1)
+#define TASKTTYPE_NOTSPECIFIED (-1)
 
 enum class StartupMethod;
 

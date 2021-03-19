@@ -37,41 +37,41 @@
 											HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_WND),\
 											ClientRectCoordinates::BOTTOM))
 
-//			taskTypeDropDList
-#define ContainerCreationWnd_taskTypeDropDList_WIDTH	(150)
-#define ContainerCreationWnd_taskTypeDropDList_HEIGHT	(15)
-#define ContainerCreationWnd_taskTypeDropDList_X		(ContainerCreationWnd_RECT_RIGHT - \
-														    6 - ContainerCreationWnd_taskTypeDropDList_WIDTH)
-#define ContainerCreationWnd_taskTypeDropDList_Y		(10)
+//			taskTypeComboBox
+#define ContainerCreationWnd_taskTypeComboBox_WIDTH	(150)
+#define ContainerCreationWnd_taskTypeComboBox_HEIGHT	(15)
+#define ContainerCreationWnd_taskTypeComboBox_X		(ContainerCreationWnd_RECT_RIGHT - \
+														    6 - ContainerCreationWnd_taskTypeComboBox_WIDTH)
+#define ContainerCreationWnd_taskTypeComboBox_Y		(10)
 
 //			taskTypeHelpText
-#define ContainerCreationWnd_taskTypeHelpText_WIDTH		(80)
-#define ContainerCreationWnd_taskTypeHelpText_HEIGHT	(ContainerCreationWnd_taskTypeDropDList_HEIGHT)
-#define ContainerCreationWnd_taskTypeHelpText_X			(ContainerCreationWnd_taskTypeDropDList_X - \
+#define ContainerCreationWnd_taskTypeHelpText_WIDTH		(85)
+#define ContainerCreationWnd_taskTypeHelpText_HEIGHT	(ContainerCreationWnd_taskTypeComboBox_HEIGHT)
+#define ContainerCreationWnd_taskTypeHelpText_X			(ContainerCreationWnd_taskTypeComboBox_X - \
 															(5 + ContainerCreationWnd_taskTypeHelpText_WIDTH))
-#define ContainerCreationWnd_taskTypeHelpText_Y			(ContainerCreationWnd_taskTypeDropDList_Y + \
-															((ContainerCreationWnd_taskTypeDropDList_Y / 2) / 2))
+#define ContainerCreationWnd_taskTypeHelpText_Y			(ContainerCreationWnd_taskTypeComboBox_Y + \
+															((ContainerCreationWnd_taskTypeComboBox_Y / 2) / 2))
 
 //			nameTextBox
 #define ContainerCreationWnd_nameTextBox_WIDTH			((ContainerCreationWnd_RECT_RIGHT / 2) - 4)
 #define ContainerCreationWnd_nameTextBox_HEIGHT			(23)
 #define ContainerCreationWnd_nameTextBox_X				(5)
-#define ContainerCreationWnd_nameTextBox_Y				(12 + ContainerCreationWnd_taskTypeDropDList_Y + \
-														    ContainerCreationWnd_taskTypeDropDList_HEIGHT)
+#define ContainerCreationWnd_nameTextBox_Y				(12 + ContainerCreationWnd_taskTypeComboBox_Y + \
+														    ContainerCreationWnd_taskTypeComboBox_HEIGHT)
 
-//			adressTextBox
-#define ContainerCreationWnd_adressTextBox_WIDTH		((ContainerCreationWnd_RECT_RIGHT / 2) - 9)
-#define ContainerCreationWnd_adressTextBox_HEIGHT		(23)
-#define ContainerCreationWnd_adressTextBox_X			(4 + (ContainerCreationWnd_RECT_RIGHT / 2))
-#define ContainerCreationWnd_adressTextBox_Y			(12 + ContainerCreationWnd_taskTypeDropDList_Y + \
-														    ContainerCreationWnd_taskTypeDropDList_HEIGHT)
+//			taskTextBox
+#define ContainerCreationWnd_taskTextBox_WIDTH		((ContainerCreationWnd_RECT_RIGHT / 2) - 9)
+#define ContainerCreationWnd_taskTextBox_HEIGHT		(23)
+#define ContainerCreationWnd_taskTextBox_X			(4 + (ContainerCreationWnd_RECT_RIGHT / 2))
+#define ContainerCreationWnd_taskTextBox_Y			(12 + ContainerCreationWnd_taskTypeComboBox_Y + \
+														    ContainerCreationWnd_taskTypeComboBox_HEIGHT)
 
 //			tagsTextBox
 #define ContainerCreationWnd_tagsTextBox_WIDTH			(ContainerCreationWnd_RECT_RIGHT - 55)
 #define ContainerCreationWnd_tagsTextBox_HEIGHT			(23)
 #define ContainerCreationWnd_tagsTextBox_X				(5)
-#define ContainerCreationWnd_tagsTextBox_Y				(5 + ContainerCreationWnd_adressTextBox_Y + \
-														    ContainerCreationWnd_adressTextBox_HEIGHT)
+#define ContainerCreationWnd_tagsTextBox_Y				(5 + ContainerCreationWnd_taskTextBox_Y + \
+														    ContainerCreationWnd_taskTextBox_HEIGHT)
 
 //			tagsListView
 #define ContainerCreationWnd_tagsListView_X				(5)

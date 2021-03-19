@@ -1,12 +1,21 @@
 ﻿set(BKM_WINDOWS
 			src/Windows/BookmarkManagerWindow/BookmarkManagerWindow.h
 			src/Windows/BookmarkManagerWindow/BookmarkManagerWindow.cpp
+
 			src/Windows/ContainerCreationWindow/ContainerCreationWindow.h
 			src/Windows/ContainerCreationWindow/ContainerCreationWindow.cpp
+			src/Windows/ContainerCreationWindow/ContainerCreationEvents.h
+			src/Windows/ContainerCreationWindow/ContainerCreationEvents.cpp
+
 			src/Windows/AboutProgramWindow/AboutProgramWindow.h
 			src/Windows/AboutProgramWindow/AboutProgramWindow.cpp
+			src/Windows/AboutProgramWindow/AboutProgramEvents.h
+			src/Windows/AboutProgramWindow/AboutProgramEvents.cpp
+
 			src/Windows/SettingsProgramWindow/SettingsProgramWindow.h
-			src/Windows/SettingsProgramWindow/SettingsProgramWindow.cpp)
+			src/Windows/SettingsProgramWindow/SettingsProgramWindow.cpp
+			src/Windows/SettingsProgramWindow/SettingsProgramEvents.h
+			src/Windows/SettingsProgramWindow/SettingsProgramEvents.cpp)
 		
 set(BKM_APPLICATIONSETTINGS
 			src/ApplicationSettings/ApplicationSettings.h

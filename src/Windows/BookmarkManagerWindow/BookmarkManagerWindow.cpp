@@ -81,12 +81,12 @@ LRESULT CALLBACK BookmarkManagerWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg, _
 		}
 
 		case ID_HELP_ABOUTBOOKMARKMANAGER: {
-			DialogBox(GetModuleHandle(NULL), MAKEINTRESOURCE(BKM_ABOUTWND), hWnd, AboutProgramWindow::DlgProc);
+			DialogBox(GetModuleHandle(NULL), MAKEINTRESOURCE(BKM_ABOUTWND), hWnd, AboutProc);
 			return 0;
 		}
 
 		case ID_FILE_SETTINGS: {
-			SettingsProgramWindow::create_settingsProgramWindow(GetModuleHandle(NULL), hWnd);
+			create_settingsProgramWindow(GetModuleHandle(NULL), hWnd);
 			return 0;
 		}
 
@@ -103,7 +103,7 @@ LRESULT CALLBACK BookmarkManagerWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg, _
 	}
 
 	case UM_SHOWCREATEDCONTAINER: {
-		showCreatedContainer(lParam);
+		showCreatedContainer(wParam);
 		return 0;
 	}
 
@@ -262,7 +262,7 @@ void BookmarkManagerWindow::addButton_pressed()
 		}
 	}
 
-	ContainerCreationWindow::create_containerCreationWindow(GetModuleHandle(NULL));
+	create_containerCreationWindow(GetModuleHandle(NULL));
 }
 
 void BookmarkManagerWindow::openButton_pressed()
@@ -320,19 +320,19 @@ void BookmarkManagerWindow::adjustmentOfControls(HWND hWnd)
 	}
 }
 
-void BookmarkManagerWindow::showCreatedContainer(LPARAM lParam)
+void BookmarkManagerWindow::showCreatedContainer(WPARAM wParam)
 {
 	HWND hWnd = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_MainListView);
 
 	LVITEM lvitem = { NULL };
 	lvitem.mask = LVIF_TEXT;
 
-	std::wstring buffer = std::to_wstring(lParam);
+	std::wstring buffer = std::to_wstring(wParam);
 	lvitem.pszText = (LPWSTR)buffer.c_str();
 	ListView_InsertItem(hWnd, &lvitem);
 	buffer.clear();
 
-	Container* container = Archive::getContainer(lParam);
+	Container* container = Archive::getContainer(wParam);
 	lvitem.iSubItem = 1;
 	lvitem.pszText = container->getName();
 	ListView_SetItem(hWnd, &lvitem);

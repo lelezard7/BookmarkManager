@@ -27,7 +27,7 @@ namespace BookmarkManagerWindow
 	void adjustmentOfControls(HWND hWnd);
 
 	/*		Displays the created container in mainListView.		*/
-	void showCreatedContainer(LPARAM lParam);
+	void showCreatedContainer(WPARAM);
 }
 
 #endif

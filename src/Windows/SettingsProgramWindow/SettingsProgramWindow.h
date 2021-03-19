@@ -1,17 +1,14 @@
-﻿/*
+﻿/**
 * 
 */
 
 #pragma once
-#ifndef _SETTINGSPROGRAMWINDOW_
-#define _SETTINGSPROGRAMWINDOW_
+#ifndef _SETTINGS_PROGRAM_WND_
+#define _SETTINGS_PROGRAM_WND_
 
 #include <Windows.h>
 
 
-namespace SettingsProgramWindow
-{
-	void create_settingsProgramWindow(HINSTANCE, HWND);
-}
+void create_settingsProgramWindow(HINSTANCE, HWND hWndParent);
 
 #endif

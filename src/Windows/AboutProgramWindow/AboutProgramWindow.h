@@ -1,18 +1,14 @@
-﻿/*
+﻿/**
 * 
 */
 
 #pragma once
-#ifndef _ABOUTPROGRAMWINDOW_
-#define _ABOUTPROGRAMWINDOW_
+#ifndef _ABOUT_PROGRAM_WND_
+#define _ABOUT_PROGRAM_WND_
 
-#include "..\..\Common\Debug.h"
 #include <Windows.h>
 
 
-namespace AboutProgramWindow
-{
-	INT_PTR CALLBACK DlgProc(_In_ HWND hWnd, _In_ UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam);
-}
+INT_PTR CALLBACK AboutProc(_In_ HWND hDlg, _In_ UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam);
 
 #endif
