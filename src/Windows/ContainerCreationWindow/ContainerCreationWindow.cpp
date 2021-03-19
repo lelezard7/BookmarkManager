@@ -23,7 +23,7 @@ LRESULT CALLBACK ContainerCreationWindow::WndProc(_In_ HWND hWnd, _In_ UINT msg,
 	}
 
 	case WM_GETMINMAXINFO: {	
-		CommonOperations::setMinimumWindowSize(350, 400, lParam);
+		setMinimumWindowSize(350, 400, lParam);
 		return 0;
 	}
 
@@ -112,7 +112,7 @@ void ContainerCreationWindow::create_containerCreationWindow(HINSTANCE hInstance
 	create_applyTagButton(hWnd, hInstance);
 	create_taskTypeHelpText(hWnd, hInstance);
 
-	CommonOperations::moveWindowToCenterScreen(hWnd);
+	moveWindowToCenterScreen(hWnd);
 
 	ShowWindow(hWnd, true);
 	EnableWindow(hWndParent, false);
@@ -136,9 +136,9 @@ void ContainerCreationWindow::create_taskTypeDropDList(HWND hWndParent, HINSTANC
 
 	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_TaskTypeDropDList);
 
-	createTaskTypesCB(hWnd);
+	fillComboBoxTaskTypes(hWnd);
 
-	TaskTypes_ID DefaultTaskType = ApplicationSettings::getDefaultTaskType();
+	TaskTypes_Index_t DefaultTaskType = ApplicationSettings::getDefaultTaskType();
 	if (DefaultTaskType != TASKT_NOTSPECIFIED)
 	{
 		SendMessage(hWnd, CB_SETCURSEL, DefaultTaskType, NULL);
@@ -288,95 +288,81 @@ void ContainerCreationWindow::create_taskTypeHelpText(HWND hWndParent, HINSTANCE
 
 void ContainerCreationWindow::fill_container()
 {
-
-
-	//HWND	hWnd = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TaskTypeDropDList);
-	//Container	container;
-
-	////Checks if the issue type is set.
-	//int index = SendMessage(hWnd, CB_GETCURSEL, NULL, NULL);
-	//if (index != -1)
-	//{
-	//	container.setTaskType(index);
-	//}
-	//else
-	//{
-	//	MessageBox(hWnd, L"Task type not selected", L"Input Error", MB_OK | MB_ICONWARNING);
-	//	return;
-	//}
-
-
-	////		We write down the values of the nameTextBox and adressTextBox in the container.
-	//bool errorCode_nameTB = setDataFromTextBox(HNAME_CONTAINERCREATIONWND_NameTextBox, ContainerDataTypes::NAME, container);
-	//bool errorCode_adressTB = setDataFromTextBox(HNAME_CONTAINERCREATIONWND_AdressTextBox, ContainerDataTypes::TASK, container);
-
-	///*
-	//*		If nameTextBox or adressTextBox is not full.
-	//*		You can break the code this way only until you add the container to the archive!
-	//*/
-	//if (!(errorCode_nameTB && errorCode_adressTB))
-	//{
-	//	container.clear();
-	//	hWnd = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_WND);
-	//	MessageBox(hWnd, L"The \"Name\" and \"Task\" fields must be filled!", L"Input Error", MB_OK | MB_ICONWARNING);
-	//	return;
-	//} //TODO: Возможен ввод пробелов. Исправить.
-	//
-
-	//HWND hTagsListView = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TagsListView);
-	//int tagsCount = ListView_GetItemCount(hTagsListView);
-	//WCHAR buffer[1000];
-	//LVITEM lvitem;
-	//lvitem.mask = LVIF_TEXT;
-	//lvitem.pszText = buffer;
-	//lvitem.cchTextMax = 1000;
-	//for (size_t i = 0; i < tagsCount; i++)
-	//{
-	//	lvitem.iItem = i;
-	//	ListView_GetItem(hTagsListView, &lvitem);
-	//	container.addTag(lvitem.pszText);
-	//}
-
-	//ID id = Archive::addContainer(container);
-
-	//hWnd = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_WND);
-	//SendMessage(hWnd, UM_SHOWCREATEDCONTAINER, NULL, id);
-	//hWnd = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_WND);
-	//SendMessage(hWnd, WM_CLOSE, NULL, true);
+	HWND		hWnd = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TaskTypeDropDList);
 	Container	container;
-	typedef void (Container::* gg)(const PWSTR);
-	gg g = &container.setName;
-	Content f = &container.setName;
-	setDataFromTextBox(HNAME_CONTAINERCREATIONWND_NameTextBox, , container);
+
+	//Checks if the issue type is set.
+	int index = SendMessage(hWnd, CB_GETCURSEL, NULL, NULL);
+	if (index != -1)
+	{
+		container.setTaskType(index);
+	}
+	else
+	{
+		MessageBox(hWnd, L"Task type not selected", L"Input Error", MB_OK | MB_ICONWARNING);
+		return;
+	}
+
+
+	//		We write down the values of the nameTextBox and adressTextBox in the container.
+	bool errorCode_nameTB = setDataFromTextBoxes(HNAME_CONTAINERCREATIONWND_NameTextBox, ContainerDataTypes::NAME, container);
+	bool errorCode_adressTB = setDataFromTextBoxes(HNAME_CONTAINERCREATIONWND_AdressTextBox, ContainerDataTypes::TASK, container);
+
+	/*
+	*		If nameTextBox or adressTextBox is not full.
+	*		You can break the code this way only until you add the container to the archive!
+	*/
+	if (!(errorCode_nameTB && errorCode_adressTB))
+	{
+		container.clear();
+		hWnd = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_WND);
+		MessageBox(hWnd, L"The \"Name\" and \"Task\" fields must be filled!", L"Input Error", MB_OK | MB_ICONWARNING);
+		return;
+	} //TODO: Возможен ввод пробелов. Исправить.
+	
+
+	HWND hTagsListView = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TagsListView);
+	int tagsCount = ListView_GetItemCount(hTagsListView);
+	WCHAR buffer[1000];
+	LVITEM lvitem;
+	lvitem.mask = LVIF_TEXT;
+	lvitem.pszText = buffer;
+	lvitem.cchTextMax = 1000;
+	for (size_t i = 0; i < tagsCount; i++)
+	{
+		lvitem.iItem = i;
+		ListView_GetItem(hTagsListView, &lvitem);
+		container.addTag(lvitem.pszText);
+	}
+
+	Archive_Id Id = Archive::addContainer(container);
+
+	hWnd = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_WND);
+	SendMessage(hWnd, UM_SHOWCREATEDCONTAINER, NULL, Id);
+	hWnd = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_WND);
+	SendMessage(hWnd, WM_CLOSE, NULL, true);
 }
 
-bool ContainerCreationWindow::setDataFromTextBox(HandleName hTextBoxName, Content content, Container& container)
+bool ContainerCreationWindow::setDataFromTextBoxes(HandleName hTextBoxName, ContainerDataTypes dataType, Container& container)
 {
 	HWND	hWnd = HandleManager::getHandleWnd(hTextBoxName);
 	size_t	length = GetWindowTextLength(hWnd) + (size_t)1;
-	PWSTR	buffer = new WCHAR[length];
 
+	if (length - 1 == 0)
+		return false;
+
+	PWSTR buffer = new WCHAR[length];
 	GetWindowText(hWnd, buffer, length);
-	container.
+
+	switch (dataType)
+	{
+	case ContainerDataTypes::NAME:	container.setName(buffer, length);	break;
+	case ContainerDataTypes::TASK:	container.setTask(buffer, length);	break;
+	}
+
 	delete[] buffer;
-
-	return (length == 1) ? false : true;
+	return true;
 }
-
-//bool ContainerCreationWindow::setDataFromTextBox(HandleName hTextBoxName, ContainerDataTypes dataType, Container& container)
-//{
-//
-//	return 0;
-//	//HWND	hWnd = HandleManager::getHandleWnd(hTextBoxName);
-//	//size_t	length = GetWindowTextLength(hWnd) + (size_t)1;
-//	//PWSTR	content = new WCHAR[length];
-//
-//	//GetWindowText(hWnd, content, length);
-//	//container.setContent(dataType, content, length);
-//	//delete[] content;
-//
-//	//return (length == 1)? false : true;
-//}
 
 void ContainerCreationWindow::applyTag()
 {

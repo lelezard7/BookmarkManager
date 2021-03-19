@@ -19,8 +19,8 @@
 #include "Windows\AboutProgramWindow\AboutProgramWindow.h"
 #include "Windows\SettingsProgramWindow\SettingsProgramWindow.h"
 #include "Common\BkmDef.h"
+#include "Common\CommonOperations.h"
 #include "res\res.h"
-#include "Archive\Archive.h"
 #include <Windows.h>
 #include <CommCtrl.h>
 
@@ -55,8 +55,8 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 		return 1;
 	}
 
-	addTaskType(L"URL");
-	addTaskType(L"Program");
+	TaskTypesCollection::addTaskType(L"URL");
+	TaskTypesCollection::addTaskType(L"Program");
 
 	/*		Create the main window and show it.		*/
 	HWND hWnd = BookmarkManagerWindow::create_bookmarkManagerWindow(hInstance);

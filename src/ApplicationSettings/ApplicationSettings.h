@@ -7,7 +7,7 @@
 #define _APPLICATIONSETTINGS_
 
 #include "..\Common\Debug.h"
-#include "..\Archive\Archive.h"
+#include "..\Common\CommonOperations.h"
 #include <Windows.h>
 
 #define TASKT_NOTSPECIFIED (-1)
@@ -21,7 +21,7 @@ class ApplicationSettings
 	*		Launch options are listed in 'enum class StartupMethod'.
 	*/
 	static StartupMethod runContainerCreationWindow_;
-	static TaskTypes_ID defaultTaskType;
+	static TaskTypes_Index_t defaultTaskType;
 
 	ApplicationSettings() = delete;
 
@@ -30,8 +30,8 @@ public:
 	static void setStartupMethodContainerCreationWindow(StartupMethod startupMethod);
 	static StartupMethod getStartupMethodContainerCreationWindow();
 
-	static void setDefaultTaskType(TaskTypes_ID id);
-	static TaskTypes_ID getDefaultTaskType();
+	static void setDefaultTaskType(TaskTypes_Index_t index);
+	static TaskTypes_Index_t getDefaultTaskType();
 };
 
 /*

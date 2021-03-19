@@ -139,7 +139,7 @@ INT_PTR initialization(HWND hDlg)
 {
 	HWND hTaskType = GetDlgItem(hDlg, BKM_DEFAULTTASKTYPE);
 	if (hTaskType) {
-		createTaskTypesCB(hTaskType);
+		fillComboBoxTaskTypes(hTaskType);
 	}
 	else {
 		return TRUE;

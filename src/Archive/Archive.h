@@ -29,31 +29,40 @@
 #include <Windows.h>
 #include <iostream>
 #include <map>
+#include <vector>
 
-typedef size_t ID;
-typedef std::map<ID, Container> Archive_t;
+typedef size_t Archive_Id;
 
 
-class Archive //TODO: Добавить функцию удаления контейнера
+class Archive //Сделать find()
 {
-	/*
-	*		A unique id that is given to each container at the stage of adding
-	*		to the archive.
-	*/
-	static ID id_;
-	static Archive_t archive_;
+	static std::map<Archive_Id, Container> archive_;
+	static std::vector<Archive_Id> nextId_;
+	static Archive_Id maxId_;
 
 	Archive() = delete;
+	~Archive() = delete;
+	static Archive_Id getFreeId();
+	static bool freeId(const Archive_Id id);
 
 public:
-	static ID addContainer(const Container container);
-
-	/*		If it fails, the function returns nullptr.		*/
-	static Container* getContainerByID(const ID id);
-	static Container* getContainerByIndex(const size_t index);
+	static Archive_Id addContainer(const Container container);
+	static Container* getContainer(const Archive_Id id);
+	static bool deleteContainer(const Archive_Id id);
 	static void clear();
-	static bool delContainerByIndex(const size_t index);
 	static size_t size();
+
+
+
+
+	//static ID addContainer(const Container container);
+
+	///*		If it fails, the function returns nullptr.		*/
+	//static Container* getContainerByID(const ID id);
+	//static Container* getContainerByIndex(const size_t index);
+	//static void clear();
+	//static bool delContainerByIndex(const size_t index);
+	//static size_t size();
 };
 
 #endif

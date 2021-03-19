@@ -3,7 +3,7 @@
 #include "ApplicationSettings.h"
 
 StartupMethod ApplicationSettings::runContainerCreationWindow_ = StartupMethod::SHOW_CLOSED_WINDOW;
-TaskTypes_ID ApplicationSettings::defaultTaskType = TASKT_NOTSPECIFIED;
+TaskTypes_Index_t ApplicationSettings::defaultTaskType = TASKT_NOTSPECIFIED;
 
 
 void ApplicationSettings::setStartupMethodContainerCreationWindow(StartupMethod startupMethod)
@@ -17,12 +17,12 @@ StartupMethod ApplicationSettings::getStartupMethodContainerCreationWindow()
 }
 
 
-void ApplicationSettings::setDefaultTaskType(TaskTypes_ID id)
+void ApplicationSettings::setDefaultTaskType(TaskTypes_Index_t index)
 {
-	defaultTaskType = id;
+	defaultTaskType = index;
 }
 
-TaskTypes_ID ApplicationSettings::getDefaultTaskType()
+TaskTypes_Index_t ApplicationSettings::getDefaultTaskType()
 {
 	return defaultTaskType;
 }

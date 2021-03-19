@@ -1,4 +1,4 @@
-﻿/*
+﻿/**
 *		The position and size of the controls are set here.
 *		This will make it easier to add new controls and update existing controls.
 * 
@@ -29,11 +29,11 @@
 
 /*		ContainerCreationWindow		*/
 
-#define ContainerCreationWnd_RECT_RIGHT		(CommonOperations::getClientRectValue(\
+#define ContainerCreationWnd_RECT_RIGHT		(getClientRectValue(\
 											HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_WND),\
 											ClientRectCoordinates::RIGHT))
 
-#define ContainerCreationWnd_RECT_BOTTOM	(CommonOperations::getClientRectValue(\
+#define ContainerCreationWnd_RECT_BOTTOM	(getClientRectValue(\
 											HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_WND),\
 											ClientRectCoordinates::BOTTOM))
 
@@ -100,11 +100,11 @@
 
 /*		BookmarkManagerWindow		*/
 
-#define BookmarkManagerWnd_RECT_RIGHT	(CommonOperations::getClientRectValue(\
+#define BookmarkManagerWnd_RECT_RIGHT	(getClientRectValue(\
 											HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_WND),\
 											ClientRectCoordinates::RIGHT))
 
-#define BookmarkManagerWnd_RECT_BOTTOM	(CommonOperations::getClientRectValue(\
+#define BookmarkManagerWnd_RECT_BOTTOM	(getClientRectValue(\
 											HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_WND),\
 											ClientRectCoordinates::BOTTOM))
 

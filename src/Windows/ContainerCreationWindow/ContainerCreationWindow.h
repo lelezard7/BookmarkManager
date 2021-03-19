@@ -39,11 +39,11 @@ namespace ContainerCreationWindow
 	*/
 	void fill_container();
 
-	bool setDataFromTextBox(HandleName hTextBoxName, Content content, Container& container);
+	//bool setDataFromTextBox(HandleName hTextBoxName, Content content, Container& container);
 
 
 	//		Called 'fill_container' function. Fills the container with data from Text Boxes.
-	//bool setDataFromTextBox(HandleName hTextBoxName, ContainerDataTypes dataType, Container& container);
+	bool setDataFromTextBoxes(HandleName hTextBoxName, ContainerDataTypes dataType, Container& container);
 
 	void applyTag();
 
