@@ -1,4 +1,4 @@
-/**
+п»ї/**
 * 
 */
 
@@ -15,7 +15,7 @@
 enum class ContainerDataTypes;
 
 
-class Container //TODO: Перегрузить операторы.
+class Container //TODO: С•РµСЂРµРіСЂСѓР·РёС‚СЊ РѕРїРµСЂР°С‚РѕСЂС‹.
 {
 	PWSTR name_;
 	PWSTR task_;
@@ -24,7 +24,7 @@ class Container //TODO: Перегрузить операторы.
 
 public:
 	Container();
-	~Container(); //Утечка памяти в случае если контейнер небыл записан в архив.
+	~Container(); //вЂќС‚РµС‡РєР° РїР°РјВ¤С‚Рё РІ СЃР»СѓС‡Р°Рµ РµСЃР»Рё РєРѕРЅС‚РµР№РЅРµСЂ РЅРµР±С‹Р» Р·Р°РїРёСЃР°РЅ РІ Р°СЂС…РёРІ.
 
 	void clear();
 	void erase(ContainerDataTypes dataTypes);

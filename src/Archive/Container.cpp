@@ -1,4 +1,4 @@
-#define UNICODE
+п»ї#define UNICODE
 
 #include "Container.h"
 
@@ -130,6 +130,6 @@ void Container::start()
 	if(!wcscmp(_taskType, L"URL"))
 		ShellExecute(NULL, L"open", task_, NULL, NULL, SW_SHOW);
 
-	else if (!wcscmp(_taskType, L"Программа"))
-		ShellExecute(NULL, L"open", task_, NULL, NULL, SW_SHOW); //TODO: Сделать возможность задавать параметры запуска.
+	else if (!wcscmp(_taskType, L"РџСЂРѕРіСЂР°РјРјР°"))
+		ShellExecute(NULL, L"open", task_, NULL, NULL, SW_SHOW); //TODO: РЎРґРµР»Р°С‚СЊ РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ Р·Р°РґР°РІР°С‚СЊ РїР°СЂР°РјРµС‚СЂС‹ Р·Р°РїСѓСЃРєР°.
 }

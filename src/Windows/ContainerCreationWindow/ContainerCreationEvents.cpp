@@ -1,4 +1,4 @@
-#define UNICODE
+п»ї#define UNICODE
 
 #include "..\..\Common\PositionAndSizeControls.h"
 #include "..\..\HandleManager\HandleManager.h"
@@ -169,9 +169,9 @@ LRESULT contCreatWnd_fillContainer()
 
 	bool errCode = fillTaskType(container);
 	if (!errCode) {
-		//Очищать контейнер напрямую, а не из архива можно только до его добавления туда.
+		//РћС‡РёС‰Р°С‚СЊ РєРѕРЅС‚РµР№РЅРµСЂ РЅР°РїСЂСЏРјСѓСЋ, Р° РЅРµ РёР· Р°СЂС…РёРІР° РјРѕР¶РЅРѕ С‚РѕР»СЊРєРѕ РґРѕ РµРіРѕ РґРѕР±Р°РІР»РµРЅРёСЏ С‚СѓРґР°.
 		container.clear();
-		MessageBox(hWnd, L"Тип задачи не задан!", L"Bookmark Manager", MB_OK | MB_ICONWARNING);
+		MessageBox(hWnd, L"РўРёРї Р·Р°РґР°С‡Рё РЅРµ Р·Р°РґР°РЅ!", L"Bookmark Manager", MB_OK | MB_ICONWARNING);
 		return 0;
 	}
 
@@ -179,7 +179,7 @@ LRESULT contCreatWnd_fillContainer()
 	bool errCode_task = fillDataFromTextBoxes(container, HNAME_CONTAINERCREATIONWND_TaskTextBox, ContainerDataTypes::TASK);
 	if (!(errCode_name && errCode_task)) {
 		container.clear();
-		MessageBox(hWnd, L"Поля \"Имя\" и \"Задача\" должны быть заполнены!", L"Bookmark Manager", MB_OK | MB_ICONWARNING);
+		MessageBox(hWnd, L"РџРѕР»СЏ \"РРјСЏ\" Рё \"Р—Р°РґР°С‡Р°\" РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ Р·Р°РїРѕР»РЅРµРЅС‹!", L"Bookmark Manager", MB_OK | MB_ICONWARNING);
 		return 0;
 	}
 
@@ -194,7 +194,7 @@ LRESULT contCreatWnd_fillContainer()
 	return 0;
 }
 
-bool fillTaskType(Container& container)
+static bool fillTaskType(Container& container)
 {
 	HWND hWnd = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TaskTypeComboBox);
 	int index = SendMessage(hWnd, CB_GETCURSEL, NULL, NULL);
@@ -206,7 +206,7 @@ bool fillTaskType(Container& container)
 	return true;
 }
 
-bool fillTags(Container& container)
+static bool fillTags(Container& container)
 {
 	HWND hWnd = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TagsListView);
 	size_t tagsCount = ListView_GetItemCount(hWnd);
@@ -229,7 +229,7 @@ bool fillTags(Container& container)
 	return true;
 }
 
-bool fillDataFromTextBoxes(Container& container, HandleName hTextBoxName, ContainerDataTypes dataType)
+static bool fillDataFromTextBoxes(Container& container, HandleName hTextBoxName, ContainerDataTypes dataType)
 {
 	HWND	hWnd = HandleManager::getHandleWnd(hTextBoxName);
 	size_t	length = GetWindowTextLength(hWnd) + (size_t)1;

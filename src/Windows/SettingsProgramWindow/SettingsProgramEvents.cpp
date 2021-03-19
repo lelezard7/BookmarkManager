@@ -1,4 +1,4 @@
-#define UNICODE
+﻿#define UNICODE
 
 #include "..\..\ApplicationSettings\ApplicationSettings.h"
 #include "..\..\HandleManager\HandleManager.h"

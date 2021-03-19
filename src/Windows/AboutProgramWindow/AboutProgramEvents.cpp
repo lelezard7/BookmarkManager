@@ -1,4 +1,4 @@
-#define UNICODE
+Ôªø#define UNICODE
 
 #include "..\..\Common\BkmDef.h"
 #include "..\..\Common\Debug.h"
@@ -12,7 +12,7 @@ static HGDIOBJ color_bk_sysLink;
 
 INT_PTR aboutProgWnd_initialization(HWND hDlg)
 {
-	std::wstring newText = L"Bookmark Manager: ‚ÂÒËˇ " + std::wstring(BOOKMARKMANAGER_VERSIONNAME);
+	std::wstring newText = L"Bookmark Manager: –≤–µ—Ä—Å–∏—è " + std::wstring(BOOKMARKMANAGER_VERSIONNAME);
 	SetDlgItemText(hDlg, ABOUTWND_TEXT_1, newText.c_str());
 
 	color_bk = CreateSolidBrush(COLOR_BK);
@@ -63,7 +63,7 @@ INT_PTR aboutProgWnd_openLink(HWND hDlg, LPARAM lParam)
 
 	HINSTANCE errCode = ShellExecute(NULL, L"open", litem.szUrl, NULL, NULL, SW_SHOW);
 	if ((int)errCode <= 32) {
-		std::wstring errMessage = L"—ould not open link: " + std::wstring(litem.szUrl) +
+		std::wstring errMessage = L"–°ould not open link: " + std::wstring(litem.szUrl) +
 			L"\nError code: " + std::to_wstring((int)errCode);
 		MessageBox(hDlg, errMessage.c_str(), L"Bookmark Manager", MB_OK | MB_ICONWARNING);
 	}
