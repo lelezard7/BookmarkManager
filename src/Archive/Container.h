@@ -6,40 +6,45 @@
 #ifndef _CONTAINER_
 #define _CONTAINER_
 
-#include "..\Common\Debug.h"
-#include "..\Common\CommonOperations.h"
-#include "..\ApplicationSettings\ApplicationSettings.h"
+#include "TaskTypesCollection.h"
 #include <Windows.h>
 #include <vector>
 
+#define CONTAINER_REGISTERED	(true)
+#define CONTAINER_UNREGISTERED	(false)
+
+class Archive;
 enum class ContainerDataTypes;
 
 
-class Container //TODO: ѕерегрузить операторы.
+class Container //TODO: перегрузить операторы.
 {
 	PWSTR name_;
 	PWSTR task_;
-	TaskTypes_Index_t taskType_;
+	TaskType taskType_;
 	std::vector<PWSTR> tags_;
+
+	bool isRegistered;
 
 public:
 	Container();
-	~Container(); //”течка пам¤ти в случае если контейнер небыл записан в архив.
+	~Container();
 
 	void clear();
 	void erase(ContainerDataTypes dataTypes);
 
 	void setName(const PWSTR name, const size_t length);
 	void setTask(const PWSTR task, const size_t length);
-	void setTaskType(const TaskTypes_Index_t index);
-	void addTag(const PWSTR tag);
+	bool setTaskType(const TaskType taskType);
+	bool addTag(const PWSTR tag);
 
 	PWSTR getName();
 	PWSTR getTask();
-	TaskTypes_Index_t getTaskType();
+	TaskType getTaskType();
 	PWSTR getTag(const size_t index);
-	
 	void start();
+
+	friend Archive;
 };
 
 enum class ContainerDataTypes

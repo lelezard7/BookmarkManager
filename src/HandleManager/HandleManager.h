@@ -1,4 +1,4 @@
-﻿/*
+﻿/**
 *		HandleManager is responsible for creating and storing window handles.
 * 
 *		Handles are defined by template:
@@ -8,11 +8,9 @@
 */
 
 #pragma once
-#ifndef _HANDLEMANAGER_
-#define _HANDLEMANAGER_
+#ifndef _HANDLE_MANAGER_
+#define _HANDLE_MANAGER_
 
-#include "..\Common\Debug.h"
-#include <iostream>
 #include <Windows.h>
 #include <vector>
 #include <map>
@@ -20,14 +18,16 @@
 typedef size_t HandleName;
 typedef std::vector<HandleName> CheckList;
 
+
 class HandleManager
 {
 	static std::map<HandleName, HWND> handleContainer_;
 
 	HandleManager() = delete;
+	~HandleManager() = delete;
 	
 public:
-	/*
+	/**
 	*		Returns a handle with the specified name.
 	* 
 	*		If a handle with the specified name exists, returns it. If does not exist
@@ -36,7 +36,7 @@ public:
 	*/
 	static HWND getHandleWnd(const HandleName name);
 
-	/*		
+	/**
 	*		Adds the handle to the collection.
 	* 
 	*		If the name already exists will return false, otherwise true.
@@ -46,7 +46,7 @@ public:
 	*/
 	static bool addHandleWnd(HWND hWnd, const HandleName name);
 
-	/*
+	/**
 	*		Checks if a handle with the specified name exists or not.
 	* 
 	*		If you need to check several names, you can create
@@ -58,7 +58,7 @@ public:
 	static bool checkExistence(const HandleName name);
 	static bool checkExistence(const CheckList& checkList);
 
-	/*
+	/**
 	*		Removes a handle with the specified name from the collection.
 	* 
 	*		Returns true if the handle was successfully removed, otherwise

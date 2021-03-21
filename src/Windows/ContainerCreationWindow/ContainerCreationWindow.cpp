@@ -2,6 +2,7 @@
 
 #include "..\..\ApplicationSettings\ApplicationSettings.h"
 #include "..\..\Common\PositionAndSizeControls.h"
+#include "..\..\Archive\TaskTypesCollection.h"
 #include "..\..\Common\Debug.h"
 #include "..\..\res\res.h"
 #include "ContainerCreationWindow.h"
@@ -37,14 +38,14 @@ LRESULT CALLBACK ContainerCreatProc(_In_ HWND hWnd, _In_ UINT msg, _In_ WPARAM w
 
 
 
-static void create_taskTypeComboBox(HWND, HINSTANCE);
-static void create_nameTextBox(HWND, HINSTANCE);
-static void create_taskTextBox(HWND, HINSTANCE);
-static void create_tagsTextBox(HWND, HINSTANCE);
-static void create_applyButton(HWND, HINSTANCE);
-static void create_tagsListView(HWND, HINSTANCE);
-static void create_applyTagButton(HWND, HINSTANCE);
-static void create_taskTypeHelpText(HWND, HINSTANCE);
+static void create_taskTypeComboBox(HWND hWndParent, HINSTANCE);
+static void create_nameTextBox(HWND hWndParent, HINSTANCE);
+static void create_taskTextBox(HWND hWndParent, HINSTANCE);
+static void create_tagsTextBox(HWND hWndParent, HINSTANCE);
+static void create_applyButton(HWND hWndParent, HINSTANCE);
+static void create_tagsListView(HWND hWndParent, HINSTANCE);
+static void create_applyTagButton(HWND hWndParent, HINSTANCE);
+static void create_taskTypeHelpText(HWND hWndParent, HINSTANCE);
 
 void create_containerCreationWindow(HINSTANCE hInstance)
 {
@@ -78,126 +79,126 @@ void create_containerCreationWindow(HINSTANCE hInstance)
 	EnableWindow(hWndParent, false);
 }
 
-void create_taskTypeComboBox(HWND hWndParent, HINSTANCE hInstance)
+static void create_taskTypeComboBox(HWND hWndParent, HINSTANCE hInstance)
 {
 	HWND hWnd = CreateWindow(
 		L"COMBOBOX",
 		NULL,
 		WS_VISIBLE | WS_CHILD | CBS_DROPDOWNLIST,
-		ContainerCreationWnd_taskTypeComboBox_X,
-		ContainerCreationWnd_taskTypeComboBox_Y,
-		ContainerCreationWnd_taskTypeComboBox_WIDTH,
-		ContainerCreationWnd_taskTypeComboBox_HEIGHT,
+		ContainerCreationWnd_TaskTypeComboBox_X,
+		ContainerCreationWnd_TaskTypeComboBox_Y,
+		ContainerCreationWnd_TaskTypeComboBox_Width,
+		ContainerCreationWnd_TaskTypeComboBox_Height,
 		hWndParent,
 		NULL,
 		hInstance,
 		NULL);
 
-	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_TaskTypeComboBox);
+	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_TASKTYPECOMBOBOX);
 
 	fillComboBoxTaskTypes(hWnd);
 
-	TaskTypes_Index_t DefaultTaskType = ApplicationSettings::getDefaultTaskType();
-	if (DefaultTaskType != TASKTTYPE_NOTSPECIFIED)
+	TaskType DefaultTaskType = ApplicationSettings::getDefaultTaskType();
+	if (DefaultTaskType != TASKTYPE_NOTSPECIFIED)
 		SendMessage(hWnd, CB_SETCURSEL, DefaultTaskType, NULL);
 }
 
-void create_nameTextBox(HWND hWndParent, HINSTANCE hInstance)
+static void create_nameTextBox(HWND hWndParent, HINSTANCE hInstance)
 {
 	HWND hWnd = CreateWindow(
 		L"EDIT",
 		NULL,
 		WS_VISIBLE | WS_CHILD | ES_AUTOHSCROLL,
-		ContainerCreationWnd_nameTextBox_X,
-		ContainerCreationWnd_nameTextBox_Y,
-		ContainerCreationWnd_nameTextBox_WIDTH,
-		ContainerCreationWnd_nameTextBox_HEIGHT,
+		ContainerCreationWnd_NameTextBox_X,
+		ContainerCreationWnd_NameTextBox_Y,
+		ContainerCreationWnd_NameTextBox_Width,
+		ContainerCreationWnd_NameTextBox_Height,
 		hWndParent,
 		NULL,
 		hInstance,
 		NULL);
 
-	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_NameTextBox);
+	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_NAMETEXTBOX);
 
 	SendMessage(hWnd, EM_SETCUEBANNER, false, (LPARAM)L"Название");
 }
 
-void create_taskTextBox(HWND hWndParent, HINSTANCE hInstance)
+static void create_taskTextBox(HWND hWndParent, HINSTANCE hInstance)
 {
 	HWND hWnd = CreateWindow(
 		L"EDIT",
 		NULL,
 		WS_VISIBLE | WS_CHILD | ES_AUTOHSCROLL,
-		ContainerCreationWnd_taskTextBox_X,
-		ContainerCreationWnd_taskTextBox_Y,
-		ContainerCreationWnd_taskTextBox_WIDTH,
-		ContainerCreationWnd_taskTextBox_HEIGHT,
+		ContainerCreationWnd_TaskTextBox_X,
+		ContainerCreationWnd_TaskTextBox_Y,
+		ContainerCreationWnd_TaskTextBox_Width,
+		ContainerCreationWnd_TaskTextBox_Height,
 		hWndParent,
 		NULL,
 		hInstance,
 		NULL);
 
-	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_TaskTextBox);
+	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_TASKTEXTBOX);
 
 	SendMessage(hWnd, EM_SETLIMITTEXT, 0, NULL);
 	SendMessage(hWnd, EM_SETCUEBANNER, false, (LPARAM)L"Задача");
 }
 
-void create_tagsTextBox(HWND hWndParent, HINSTANCE hInstance)
+static void create_tagsTextBox(HWND hWndParent, HINSTANCE hInstance)
 {
 	HWND hWnd = CreateWindow(
 		L"EDIT",
 		NULL,
 		WS_VISIBLE | WS_CHILD | ES_AUTOHSCROLL,
-		ContainerCreationWnd_tagsTextBox_X,
-		ContainerCreationWnd_tagsTextBox_Y,
-		ContainerCreationWnd_tagsTextBox_WIDTH,
-		ContainerCreationWnd_tagsTextBox_HEIGHT,
+		ContainerCreationWnd_TagsTextBox_X,
+		ContainerCreationWnd_TagsTextBox_Y,
+		ContainerCreationWnd_TagsTextBox_Width,
+		ContainerCreationWnd_TagsTextBox_Height,
 		hWndParent,
 		NULL,
 		hInstance,
 		NULL);
 
-	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_TagsTextBox);
+	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_TAGSTEXTBOX);
 
 	SendMessage(hWnd, EM_SETCUEBANNER, false, (LPARAM)L"Тег");
 }
 
-void create_applyButton(HWND hWndParent, HINSTANCE hInstance)
+static void create_applyButton(HWND hWndParent, HINSTANCE hInstance)
 {
 	HWND hWnd = CreateWindow(
 		L"BUTTON",
 		L"Принять",
 		WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
-		ContainerCreationWnd_applyButton_X,
-		ContainerCreationWnd_applyButton_Y,
-		ContainerCreationWnd_applyButton_WIDTH,
-		ContainerCreationWnd_applyButton_HEIGHT,
+		ContainerCreationWnd_ApplyButton_X,
+		ContainerCreationWnd_ApplyButton_Y,
+		ContainerCreationWnd_ApplyButton_Width,
+		ContainerCreationWnd_ApplyButton_Height,
 		hWndParent,
 		(HMENU)ID_CONTAINERCREATIONWND_APPLYBUTTON,
 		hInstance,
 		NULL);
 
-	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_ApplyButton);
+	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_APPLYBUTTON);
 }
 
-void create_tagsListView(HWND hWndParent, HINSTANCE hInstance)
+static void create_tagsListView(HWND hWndParent, HINSTANCE hInstance)
 {
 	HWND hWnd = CreateWindow(
 		WC_LISTVIEW,
 		NULL,
 		WS_CHILD | WS_VISIBLE | LVS_REPORT,
-		ContainerCreationWnd_tagsListView_X,
-		ContainerCreationWnd_tagsListView_Y,
-		ContainerCreationWnd_tagsListView_WIDTH,
-		ContainerCreationWnd_tagsListView_HEIGHT,
+		ContainerCreationWnd_TagsListView_X,
+		ContainerCreationWnd_TagsListView_Y,
+		ContainerCreationWnd_TagsListView_Width,
+		ContainerCreationWnd_TagsListView_Height,
 		hWndParent,
 		NULL,
 		hInstance,
 		NULL);
 
 	ListView_SetExtendedListViewStyleEx(hWnd, LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES, LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_TagsListView);
+	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_TAGSLISTVIEW);
 
 	LVCOLUMN lvcolumn;
 	lvcolumn.mask = LVCF_WIDTH | LVCF_TEXT;
@@ -207,38 +208,38 @@ void create_tagsListView(HWND hWndParent, HINSTANCE hInstance)
 	ListView_InsertColumn(hWnd, 1, &lvcolumn);
 }
 
-void create_applyTagButton(HWND hWndParent, HINSTANCE hInstance)
+static void create_applyTagButton(HWND hWndParent, HINSTANCE hInstance)
 {
 	HWND hWnd = CreateWindow(
 		L"BUTTON",
 		L">>",
 		WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
-		ContainerCreationWnd_applyTagButton_X,
-		ContainerCreationWnd_applyTagButton_Y,
-		ContainerCreationWnd_applyTagButton_WIDTH,
-		ContainerCreationWnd_applyTagButton_HEIGHT,
+		ContainerCreationWnd_ApplyTagButton_X,
+		ContainerCreationWnd_ApplyTagButton_Y,
+		ContainerCreationWnd_ApplyTagButton_Width,
+		ContainerCreationWnd_ApplyTagButton_Height,
 		hWndParent,
 		(HMENU)ID_CONTAINERCREATIONWND_APPLYTAGBUTTON,
 		hInstance,
 		NULL);
 
-	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_ApplyTagButton);
+	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_APPLYTAGBUTTON);
 }
 
-void create_taskTypeHelpText(HWND hWndParent, HINSTANCE hInstance)
+static void create_taskTypeHelpText(HWND hWndParent, HINSTANCE hInstance)
 {
 	HWND hWnd = CreateWindow(
 		L"STATIC",
 		L"Тип задачи:",
 		WS_VISIBLE | WS_CHILD,
-		ContainerCreationWnd_taskTypeHelpText_X,
-		ContainerCreationWnd_taskTypeHelpText_Y,
-		ContainerCreationWnd_taskTypeHelpText_WIDTH,
-		ContainerCreationWnd_taskTypeHelpText_HEIGHT,
+		ContainerCreationWnd_TaskTypeHelpText_X,
+		ContainerCreationWnd_TaskTypeHelpText_Y,
+		ContainerCreationWnd_TaskTypeHelpText_Width,
+		ContainerCreationWnd_TaskTypeHelpText_Height,
 		hWndParent,
 		NULL,
 		hInstance,
 		NULL);
 
-	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_TaskTypeHelpText);
+	HandleManager::addHandleWnd(hWnd, HNAME_CONTAINERCREATIONWND_TASKTYPEHELPTEXT);
 }

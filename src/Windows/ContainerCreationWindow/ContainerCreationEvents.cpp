@@ -1,5 +1,6 @@
 ﻿#define UNICODE
 
+#include "..\..\ApplicationSettings\ApplicationSettings.h"
 #include "..\..\Common\PositionAndSizeControls.h"
 #include "..\..\HandleManager\HandleManager.h"
 #include "..\..\Archive\Archive.h"
@@ -14,53 +15,52 @@ static HBRUSH color_bk;
 LRESULT contCreatWnd_initialization()
 {
 	color_bk = CreateSolidBrush(COLOR_BK);
-
 	return 0;
 }
 
 LRESULT contCreatWnd_adjustmentControls()
 {
-	HWND hApplyButton = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_ApplyButton);
-	HWND hNameTextBox = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_NameTextBox);
-	HWND hTaskTextBox = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TaskTextBox);
-	HWND hTagsTextBox = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TagsTextBox);
-	HWND hTagsListView = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TagsListView);
-	HWND hTaskTypeComboBox = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TaskTypeComboBox);
-	HWND hApplyTagButton = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_ApplyTagButton);
-	HWND hTaskTypeHelpText = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TaskTypeHelpText);
+	HWND hApplyButton = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_APPLYBUTTON);
+	HWND hNameTextBox = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_NAMETEXTBOX);
+	HWND hTaskTextBox = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TASKTEXTBOX);
+	HWND hTagsTextBox = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TAGSTEXTBOX);
+	HWND hTagsListView = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TAGSLISTVIEW);
+	HWND hTaskTypeComboBox = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TASKTYPECOMBOBOX);
+	HWND hApplyTagButton = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_APPLYTAGBUTTON);
+	HWND hTaskTypeHelpText = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TASKTYPEHELPTEXT);
 
-	SetWindowPos(hApplyButton, HWND_TOP, ContainerCreationWnd_applyButton_X,
-		ContainerCreationWnd_applyButton_Y,
-		ContainerCreationWnd_applyButton_WIDTH,
-		ContainerCreationWnd_applyButton_HEIGHT, NULL);
-	SetWindowPos(hNameTextBox, HWND_TOP, ContainerCreationWnd_nameTextBox_X,
-		ContainerCreationWnd_nameTextBox_Y,
-		ContainerCreationWnd_nameTextBox_WIDTH,
-		ContainerCreationWnd_nameTextBox_HEIGHT, NULL);
-	SetWindowPos(hTaskTextBox, HWND_TOP, ContainerCreationWnd_taskTextBox_X,
-		ContainerCreationWnd_taskTextBox_Y,
-		ContainerCreationWnd_taskTextBox_WIDTH,
-		ContainerCreationWnd_taskTextBox_HEIGHT, NULL);
-	SetWindowPos(hTagsTextBox, HWND_TOP, ContainerCreationWnd_tagsTextBox_X,
-		ContainerCreationWnd_tagsTextBox_Y,
-		ContainerCreationWnd_tagsTextBox_WIDTH,
-		ContainerCreationWnd_tagsTextBox_HEIGHT, NULL);
-	SetWindowPos(hTagsListView, HWND_TOP, ContainerCreationWnd_tagsListView_X,
-		ContainerCreationWnd_tagsListView_Y,
-		ContainerCreationWnd_tagsListView_WIDTH,
-		ContainerCreationWnd_tagsListView_HEIGHT, NULL);
-	SetWindowPos(hTaskTypeComboBox, HWND_TOP, ContainerCreationWnd_taskTypeComboBox_X,
-		ContainerCreationWnd_taskTypeComboBox_Y,
-		ContainerCreationWnd_taskTypeComboBox_WIDTH,
-		ContainerCreationWnd_taskTypeComboBox_HEIGHT, NULL);
-	SetWindowPos(hApplyTagButton, HWND_TOP, ContainerCreationWnd_applyTagButton_X,
-		ContainerCreationWnd_applyTagButton_Y,
-		ContainerCreationWnd_applyTagButton_WIDTH,
-		ContainerCreationWnd_applyTagButton_HEIGHT, NULL);
-	SetWindowPos(hTaskTypeHelpText, HWND_TOP, ContainerCreationWnd_taskTypeHelpText_X,
-		ContainerCreationWnd_taskTypeHelpText_Y,
-		ContainerCreationWnd_taskTypeHelpText_WIDTH,
-		ContainerCreationWnd_taskTypeHelpText_HEIGHT, NULL);
+	SetWindowPos(hApplyButton, HWND_TOP, ContainerCreationWnd_ApplyButton_X,
+		ContainerCreationWnd_ApplyButton_Y,
+		ContainerCreationWnd_ApplyButton_Width,
+		ContainerCreationWnd_ApplyButton_Height, NULL);
+	SetWindowPos(hNameTextBox, HWND_TOP, ContainerCreationWnd_NameTextBox_X,
+		ContainerCreationWnd_NameTextBox_Y,
+		ContainerCreationWnd_NameTextBox_Width,
+		ContainerCreationWnd_NameTextBox_Height, NULL);
+	SetWindowPos(hTaskTextBox, HWND_TOP, ContainerCreationWnd_TaskTextBox_X,
+		ContainerCreationWnd_TaskTextBox_Y,
+		ContainerCreationWnd_TaskTextBox_Width,
+		ContainerCreationWnd_TaskTextBox_Height, NULL);
+	SetWindowPos(hTagsTextBox, HWND_TOP, ContainerCreationWnd_TagsTextBox_X,
+		ContainerCreationWnd_TagsTextBox_Y,
+		ContainerCreationWnd_TagsTextBox_Width,
+		ContainerCreationWnd_TagsTextBox_Height, NULL);
+	SetWindowPos(hTagsListView, HWND_TOP, ContainerCreationWnd_TagsListView_X,
+		ContainerCreationWnd_TagsListView_Y,
+		ContainerCreationWnd_TagsListView_Width,
+		ContainerCreationWnd_TagsListView_Height, NULL);
+	SetWindowPos(hTaskTypeComboBox, HWND_TOP, ContainerCreationWnd_TaskTypeComboBox_X,
+		ContainerCreationWnd_TaskTypeComboBox_Y,
+		ContainerCreationWnd_TaskTypeComboBox_Width,
+		ContainerCreationWnd_TaskTypeComboBox_Height, NULL);
+	SetWindowPos(hApplyTagButton, HWND_TOP, ContainerCreationWnd_ApplyTagButton_X,
+		ContainerCreationWnd_ApplyTagButton_Y,
+		ContainerCreationWnd_ApplyTagButton_Width,
+		ContainerCreationWnd_ApplyTagButton_Height, NULL);
+	SetWindowPos(hTaskTypeHelpText, HWND_TOP, ContainerCreationWnd_TaskTypeHelpText_X,
+		ContainerCreationWnd_TaskTypeHelpText_Y,
+		ContainerCreationWnd_TaskTypeHelpText_Width,
+		ContainerCreationWnd_TaskTypeHelpText_Height, NULL);
 
 	return 0;
 }
@@ -71,20 +71,20 @@ LRESULT contCreatWnd_closeWnd(HWND hWnd, LPARAM lParam)
 	EnableWindow(hWndParent, true);
 	SetFocus(hWndParent);
 
-	StartupMethod startupmethod = ApplicationSettings::getStartupMethodContainerCreationWindow();
+	LaunchMethod launchMethod = ApplicationSettings::getLaunchMethodContainerCreationWindow();
 
-	if (startupmethod == StartupMethod::CREATE_NEW_WINDOW ||
+	if (launchMethod == LaunchMethod::CREATE_NEW_WINDOW ||
 		(lParam == APPLYBUTTON_PRESSED &&
-			startupmethod == StartupMethod::CONTINUE_UNFINISHED_CREATION))
+			launchMethod == LaunchMethod::CONTINUE_UNFINISHED_CREATION))
 	{
-		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_TaskTypeComboBox);
-		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_NameTextBox);
-		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_ApplyButton);
-		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_TaskTextBox);
-		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_TagsTextBox);
-		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_TagsListView);
-		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_ApplyTagButton);
-		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_TaskTypeHelpText);
+		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_TASKTYPECOMBOBOX);
+		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_NAMETEXTBOX);
+		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_APPLYBUTTON);
+		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_TASKTEXTBOX);
+		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_TAGSTEXTBOX);
+		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_TAGSLISTVIEW);
+		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_APPLYTAGBUTTON);
+		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_TASKTYPEHELPTEXT);
 		HandleManager::removeHandleWnd(HNAME_CONTAINERCREATIONWND_WND);
 		DestroyWindow(hWnd);
 		DeleteObject(color_bk);
@@ -106,7 +106,7 @@ LRESULT contCreatWnd_setColorStatic(WPARAM wParam)
 
 LRESULT contCreatWnd_applyTag()
 {
-	HWND	hTagsTextBox = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TagsTextBox);
+	HWND	hTagsTextBox = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TAGSTEXTBOX);
 	size_t	length = GetWindowTextLength(hTagsTextBox) + (size_t)1;
 	PWSTR	buffer = new WCHAR[length];
 
@@ -116,7 +116,7 @@ LRESULT contCreatWnd_applyTag()
 	lvitem.mask = LVIF_TEXT;
 	lvitem.pszText = buffer;
 
-	HWND hTagsListView = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TagsListView);
+	HWND hTagsListView = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TAGSLISTVIEW);
 	ListView_InsertItem(hTagsListView, &lvitem);
 
 	delete[] buffer;
@@ -129,7 +129,7 @@ LRESULT contCreatWnd_enter_pressed()
 {
 	HWND currentFocus = GetFocus();
 
-	if (currentFocus == HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TagsTextBox))
+	if (currentFocus == HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TAGSTEXTBOX))
 		contCreatWnd_applyTag();
 	else
 		contCreatWnd_fillContainer();
@@ -141,17 +141,17 @@ LRESULT contCreatWnd_tab_pressed()
 {
 	HWND currentFocus = GetFocus();
 
-	if (currentFocus == HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_NameTextBox))
-		SetFocus(HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TaskTextBox));
+	if (currentFocus == HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_NAMETEXTBOX))
+		SetFocus(HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TASKTEXTBOX));
 
-	else if (currentFocus == HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TaskTextBox))
-		SetFocus(HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TagsTextBox));
+	else if (currentFocus == HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TASKTEXTBOX))
+		SetFocus(HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TAGSTEXTBOX));
 
-	else if (currentFocus == HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TagsTextBox))
-		SetFocus(HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TaskTypeComboBox));
+	else if (currentFocus == HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TAGSTEXTBOX))
+		SetFocus(HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TASKTYPECOMBOBOX));
 
-	else if (currentFocus == HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TaskTypeComboBox))
-		SetFocus(HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_ApplyButton));
+	else if (currentFocus == HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TASKTYPECOMBOBOX))
+		SetFocus(HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_APPLYBUTTON));
 
 	return 0;
 }
@@ -175,11 +175,11 @@ LRESULT contCreatWnd_fillContainer()
 		return 0;
 	}
 
-	bool errCode_name = fillDataFromTextBoxes(container, HNAME_CONTAINERCREATIONWND_NameTextBox, ContainerDataTypes::NAME);
-	bool errCode_task = fillDataFromTextBoxes(container, HNAME_CONTAINERCREATIONWND_TaskTextBox, ContainerDataTypes::TASK);
+	bool errCode_name = fillDataFromTextBoxes(container, HNAME_CONTAINERCREATIONWND_NAMETEXTBOX, ContainerDataTypes::NAME);
+	bool errCode_task = fillDataFromTextBoxes(container, HNAME_CONTAINERCREATIONWND_TASKTEXTBOX, ContainerDataTypes::TASK);
 	if (!(errCode_name && errCode_task)) {
 		container.clear();
-		MessageBox(hWnd, L"Поля \"Имя\" и \"Задача\" должны быть заполнены!", L"Bookmark Manager", MB_OK | MB_ICONWARNING);
+		MessageBox(hWnd, L"Поля \"Название\" и \"Задача\" должны быть заполнены!", L"Bookmark Manager", MB_OK | MB_ICONWARNING);
 		return 0;
 	}
 
@@ -196,7 +196,7 @@ LRESULT contCreatWnd_fillContainer()
 
 static bool fillTaskType(Container& container)
 {
-	HWND hWnd = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TaskTypeComboBox);
+	HWND hWnd = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TASKTYPECOMBOBOX);
 	int index = SendMessage(hWnd, CB_GETCURSEL, NULL, NULL);
 
 	if (index == -1)
@@ -208,7 +208,7 @@ static bool fillTaskType(Container& container)
 
 static bool fillTags(Container& container)
 {
-	HWND hWnd = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TagsListView);
+	HWND hWnd = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TAGSLISTVIEW);
 	size_t tagsCount = ListView_GetItemCount(hWnd);
 
 	if (!tagsCount)

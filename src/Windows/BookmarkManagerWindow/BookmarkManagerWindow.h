@@ -1,33 +1,15 @@
-﻿/*
+﻿/**
 *		bookmarkManagerWindow is the main window of the application.
 */
 
 #pragma once
-#ifndef _BOOKMARKMANAGERWINDOW_
-#define _BOOKMARKMANAGERWINDOW_
+#ifndef _BOOKMARK_MANAGER_WND_
+#define _BOOKMARK_MANAGER_WND_
 
-#include "..\..\Common\Debug.h"
 #include <Windows.h>
 
 
-namespace BookmarkManagerWindow
-{
-	LRESULT CALLBACK WndProc(_In_ HWND hWnd, _In_ UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam);
-	HWND create_bookmarkManagerWindow(HINSTANCE hInstance);
-
-	void create_mainListView(HWND hWndParent, HINSTANCE hInstance);
-	void create_addButton(HWND hWndParent, HINSTANCE hInstance);
-	void create_openButton(HWND hWndParent, HINSTANCE hInstance);
-	void create_clearButton(HWND hWndParent, HINSTANCE hInstance);
-
-	void addButton_pressed();
-	void openButton_pressed();
-
-	/*		Resizes and positions controls when the window is resized.		*/
-	void adjustmentOfControls(HWND hWnd);
-
-	/*		Displays the created container in mainListView.		*/
-	void showCreatedContainer(WPARAM);
-}
+LRESULT CALLBACK BkmManagerProc(_In_ HWND, _In_ UINT, _In_ WPARAM, _In_ LPARAM);
+HWND create_bookmarkManagerWindow(HINSTANCE);
 
 #endif

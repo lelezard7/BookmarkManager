@@ -2,6 +2,7 @@
 
 #include "..\..\ApplicationSettings\ApplicationSettings.h"
 #include "..\..\HandleManager\HandleManager.h"
+#include "..\..\Common\CommonOperations.h"
 #include "..\..\Common\BkmDef.h"
 #include "..\..\Common\Debug.h"
 #include "..\..\res\res.h"
@@ -15,7 +16,7 @@ INT_PTR settingsProgWnd_initialization(HWND hDlg)
 	HWND hTaskTypeComobBox = GetDlgItem(hDlg, BKM_DEFAULTTASKTYPE_COMBOBOX);
 	fillComboBoxTaskTypes(hTaskTypeComobBox);
 
-	if (ApplicationSettings::getDefaultTaskType() != TASKTTYPE_NOTSPECIFIED)
+	if (ApplicationSettings::getDefaultTaskType() != TASKTYPE_NOTSPECIFIED)
 	{
 		CheckDlgButton(hDlg, BKM_DEFAULTTASKTYPE_CHECKBOX, true);
 		EnableWindow(hTaskTypeComobBox, true);
@@ -23,16 +24,16 @@ INT_PTR settingsProgWnd_initialization(HWND hDlg)
 	}
 
 
-	if (ApplicationSettings::getStartupMethodContainerCreationWindow() == StartupMethod::SHOW_CLOSED_WINDOW) {
+	if (ApplicationSettings::getLaunchMethodContainerCreationWindow() == LaunchMethod::SHOW_CLOSED_WINDOW) {
 		CheckDlgButton(hDlg, BKM_ADDCONTAINERWNDBEHAVIOR_1, BST_CHECKED);
 	}
 	else {
 		ContainerCreationWndBehavior_radioButtons_changeEnable(hDlg);
 
-		if (ApplicationSettings::getStartupMethodContainerCreationWindow() == StartupMethod::CREATE_NEW_WINDOW) {
+		if (ApplicationSettings::getLaunchMethodContainerCreationWindow() == LaunchMethod::CREATE_NEW_WINDOW) {
 			CheckDlgButton(hDlg, BKM_ADDCONTAINERWNDBEHAVIOR_2, BST_CHECKED);
 		}
-		else if (ApplicationSettings::getStartupMethodContainerCreationWindow() == StartupMethod::CONTINUE_UNFINISHED_CREATION) {
+		else if (ApplicationSettings::getLaunchMethodContainerCreationWindow() == LaunchMethod::CONTINUE_UNFINISHED_CREATION) {
 			CheckDlgButton(hDlg, BKM_ADDCONTAINERWNDBEHAVIOR_3, BST_CHECKED);
 		}
 	}
@@ -92,7 +93,7 @@ INT_PTR applySettings(HWND hDlg)
 static void changeDefaultTaskType(HWND hDlg)
 {
 	if (IsDlgButtonChecked(hDlg, BKM_DEFAULTTASKTYPE_CHECKBOX) == BST_UNCHECKED) {
-		ApplicationSettings::setDefaultTaskType(TASKTTYPE_NOTSPECIFIED);
+		ApplicationSettings::setDefaultTaskType(TASKTYPE_NOTSPECIFIED);
 		return;
 	}
 
@@ -104,12 +105,12 @@ static void changeDefaultTaskType(HWND hDlg)
 static void changeStartupMethod(HWND hDlg)
 {
 	if (IsDlgButtonChecked(hDlg, BKM_ADDCONTAINERWNDBEHAVIOR_1) == BST_CHECKED) {
-		ApplicationSettings::setStartupMethodContainerCreationWindow(StartupMethod::SHOW_CLOSED_WINDOW);
+		ApplicationSettings::setLaunchMethodContainerCreationWindow(LaunchMethod::SHOW_CLOSED_WINDOW);
 		return;
 	}
 
 	if (IsDlgButtonChecked(hDlg, BKM_ADDCONTAINERWNDBEHAVIOR_2) == BST_CHECKED) {
-		ApplicationSettings::setStartupMethodContainerCreationWindow(StartupMethod::CREATE_NEW_WINDOW);
+		ApplicationSettings::setLaunchMethodContainerCreationWindow(LaunchMethod::CREATE_NEW_WINDOW);
 
 		if (HandleManager::checkExistence(HNAME_CONTAINERCREATIONWND_WND)) {
 			HWND hWnd = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_WND);
@@ -117,6 +118,6 @@ static void changeStartupMethod(HWND hDlg)
 		}
 	}
 	else if (IsDlgButtonChecked(hDlg, BKM_ADDCONTAINERWNDBEHAVIOR_3) == BST_CHECKED) {
-		ApplicationSettings::setStartupMethodContainerCreationWindow(StartupMethod::CONTINUE_UNFINISHED_CREATION);
+		ApplicationSettings::setLaunchMethodContainerCreationWindow(LaunchMethod::CONTINUE_UNFINISHED_CREATION);
 	}
 }

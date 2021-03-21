@@ -38,7 +38,7 @@ static INT_PTR CALLBACK ProgramProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 	}
 }
 
-void create_settingsProgramWindow(HINSTANCE hInstance, HWND hWndParent)
+LRESULT create_settingsProgramWindow(HINSTANCE hInstance, HWND hWndParent)
 {
 	PROPSHEETPAGE propsheetpage;
 	propsheetpage.dwFlags = PSP_USETITLE;
@@ -59,4 +59,6 @@ void create_settingsProgramWindow(HINSTANCE hInstance, HWND hWndParent)
 	propsheethead.ppsp = (LPCPROPSHEETPAGE)&propsheetpage;
 
 	PropertySheet(&propsheethead);
+
+	return 0;
 }

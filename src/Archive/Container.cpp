@@ -1,22 +1,31 @@
 ﻿#define UNICODE
 
+#include "..\Common\Debug.h"
 #include "Container.h"
 
 
 Container::Container()
 {
+	isRegistered = CONTAINER_UNREGISTERED;
+
 	name_ = nullptr;
 	task_ = nullptr;
-	taskType_ = TASKTTYPE_NOTSPECIFIED;
+	taskType_ = TASKTYPE_NOTSPECIFIED;
 }
 
 Container::~Container()
 {
+	if (isRegistered == CONTAINER_UNREGISTERED) {
+		clear();
+		return;
+	}
+
 	name_ = nullptr;
 	task_ = nullptr;
-	taskType_ = TASKTTYPE_NOTSPECIFIED;
+	taskType_ = TASKTYPE_NOTSPECIFIED;
 	tags_.clear();
 }
+
 
 void Container::clear()
 {
@@ -28,6 +37,9 @@ void Container::clear()
 
 void Container::erase(ContainerDataTypes dataTypes)
 {
+	if (isRegistered == CONTAINER_REGISTERED)
+		return;
+
 	switch (dataTypes)
 	{
 	case ContainerDataTypes::NAME:
@@ -46,7 +58,7 @@ void Container::erase(ContainerDataTypes dataTypes)
 
 	case ContainerDataTypes::TASK_TYPE:
 		if (taskType_) {
-			taskType_ = TASKTTYPE_NOTSPECIFIED;
+			taskType_ = TASKTYPE_NOTSPECIFIED;
 		}
 		break;
 
@@ -58,6 +70,7 @@ void Container::erase(ContainerDataTypes dataTypes)
 		break;
 	}
 }
+
 
 void Container::setName(const PWSTR name, const size_t length)
 {
@@ -73,17 +86,21 @@ void Container::setTask(const PWSTR task, const size_t length)
 	wcscpy_s(task_, length, task);
 }
 
-void Container::setTaskType(const TaskTypes_Index_t index)
+bool Container::setTaskType(const TaskType taskType)
 {
-	if (TaskTypesCollection::findTaskType(index))
-		taskType_ = index;
+	if (TaskTypesCollection::checkTaskType(taskType)) {
+		taskType_ = taskType;
+		return true;
+	}
+
+	return false;
 }
 
-void Container::addTag(const PWSTR tag)
+bool Container::addTag(const PWSTR tag)
 {
 	for (auto i : tags_) {
 		if (!wcscmp(tag, i)) {
-			return;
+			return false;
 		}
 	}
 
@@ -92,7 +109,10 @@ void Container::addTag(const PWSTR tag)
 
 	wcscpy_s(_tag, _length, tag);
 	tags_.push_back(_tag);
+
+	return true;
 }
+
 
 PWSTR Container::getName()
 {
@@ -110,7 +130,7 @@ PWSTR Container::getTask()
 	return nullptr;
 }
 
-TaskTypes_Index_t Container::getTaskType()
+TaskType Container::getTaskType()
 {
 	return taskType_;
 }
@@ -123,9 +143,10 @@ PWSTR Container::getTag(const size_t index)
 	return nullptr;
 }
 
+
 void Container::start()
 {
-	PWSTR _taskType = TaskTypesCollection::getTaskType(taskType_);
+	PWSTR _taskType = TaskTypesCollection::getTaskTypeName(taskType_);
 
 	if(!wcscmp(_taskType, L"URL"))
 		ShellExecute(NULL, L"open", task_, NULL, NULL, SW_SHOW);

@@ -1,28 +1,29 @@
 ﻿#define UNICODE
 
+#include "..\Common\Debug.h"
 #include "ApplicationSettings.h"
 
-StartupMethod ApplicationSettings::runContainerCreationWindow_ = StartupMethod::SHOW_CLOSED_WINDOW;
-TaskTypes_Index_t ApplicationSettings::defaultTaskType = TASKTTYPE_NOTSPECIFIED;
+LaunchMethod ApplicationSettings::containerCreationWindowLaunchMethod_ = LaunchMethod::SHOW_CLOSED_WINDOW;
+TaskType ApplicationSettings::defaultTaskType_ = TASKTYPE_NOTSPECIFIED;
 
 
-void ApplicationSettings::setStartupMethodContainerCreationWindow(StartupMethod startupMethod)
+void ApplicationSettings::setLaunchMethodContainerCreationWindow(LaunchMethod launchMethod)
 {
-	runContainerCreationWindow_ = startupMethod;
+	containerCreationWindowLaunchMethod_ = launchMethod;
 }
 
-StartupMethod ApplicationSettings::getStartupMethodContainerCreationWindow()
+LaunchMethod ApplicationSettings::getLaunchMethodContainerCreationWindow()
 {
-	return runContainerCreationWindow_;
+	return containerCreationWindowLaunchMethod_;
 }
 
 
-void ApplicationSettings::setDefaultTaskType(TaskTypes_Index_t index)
+void ApplicationSettings::setDefaultTaskType(TaskType taskType)
 {
-	defaultTaskType = index;
+	defaultTaskType_ = taskType;
 }
 
-TaskTypes_Index_t ApplicationSettings::getDefaultTaskType()
+TaskType ApplicationSettings::getDefaultTaskType()
 {
-	return defaultTaskType;
+	return defaultTaskType_;
 }

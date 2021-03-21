@@ -1,6 +1,8 @@
 ﻿set(BKM_WINDOWS
 			src/Windows/BookmarkManagerWindow/BookmarkManagerWindow.h
 			src/Windows/BookmarkManagerWindow/BookmarkManagerWindow.cpp
+			src/Windows/BookmarkManagerWindow/BookmarkManagerEvents.h
+			src/Windows/BookmarkManagerWindow/BookmarkManagerEvents.cpp
 
 			src/Windows/ContainerCreationWindow/ContainerCreationWindow.h
 			src/Windows/ContainerCreationWindow/ContainerCreationWindow.cpp
@@ -25,7 +27,9 @@ set(BKM_ARCHIVE
 			src/Archive/Archive.h
 			src/Archive/Archive.cpp
 			src/Archive/Container.h
-			src/Archive/Container.cpp)
+			src/Archive/Container.cpp
+			src/Archive/TaskTypesCollection.h
+			src/Archive/TaskTypesCollection.cpp)
 		
 set(BKM_COMMON
 			src/Common/BkmDef.h

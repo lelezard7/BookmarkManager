@@ -9,6 +9,6 @@
 #include <Windows.h>
 
 
-void create_settingsProgramWindow(HINSTANCE, HWND hWndParent);
+LRESULT create_settingsProgramWindow(HINSTANCE, HWND hWndParent);
 
 #endif

@@ -1,4 +1,4 @@
-﻿/*
+﻿/**
 *		This header connects to all other files. Here you can write everything that will help in debugging.
 */
 
@@ -8,6 +8,7 @@
 
 #include <Windows.h>
 #include <string>
+
 
 //		Comment if the debugging mode is off.
 #define BKM_DEBUG

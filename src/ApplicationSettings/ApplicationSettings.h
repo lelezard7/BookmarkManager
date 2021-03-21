@@ -1,18 +1,16 @@
-﻿/*
+﻿/**
 *		ApplicationSettings sets and stores application settings.
 */
 
 #pragma once
-#ifndef _APPLICATIONSETTINGS_
-#define _APPLICATIONSETTINGS_
+#ifndef _APPLICATION_SETTINGS_
+#define _APPLICATION_SETTINGS_
 
-#include "..\Common\Debug.h"
-#include "..\Common\CommonOperations.h"
+#include "..\Archive\TaskTypesCollection.h"
 #include <Windows.h>
 
-#define TASKTTYPE_NOTSPECIFIED (-1)
+enum class LaunchMethod;
 
-enum class StartupMethod;
 
 class ApplicationSettings
 {	
@@ -20,19 +18,21 @@ class ApplicationSettings
 	*		Stores the way to launch ContainerCreationWindow.
 	*		Launch options are listed in 'enum class StartupMethod'.
 	*/
-	static StartupMethod runContainerCreationWindow_;
-	static TaskTypes_Index_t defaultTaskType;
+	static LaunchMethod containerCreationWindowLaunchMethod_;
+	static TaskType defaultTaskType_;
 
 	ApplicationSettings() = delete;
+	~ApplicationSettings() = delete;
 
 public:
 	/*		Sets and gets the launch method for ContainerCreationWindow.		*/
-	static void setStartupMethodContainerCreationWindow(StartupMethod startupMethod);
-	static StartupMethod getStartupMethodContainerCreationWindow();
+	static void setLaunchMethodContainerCreationWindow(LaunchMethod launchMethod);
+	static LaunchMethod getLaunchMethodContainerCreationWindow();
 
-	static void setDefaultTaskType(TaskTypes_Index_t index);
-	static TaskTypes_Index_t getDefaultTaskType();
+	static void setDefaultTaskType(TaskType taskType);
+	static TaskType getDefaultTaskType();
 };
+
 
 /*
 *		Stores ContainerCreationWindow launch methods.
@@ -50,7 +50,7 @@ public:
 *		entered in ContainerCreationWindow is saved, he must specify SHOW_CLOSED_WINDOW
 *		in the settings.
 */
-enum class StartupMethod
+enum class LaunchMethod
 {
 	CREATE_NEW_WINDOW,
 	SHOW_CLOSED_WINDOW,

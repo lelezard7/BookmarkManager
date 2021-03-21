@@ -19,7 +19,7 @@
 #include "Windows\AboutProgramWindow\AboutProgramWindow.h"
 #include "Windows\SettingsProgramWindow\SettingsProgramWindow.h"
 #include "Common\BkmDef.h"
-#include "Common\CommonOperations.h"
+#include "Archive\TaskTypesCollection.h"
 #include "HandleManager\HandleManager.h"
 #include "res\res.h"
 #include <Windows.h>
@@ -60,7 +60,7 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	TaskTypesCollection::addTaskType(L"Программа");
 
 	/*		Create the main window and show it.		*/
-	HWND hWnd = BookmarkManagerWindow::create_bookmarkManagerWindow(hInstance);
+	HWND hWnd = create_bookmarkManagerWindow(hInstance);
 	ShowWindow(hWnd, true);
 	UpdateWindow(hWnd);
 
@@ -84,6 +84,7 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 		DispatchMessage(&msg);
 	}
 
+	TaskTypesCollection::clear();
 	return (int)msg.wParam;
 }
 
@@ -112,7 +113,7 @@ ErrorCode register_windowClasses(HINSTANCE hInstance)
 
 	/*		BookmarkManagerWindow class.		*/
 	wndClass.lpszClassName = CLASSNAME_BOOKMARKMANAGERWND;
-	wndClass.lpfnWndProc = BookmarkManagerWindow::WndProc;
+	wndClass.lpfnWndProc = BkmManagerProc;
 	wndClass.hInstance = hInstance;
 	wndClass.cbSize = sizeof(WNDCLASSEX);
 	wndClass.style = CS_HREDRAW | CS_VREDRAW;

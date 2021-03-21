@@ -24,10 +24,8 @@
 #ifndef _ARCHIVE_
 #define _ARCHIVE_
 
-#include "..\Common\Debug.h"
 #include "Container.h"
 #include <Windows.h>
-#include <iostream>
 #include <map>
 #include <vector>
 
@@ -42,27 +40,16 @@ class Archive //Сделать find()
 
 	Archive() = delete;
 	~Archive() = delete;
+
 	static Archive_Id getFreeId();
 	static bool freeId(const Archive_Id id);
 
 public:
-	static Archive_Id addContainer(const Container container);
+	static Archive_Id addContainer(Container& container);
 	static Container* getContainer(const Archive_Id id);
 	static bool deleteContainer(const Archive_Id id);
 	static void clear();
 	static size_t size();
-
-
-
-
-	//static ID addContainer(const Container container);
-
-	///*		If it fails, the function returns nullptr.		*/
-	//static Container* getContainerByID(const ID id);
-	//static Container* getContainerByIndex(const size_t index);
-	//static void clear();
-	//static bool delContainerByIndex(const size_t index);
-	//static size_t size();
 };
 
 #endif
