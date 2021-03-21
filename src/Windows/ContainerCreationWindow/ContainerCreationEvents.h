@@ -17,6 +17,7 @@ LRESULT contCreatWnd_applyTag();
 LRESULT contCreatWnd_fillContainer();
 
 LRESULT contCreatWnd_enter_pressed();
+LRESULT contCreatWnd_delete_pressed();
 LRESULT contCreatWnd_tab_pressed();
 
 #endif

@@ -7,28 +7,28 @@
 Container::Container()
 {
 	isRegistered = CONTAINER_UNREGISTERED;
-
+	taskType_ = TASKTYPE_NOTSPECIFIED;
 	name_ = nullptr;
 	task_ = nullptr;
-	taskType_ = TASKTYPE_NOTSPECIFIED;
+}
+
+Container::Container(const Container& other)
+{
+	this->operator=(other);
 }
 
 Container::~Container()
 {
-	if (isRegistered == CONTAINER_UNREGISTERED) {
-		clear();
-		return;
-	}
-
-	name_ = nullptr;
-	task_ = nullptr;
-	taskType_ = TASKTYPE_NOTSPECIFIED;
-	tags_.clear();
+	isRegistered == CONTAINER_UNREGISTERED;
+	clear();
 }
 
 
 void Container::clear()
 {
+	if (isRegistered == CONTAINER_REGISTERED)
+		return;
+
 	erase(ContainerDataTypes::NAME);
 	erase(ContainerDataTypes::TASK);
 	erase(ContainerDataTypes::TASK_TYPE);
@@ -74,6 +74,9 @@ void Container::erase(ContainerDataTypes dataTypes)
 
 void Container::setName(const PWSTR name, const size_t length)
 {
+	if (isRegistered == CONTAINER_REGISTERED)
+		return;
+
 	erase(ContainerDataTypes::NAME);
 	name_ = new WCHAR[length];
 	wcscpy_s(name_, length, name);
@@ -81,6 +84,9 @@ void Container::setName(const PWSTR name, const size_t length)
 
 void Container::setTask(const PWSTR task, const size_t length)
 {
+	if (isRegistered == CONTAINER_REGISTERED)
+		return;
+
 	erase(ContainerDataTypes::TASK);
 	task_ = new WCHAR[length];
 	wcscpy_s(task_, length, task);
@@ -88,6 +94,9 @@ void Container::setTask(const PWSTR task, const size_t length)
 
 bool Container::setTaskType(const TaskType taskType)
 {
+	if (isRegistered == CONTAINER_REGISTERED)
+		return false;
+
 	if (TaskTypesCollection::checkTaskType(taskType)) {
 		taskType_ = taskType;
 		return true;
@@ -98,6 +107,9 @@ bool Container::setTaskType(const TaskType taskType)
 
 bool Container::addTag(const PWSTR tag)
 {
+	if (isRegistered == CONTAINER_REGISTERED)
+		return false;
+
 	for (auto i : tags_) {
 		if (!wcscmp(tag, i)) {
 			return false;
@@ -153,4 +165,26 @@ void Container::start()
 
 	else if (!wcscmp(_taskType, L"Программа"))
 		ShellExecute(NULL, L"open", task_, NULL, NULL, SW_SHOW); //TODO: Сделать возможность задавать параметры запуска.
+}
+
+void Container::operator=(const Container& other)
+{
+	int _length = wcslen(other.name_) + 1;
+	this->name_ = new WCHAR[_length];
+	wcscpy_s(this->name_, _length, other.name_);
+
+	_length = wcslen(other.task_) + 1;
+	this->task_ = new WCHAR[_length];
+	wcscpy_s(this->task_, _length, other.task_);
+
+	this->taskType_ = other.taskType_;
+	this->isRegistered = CONTAINER_UNREGISTERED; //TODO: Написать о том что он всегда копируется как UNREGISTERED.
+
+	for (auto i : other.tags_) {
+		_length = wcslen(i) + 1;
+		PWSTR _tag = new WCHAR[_length];
+
+		wcscpy_s(_tag, _length, i);
+		tags_.push_back(_tag);
+	}
 }

@@ -28,6 +28,7 @@ LRESULT CALLBACK ContainerCreatProc(_In_ HWND hWnd, _In_ UINT msg, _In_ WPARAM w
 		case ID_CONTAINERCREATIONWND_APPLYTAGBUTTON:	return contCreatWnd_applyTag();
 
 		case BKM_ID_ENTER:	return contCreatWnd_enter_pressed();
+		case BKM_ID_DELETE:	return contCreatWnd_delete_pressed();
 		case BKM_ID_TAB:	return contCreatWnd_tab_pressed();
 		}
 	}
@@ -202,7 +203,7 @@ static void create_tagsListView(HWND hWndParent, HINSTANCE hInstance)
 
 	LVCOLUMN lvcolumn;
 	lvcolumn.mask = LVCF_WIDTH | LVCF_TEXT;
-	lvcolumn.cx = 250;
+	lvcolumn.cx = ContainerCreationWnd_TagsListView_Width;
 	lvcolumn.pszText = (LPWSTR)L"Тег";
 
 	ListView_InsertColumn(hWnd, 1, &lvcolumn);

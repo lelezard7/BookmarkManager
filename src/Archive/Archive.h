@@ -45,7 +45,7 @@ class Archive //Сделать find()
 	static bool freeId(const Archive_Id id);
 
 public:
-	static Archive_Id addContainer(Container& container);
+	static Archive_Id addContainer(const Container& container);
 	static Container* getContainer(const Archive_Id id);
 	static bool deleteContainer(const Archive_Id id);
 	static void clear();

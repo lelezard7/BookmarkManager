@@ -1,4 +1,4 @@
-#define UNICODE
+﻿#define UNICODE
 
 #include "..\Common\Debug.h"
 #include "TaskTypesCollection.h"

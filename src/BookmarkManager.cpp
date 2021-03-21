@@ -1,5 +1,5 @@
 ﻿//TODO: Add a license
-//TODO: delete 'pragma comment'
+//TODO: Удалить 'pragma comment'
 
 /*
 *		General requirements:
@@ -13,14 +13,12 @@
 
 #define UNICODE
 
-#include "Common\Debug.h"
-#include "Windows\BookmarkManagerWindow\BookmarkManagerWindow.h"
 #include "Windows\ContainerCreationWindow\ContainerCreationWindow.h"
-#include "Windows\AboutProgramWindow\AboutProgramWindow.h"
-#include "Windows\SettingsProgramWindow\SettingsProgramWindow.h"
-#include "Common\BkmDef.h"
+#include "Windows\BookmarkManagerWindow\BookmarkManagerWindow.h"
 #include "Archive\TaskTypesCollection.h"
 #include "HandleManager\HandleManager.h"
+#include "Common\BkmDef.h"
+#include "Common\Debug.h"
 #include "res\res.h"
 #include <Windows.h>
 #include <CommCtrl.h>
@@ -29,37 +27,25 @@
 name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
 processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 
-/*		Later a help on possible errors will be created and bool will possibly be replaced.		*/
-typedef bool ErrorCode;
 
-/*		Initialization of common controls.		*/
-ErrorCode initialization_commCtrl();
-/*		Registering window classes.		*/
-ErrorCode register_windowClasses(HINSTANCE hInstance);
-
+static bool initialization_commCtrl();
+static bool register_windowClasses(HINSTANCE hInstance);
 
 INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ PWSTR pCmdLine, _In_ int nCmdShow)
 {
-	/*
-	*		Common controls are initiated here and classes of all windows are recorded.
-	*		If one of these steps fails the program stops running.
-	*/
-	if (!initialization_commCtrl())
-	{
-		MessageBox(NULL, L"Не удалось инициализировать общие элементы управления", L"Error", MB_OK);
+	if (!initialization_commCtrl()) {
+		MessageBox(NULL, L"Не удалось инициализировать общие элементы управления", L"Bookmark Manager", MB_OK);
 		return 1;
 	}
 
-	if (!register_windowClasses(hInstance))
-	{
-		MessageBox(NULL, L"Не удалось зарегистрировать класс окна", L"Error", MB_OK);
+	if (!register_windowClasses(hInstance)) {
+		MessageBox(NULL, L"Не удалось зарегистрировать класс окна", L"Bookmark Manager", MB_OK);
 		return 1;
 	}
 
 	TaskTypesCollection::addTaskType(L"URL");
 	TaskTypesCollection::addTaskType(L"Программа");
 
-	/*		Create the main window and show it.		*/
 	HWND hWnd = create_bookmarkManagerWindow(hInstance);
 	ShowWindow(hWnd, true);
 	UpdateWindow(hWnd);
@@ -70,10 +56,10 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	{
 		if (HandleManager::checkExistence(HNAME_CONTAINERCREATIONWND_WND))
 		{
-			HWND hCrtCntrWnd = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_WND);
+			HWND hCreatContainerWnd = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_WND);
 
-			if (GetActiveWindow() == hCrtCntrWnd)
-				if (TranslateAccelerator(hCrtCntrWnd, accel, &msg))
+			if (GetActiveWindow() == hCreatContainerWnd)
+				if (TranslateAccelerator(hCreatContainerWnd, accel, &msg))
 					continue;
 		}
 
@@ -88,7 +74,7 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	return (int)msg.wParam;
 }
 
-ErrorCode initialization_commCtrl()
+static bool initialization_commCtrl()
 {
 	INITCOMMONCONTROLSEX	commonControl;
 
@@ -107,7 +93,7 @@ ErrorCode initialization_commCtrl()
 	return true;
 }
 
-ErrorCode register_windowClasses(HINSTANCE hInstance)
+static bool register_windowClasses(HINSTANCE hInstance)
 {
 	WNDCLASSEX	wndClass = { NULL };
 
@@ -117,7 +103,7 @@ ErrorCode register_windowClasses(HINSTANCE hInstance)
 	wndClass.hInstance = hInstance;
 	wndClass.cbSize = sizeof(WNDCLASSEX);
 	wndClass.style = CS_HREDRAW | CS_VREDRAW;
-	wndClass.hbrBackground = CreateSolidBrush(RGB(70, 68, 81));
+	wndClass.hbrBackground = CreateSolidBrush(COLOR_BK);
 	wndClass.hCursor = LoadCursor(hInstance, IDC_ARROW);
 	wndClass.hIcon = (HICON)LoadImage(hInstance, MAKEINTRESOURCE(BKM_ICON_1), IMAGE_ICON, NULL, NULL, LR_SHARED);
 	
@@ -130,7 +116,7 @@ ErrorCode register_windowClasses(HINSTANCE hInstance)
 	wndClass.hInstance = hInstance;
 	wndClass.cbSize = sizeof(WNDCLASSEX);
 	wndClass.style = CS_HREDRAW | CS_VREDRAW;
-	wndClass.hbrBackground = CreateSolidBrush(RGB(70, 68, 81));
+	wndClass.hbrBackground = CreateSolidBrush(COLOR_BK);
 	wndClass.hCursor = LoadCursor(hInstance, IDC_ARROW);
 
 	if (!RegisterClassEx(&wndClass))

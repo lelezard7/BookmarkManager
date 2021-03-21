@@ -1,4 +1,4 @@
-/**
+﻿/**
 * 
 */
 
@@ -13,7 +13,7 @@ LRESULT bkmManagerWnd_adjustmentControls(HWND hWnd);
 LRESULT showCreatedContainer(WPARAM);
 
 LRESULT bkmManagerWnd_ClearMainListView(HWND hWnd);
-LRESULT bkmManagerWnd_start�ontainer(HWND hWnd);
+LRESULT bkmManagerWnd_startСontainer(HWND hWnd);
 LRESULT bkmManagerWnd_delete_pressed(HWND hWnd);
 LRESULT bkmManagerWnd_addButton_pressed(HWND hWnd);
 

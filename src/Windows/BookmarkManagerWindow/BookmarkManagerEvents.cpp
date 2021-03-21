@@ -1,4 +1,4 @@
-#define UNICODE
+п»ї#define UNICODE
 
 #include "..\..\ApplicationSettings\ApplicationSettings.h"
 #include "..\..\Common\PositionAndSizeControls.h"
@@ -19,7 +19,7 @@ static size_t mainListView_getSelectedId()
 	HWND hWnd = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_MAINLISTVIEW);
 	size_t index = ListView_GetNextItem(hWnd, -1, LVNI_SELECTED);
 
-	PWSTR buffer_id = new WCHAR[0xF4240];  //TODO: Сделать нормальное ограничение размеров во всей программе.
+	PWSTR buffer_id = new WCHAR[0xF4240];  //TODO: РЎРґРµР»Р°С‚СЊ РЅРѕСЂРјР°Р»СЊРЅРѕРµ РѕРіСЂР°РЅРёС‡РµРЅРёРµ СЂР°Р·РјРµСЂРѕРІ РІРѕ РІСЃРµР№ РїСЂРѕРіСЂР°РјРјРµ.
 	ListView_GetItemText(hWnd, index, 0, buffer_id, 0xF4240);
 
 	size_t id = std::stoull(buffer_id);
@@ -51,6 +51,9 @@ LRESULT bkmManagerWnd_adjustmentControls(HWND hWnd)
 		BookmarkManagerWnd_ClearButton_Y,
 		BookmarkManagerWnd_ClearButton_Width,
 		BookmarkManagerWnd_ClearButton_Height, NULL);
+
+	ListView_SetColumnWidth(hMainListView, 1, BookmarkManagerWnd_MainListView_Width / 2);
+	ListView_SetColumnWidth(hMainListView, 2, BookmarkManagerWnd_MainListView_Width / 2);
 
 	return 0;
 }
@@ -88,7 +91,7 @@ LRESULT bkmManagerWnd_ClearMainListView(HWND hWnd)
 	if (ListView_GetItemCount(hMainLv) == 0)
 		return 0;
 
-	if (MessageBox(hWnd, L"Вы действительно хотите очистить весь список?",
+	if (MessageBox(hWnd, L"Р’С‹ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕ С…РѕС‚РёС‚Рµ РѕС‡РёСЃС‚РёС‚СЊ РІРµСЃСЊ СЃРїРёСЃРѕРє?",
 		L"Bookmark Manager", MB_OKCANCEL | MB_ICONWARNING) == IDOK)
 	{
 		ListView_DeleteAllItems(hMainLv);
@@ -98,20 +101,20 @@ LRESULT bkmManagerWnd_ClearMainListView(HWND hWnd)
 	return 0;
 }
 
-LRESULT bkmManagerWnd_startСontainer(HWND hWnd)
+LRESULT bkmManagerWnd_startРЎontainer(HWND hWnd)
 {
 	HWND hMainLv = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_MAINLISTVIEW);
 	size_t index = ListView_GetNextItem(hMainLv, -1, LVNI_SELECTED);
 
-	if (index == -1)
+	if (index == -1 || GetFocus() != hMainLv)
 		return 0;
 
 	Archive_Id id = mainListView_getSelectedId();
 	Container* container = Archive::getContainer(id);
 
 	if (!container) {
-		std::wstring errMessage = L"Не удалось запустить контейнер. Контейнер с ID: " +
-			std::to_wstring(id) + L" не найден!";
+		std::wstring errMessage = L"РќРµ СѓРґР°Р»РѕСЃСЊ Р·Р°РїСѓСЃС‚РёС‚СЊ РєРѕРЅС‚РµР№РЅРµСЂ. РљРѕРЅС‚РµР№РЅРµСЂ СЃ ID: " +
+			std::to_wstring(id) + L" РЅРµ РЅР°Р№РґРµРЅ!";
 		MessageBox(hWnd, errMessage.c_str(), L"Bookmark Manager", MB_OK | MB_ICONWARNING);
 
 		return 0;
@@ -127,7 +130,7 @@ LRESULT bkmManagerWnd_delete_pressed(HWND hWnd)
 	HWND hMainLv = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_MAINLISTVIEW);
 	size_t index = ListView_GetNextItem(hMainLv, -1, LVNI_SELECTED);
 
-	if (index == -1)
+	if (index == -1 || GetFocus() != hMainLv)
 		return 0;
 
 	Archive_Id id = mainListView_getSelectedId();
@@ -136,8 +139,8 @@ LRESULT bkmManagerWnd_delete_pressed(HWND hWnd)
 		ListView_DeleteItem(hMainLv, index);
 	}
 	else {
-		std::wstring errMessage = L"Не удалось удалить контейнер. Контейнер с ID: " +
-			std::to_wstring(id) + L" не найден!";
+		std::wstring errMessage = L"РќРµ СѓРґР°Р»РѕСЃСЊ СѓРґР°Р»РёС‚СЊ РєРѕРЅС‚РµР№РЅРµСЂ. РљРѕРЅС‚РµР№РЅРµСЂ СЃ ID: " +
+			std::to_wstring(id) + L" РЅРµ РЅР°Р№РґРµРЅ!";
 		MessageBox(hWnd, errMessage.c_str(), L"Bookmark Manager", MB_OK | MB_ICONWARNING);
 	}
 
@@ -182,7 +185,7 @@ LRESULT bkmManagerWnd_menu_help_howToUse(HWND hWnd)
 	PWSTR buffer = new WCHAR[length];
 
 	GetCurrentDirectory(length, buffer);
-	std::wstring errMessage = L"Не удалось найти файл справки: \"" + std::wstring(buffer) +
+	std::wstring errMessage = L"РќРµ СѓРґР°Р»РѕСЃСЊ РЅР°Р№С‚Рё С„Р°Р№Р» СЃРїСЂР°РІРєРё: \"" + std::wstring(buffer) +
 		L"\\BookmarkManager.chm\"";
 	delete[] buffer;
 

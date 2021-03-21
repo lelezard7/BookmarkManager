@@ -17,7 +17,7 @@ class Archive;
 enum class ContainerDataTypes;
 
 
-class Container //TODO: перегрузить операторы.
+class Container
 {
 	PWSTR name_;
 	PWSTR task_;
@@ -28,6 +28,7 @@ class Container //TODO: перегрузить операторы.
 
 public:
 	Container();
+	Container(const Container& other);
 	~Container();
 
 	void clear();
@@ -42,7 +43,9 @@ public:
 	PWSTR getTask();
 	TaskType getTaskType();
 	PWSTR getTag(const size_t index);
+
 	void start();
+	void operator=(const Container& other);
 
 	friend Archive;
 };

@@ -62,6 +62,8 @@ LRESULT contCreatWnd_adjustmentControls()
 		ContainerCreationWnd_TaskTypeHelpText_Width,
 		ContainerCreationWnd_TaskTypeHelpText_Height, NULL);
 
+	ListView_SetColumnWidth(hTagsListView, 0, ContainerCreationWnd_TagsListView_Width);
+
 	return 0;
 }
 
@@ -119,7 +121,9 @@ LRESULT contCreatWnd_applyTag()
 	HWND hTagsListView = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TAGSLISTVIEW);
 	ListView_InsertItem(hTagsListView, &lvitem);
 
+	SetWindowText(hTagsTextBox, L"");
 	delete[] buffer;
+
 	return 0;
 }
 
@@ -134,6 +138,18 @@ LRESULT contCreatWnd_enter_pressed()
 	else
 		contCreatWnd_fillContainer();
 
+	return 0;
+}
+
+LRESULT contCreatWnd_delete_pressed()
+{
+	HWND hMainLv = HandleManager::getHandleWnd(HNAME_CONTAINERCREATIONWND_TAGSLISTVIEW);
+	size_t index = ListView_GetNextItem(hMainLv, -1, LVNI_SELECTED);
+
+	if (index == -1 || GetFocus() != hMainLv)
+		return 0;
+
+	ListView_DeleteItem(hMainLv, index);
 	return 0;
 }
 
@@ -226,6 +242,7 @@ static bool fillTags(Container& container)
 		container.addTag(lvitem.pszText);
 	}
 
+	delete[] buffer;
 	return true;
 }
 

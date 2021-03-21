@@ -62,7 +62,7 @@
 //			taskTextBox
 #define ContainerCreationWnd_TaskTextBox_Width			((ContainerCreationWnd_Rect_Right / 2) - 9)
 #define ContainerCreationWnd_TaskTextBox_Height			(23)
-#define ContainerCreationWnd_TaskTextBox_X				(4 + (ContainerCreationWnd_Rect_Bottom / 2))
+#define ContainerCreationWnd_TaskTextBox_X				(4 + (ContainerCreationWnd_Rect_Right / 2))
 #define ContainerCreationWnd_TaskTextBox_Y				(12 + ContainerCreationWnd_TaskTypeComboBox_Y + \
 															ContainerCreationWnd_TaskTypeComboBox_Height)
 

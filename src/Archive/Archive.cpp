@@ -32,18 +32,16 @@ bool Archive::freeId(const Archive_Id id)
 	}
 
 	nextId_.push_back(id);
-
 	return true;
 }
 
 
-Archive_Id Archive::addContainer(Container& container)
+Archive_Id Archive::addContainer(const Container& container)
 {
-	container.isRegistered = CONTAINER_REGISTERED;
-	Container _newContainer = container;
-
 	Archive_Id _id = getFreeId();
-	archive_.emplace(std::make_pair(_id, _newContainer));
+	archive_.emplace(std::make_pair(_id, container));
+
+	archive_[_id].isRegistered = CONTAINER_REGISTERED;
 
 	return _id;
 }
@@ -54,7 +52,6 @@ Container* Archive::getContainer(const Archive_Id id)
 		return nullptr;
 
 	auto _iterator = archive_.find(id);
-
 	return &_iterator->second;
 }
 
@@ -68,7 +65,6 @@ bool Archive::deleteContainer(const Archive_Id id)
 
 	auto _iterator = archive_.find(id);
 	archive_.erase(_iterator->first);
-
 	freeId(id);
 
 	return true;
@@ -82,6 +78,8 @@ void Archive::clear()
 	}
 
 	archive_.clear();
+	nextId_.clear();
+	maxId_ = 0;
 }
 
 size_t Archive::size()
