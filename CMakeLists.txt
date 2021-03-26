@@ -1,8 +1,11 @@
 ﻿cmake_minimum_required(VERSION 3.5)
+
 project(BookmarkManager	LANGUAGES C	CXX)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/Output)
 
 include(src_variables.cmake)
 
+add_subdirectory("lib/SaveModule")
 
 #			Visual Studio
 foreach(i ${BKM_ALL})
@@ -15,7 +18,7 @@ add_executable(BookmarkManager WIN32 ${BKM_ALL} src_variables.cmake)
 #			Libraries
 target_link_libraries(BookmarkManager PRIVATE comctl32)
 target_link_libraries(BookmarkManager PRIVATE htmlhelp)
-
+target_link_libraries(BookmarkManager PRIVATE SaveModule)
 
 set_target_properties(BookmarkManager PROPERTIES
 											CXX_STANDARD 11

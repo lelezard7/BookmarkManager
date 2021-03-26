@@ -20,6 +20,8 @@ LRESULT bkmManagerWnd_addButton_pressed(HWND hWnd);
 LRESULT bkmManagerWnd_menu_help_howToUse(HWND hWnd);
 LRESULT bkmManagerWnd_menu_help_aboutProg(HWND hWnd);
 LRESULT bkmManagerWnd_menu_file_close(HWND hWnd);
+LRESULT bkmManagerWnd_menu_file_save();
+LRESULT bkmManagerWnd_menu_file_open();
 
 LRESULT bkmManagerWnd_closeProgram(HWND hWnd);
 LRESULT bkmManagerWnd_destroyWindow();

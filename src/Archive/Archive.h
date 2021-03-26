@@ -47,6 +47,7 @@ class Archive //Сделать find()
 public:
 	static Archive_Id addContainer(const Container& container);
 	static Container* getContainer(const Archive_Id id);
+	static Archive_Id getIdByIndex(const size_t index);
 	static bool deleteContainer(const Archive_Id id);
 	static void clear();
 	static size_t size();

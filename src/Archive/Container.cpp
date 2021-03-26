@@ -160,6 +160,8 @@ void Container::start()
 {
 	PWSTR _taskType = TaskTypesCollection::getTaskTypeName(taskType_);
 
+	//TODO: Инициализировать COM перед ShellExecute.
+
 	if(!wcscmp(_taskType, L"URL"))
 		ShellExecute(NULL, L"open", task_, NULL, NULL, SW_SHOW);
 

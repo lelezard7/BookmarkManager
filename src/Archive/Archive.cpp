@@ -55,6 +55,17 @@ Container* Archive::getContainer(const Archive_Id id)
 	return &_iterator->second;
 }
 
+Archive_Id Archive::getIdByIndex(const size_t index)
+{
+	if (index >= archive_.size())
+		return 0;
+
+	auto _iterator = archive_.begin();
+	std::advance(_iterator, index);
+
+	return _iterator->first;
+}
+
 bool Archive::deleteContainer(const Archive_Id id)
 {
 	if (archive_.find(id) == archive_.end())

@@ -10,6 +10,7 @@
 #include "..\ContainerCreationWindow\ContainerCreationWindow.h"
 #include "..\AboutProgramWindow\AboutProgramWindow.h"
 #include "BookmarkManagerEvents.h"
+#include <SaveModule.h>
 #include <CommCtrl.h>
 #include <HtmlHelp.h>
 
@@ -204,6 +205,99 @@ LRESULT bkmManagerWnd_menu_help_aboutProg(HWND hWnd)
 LRESULT bkmManagerWnd_menu_file_close(HWND hWnd)
 {
 	PostMessage(hWnd, WM_CLOSE, NULL, NULL);
+
+	return 0;
+}
+
+LRESULT bkmManagerWnd_menu_file_save()
+{
+	TagStructure mainTag;
+
+	mainTag.setTag("BookmarkManager");
+	mainTag.setFlag(TSF_SUBTAGS);
+	mainTag.addAttribute("SaveVer", "0.0.1");
+	std::wstring newVer = BOOKMARKMANAGER_VERSIONNAME;
+	mainTag.addAttribute("BkmVer", std::string(newVer.begin(), newVer.end()));
+
+	TagStructure* archiveTag = new TagStructure;
+	mainTag.addSubTag(archiveTag);
+	{
+		archiveTag->setTag("archive");
+		archiveTag->setFlag(TSF_SUBTAGS);
+
+		size_t archiveSize = Archive::size();
+		for (size_t i = 0; i < archiveSize; ++i)
+		{
+			TagStructure* containerTag = new TagStructure;
+			archiveTag->addSubTag(containerTag);
+			{
+				Archive_Id containerId = Archive::getIdByIndex(i);
+				Container* container = Archive::getContainer(containerId);
+
+				containerTag->setTag("container");
+				containerTag->setFlag(TSF_SUBTAGS);
+				containerTag->addAttribute("id", std::to_string(containerId));
+
+				TagStructure* containeDataTypesTag[4];
+				containeDataTypesTag[0] = new TagStructure;
+				containeDataTypesTag[1] = new TagStructure;
+				containeDataTypesTag[2] = new TagStructure;
+				containeDataTypesTag[3] = new TagStructure;
+
+				containerTag->addSubTag(containeDataTypesTag[0]);
+				containerTag->addSubTag(containeDataTypesTag[1]);
+				containerTag->addSubTag(containeDataTypesTag[2]);
+				containerTag->addSubTag(containeDataTypesTag[3]);
+				{
+					containeDataTypesTag[0]->setTag("name");
+					containeDataTypesTag[0]->setFlag(TSF_VALUE);
+					std::wstring buffer = container->getName();
+					containeDataTypesTag[0]->setValue(std::string(buffer.begin(), buffer.end()));
+
+					containeDataTypesTag[1]->setTag("task");
+					containeDataTypesTag[1]->setFlag(TSF_VALUE);
+					buffer = container->getTask();
+					containeDataTypesTag[1]->setValue(std::string(buffer.begin(), buffer.end()));
+
+					containeDataTypesTag[2]->setTag("taskType");
+					containeDataTypesTag[2]->setFlag(TSF_VALUE);
+					TaskType taskType = container->getTaskType();
+					containeDataTypesTag[2]->setValue(std::to_string(taskType));
+
+					containeDataTypesTag[3]->setTag("TagsGroup");
+					containeDataTypesTag[3]->setFlag(TSF_SUBTAGS);
+
+					TagStructure* tagTag = new TagStructure;
+					int index = 0;
+
+					while (container->getTag(index) != nullptr)
+					{
+						containeDataTypesTag[3]->addSubTag(tagTag);
+						{
+							tagTag->setTag("tag");
+							tagTag->setFlag(TSF_VALUE);
+							buffer = container->getTag(index);
+							tagTag->setValue(std::string(buffer.begin(), buffer.end()));
+						}
+						index++;
+					}
+				}
+			}
+		}
+	}
+
+	openXmlFile("dfd.xml", XMLFILE_WRITE);
+	saveXmlFile(mainTag);
+	closeXmlFile("dfd");
+
+	return 0;
+}
+
+LRESULT bkmManagerWnd_menu_file_open()
+{
+	openXmlFile("dfd.xml", XMLFILE_READ);
+	TagStructure* mainTag = readXmlFile();
+	closeXmlFile("dfd");
 
 	return 0;
 }

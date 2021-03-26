@@ -33,6 +33,8 @@ LRESULT CALLBACK BkmManagerProc(_In_ HWND hWnd, _In_ UINT msg, _In_ WPARAM wPara
 		case ID_HELP_ABOUTBOOKMARKMANAGER:	return bkmManagerWnd_menu_help_aboutProg(hWnd);
 		case ID_FILE_SETTINGS:				return create_settingsProgramWindow(GetModuleHandle(NULL), hWnd);
 		case ID_HELP_HOWTOUSE:				return bkmManagerWnd_menu_help_howToUse(hWnd);
+		case ID_FILE_SAVE:					return bkmManagerWnd_menu_file_save();
+		case ID_FILE_OPEN:					return bkmManagerWnd_menu_file_open();
 
 		case BKM_ID_DELETE:	return bkmManagerWnd_delete_pressed(hWnd);
 		case BKM_ID_ENTER:	return bkmManagerWnd_startСontainer(hWnd);
@@ -107,7 +109,7 @@ static void create_mainListView(HWND hWndParent, HINSTANCE hInstance)
 	lvcolumn.pszText = (LPWSTR)L"ID";
 	ListView_InsertColumn(hWnd, 1, &lvcolumn);
 
-	lvcolumn.cx = 215;
+	lvcolumn.cx = BookmarkManagerWnd_MainListView_Width / 2;
 	lvcolumn.pszText = (LPWSTR)L"Название";
 	ListView_InsertColumn(hWnd, 2, &lvcolumn);
 
