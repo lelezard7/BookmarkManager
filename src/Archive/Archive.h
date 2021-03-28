@@ -45,7 +45,12 @@ class Archive //Сделать find()
 	static bool freeId(const Archive_Id id);
 
 public:
+	static Archive_Id getMaxId(); //TODO: check
+	static Archive_Id getNextId(const size_t index); //TODO: check
+	static size_t getNextIdCount(); //TODO: check
+	static bool initialization(const Archive_Id maxId, const std::vector<Archive_Id>& nextId); //TODO: сделать возможность уменьшения.
 	static Archive_Id addContainer(const Container& container);
+	static bool addContainer(const Container& container, const Archive_Id id); //TODO: check
 	static Container* getContainer(const Archive_Id id);
 	static Archive_Id getIdByIndex(const size_t index);
 	static bool deleteContainer(const Archive_Id id);

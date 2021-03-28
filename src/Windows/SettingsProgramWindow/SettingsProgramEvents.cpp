@@ -6,6 +6,7 @@
 #include "..\..\Common\BkmDef.h"
 #include "..\..\Common\Debug.h"
 #include "..\..\res\res.h"
+#include <SaveModule.h>
 #include "SettingsProgramEvents.h"
 
 
@@ -81,11 +82,13 @@ INT_PTR behavior_1_radioButtons_changeEnable(HWND hDlg)
 
 static void changeDefaultTaskType(HWND);
 static void changeStartupMethod(HWND);
+static void save();
 
 INT_PTR applySettings(HWND hDlg)
 {
 	changeDefaultTaskType(hDlg);
 	changeStartupMethod(hDlg);
+	save();
 
 	return TRUE;
 }
@@ -120,4 +123,37 @@ static void changeStartupMethod(HWND hDlg)
 	else if (IsDlgButtonChecked(hDlg, BKM_ADDCONTAINERWNDBEHAVIOR_3) == BST_CHECKED) {
 		ApplicationSettings::setLaunchMethodContainerCreationWindow(LaunchMethod::CONTINUE_UNFINISHED_CREATION);
 	}
+}
+
+static void save()
+{
+	TagStructure mainTag;
+
+	mainTag.setFlag(TSF_SUBTAGS);
+	mainTag.setTag("Settings");
+	std::wstring newVerName = SAVEMODULE_VERSIONNAME;
+	mainTag.addAttribute("SaveVer", std::string(newVerName.begin(), newVerName.end()));
+	std::wstring newVer = BOOKMARKMANAGER_VERSIONNAME;
+	mainTag.addAttribute("BkmVer", std::string(newVer.begin(), newVer.end()));
+
+	TagStructure* settingsTag[3];
+	settingsTag[0] = new TagStructure;
+	settingsTag[1] = new TagStructure;
+
+	mainTag.addSubTag(settingsTag[0]);
+	mainTag.addSubTag(settingsTag[1]);
+	{
+		settingsTag[0]->setFlag(TSF_VALUE);
+		settingsTag[0]->setTag("defaultTaskType");
+		settingsTag[0]->setValue(std::to_string(ApplicationSettings::getDefaultTaskType()));
+
+		settingsTag[1]->setFlag(TSF_VALUE);
+		settingsTag[1]->setTag("launchMethod_window");
+		int launchMethod = static_cast<int>(ApplicationSettings::getLaunchMethodContainerCreationWindow());
+		settingsTag[1]->setValue(std::to_string(launchMethod));
+	}
+
+	openXmlFile("Settings.bkms", XMLFILE_WRITE);
+	saveXmlFile(mainTag);
+	closeXmlFile("Settings.bkms");
 }

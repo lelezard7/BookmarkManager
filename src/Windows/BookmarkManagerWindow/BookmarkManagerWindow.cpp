@@ -34,7 +34,7 @@ LRESULT CALLBACK BkmManagerProc(_In_ HWND hWnd, _In_ UINT msg, _In_ WPARAM wPara
 		case ID_FILE_SETTINGS:				return create_settingsProgramWindow(GetModuleHandle(NULL), hWnd);
 		case ID_HELP_HOWTOUSE:				return bkmManagerWnd_menu_help_howToUse(hWnd);
 		case ID_FILE_SAVE:					return bkmManagerWnd_menu_file_save();
-		case ID_FILE_OPEN:					return bkmManagerWnd_menu_file_open();
+		case ID_FILE_OPEN:					return bkmManagerWnd_menu_file_open(L"");
 
 		case BKM_ID_DELETE:	return bkmManagerWnd_delete_pressed(hWnd);
 		case BKM_ID_ENTER:	return bkmManagerWnd_startСontainer(hWnd);
@@ -55,7 +55,7 @@ static void create_addButton(HWND hWndParent, HINSTANCE);
 static void create_openButton(HWND hWndParent, HINSTANCE);
 static void create_clearButton(HWND hWndParent, HINSTANCE);
 
-HWND create_bookmarkManagerWindow(HINSTANCE hInstance)
+HWND create_bookmarkManagerWindow(HINSTANCE hInstance, PWSTR pCmdLine)
 {
 	HWND hWnd = CreateWindow(
 		CLASSNAME_BOOKMARKMANAGERWND,
@@ -79,6 +79,7 @@ HWND create_bookmarkManagerWindow(HINSTANCE hInstance)
 	SetMenu(hWnd, hMenu);
 
 	moveWindowToCenterScreen(hWnd);
+	bkmManagerWnd_initialization(pCmdLine);
 
 	return hWnd;
 }

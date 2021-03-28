@@ -15,11 +15,13 @@
 
 #include "Windows\ContainerCreationWindow\ContainerCreationWindow.h"
 #include "Windows\BookmarkManagerWindow\BookmarkManagerWindow.h"
+#include "ApplicationSettings\ApplicationSettings.h"
 #include "Archive\TaskTypesCollection.h"
 #include "HandleManager\HandleManager.h"
 #include "Common\BkmDef.h"
 #include "Common\Debug.h"
 #include "res\res.h"
+#include <SaveModule.h>
 #include <Windows.h>
 #include <CommCtrl.h>
 
@@ -30,6 +32,7 @@ processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 
 static bool initialization_commCtrl();
 static bool register_windowClasses(HINSTANCE hInstance);
+static bool initialization_settings();
 
 INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ PWSTR pCmdLine, _In_ int nCmdShow)
 {
@@ -46,7 +49,9 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	TaskTypesCollection::addTaskType(L"URL");
 	TaskTypesCollection::addTaskType(L"Программа");
 
-	HWND hWnd = create_bookmarkManagerWindow(hInstance);
+	initialization_settings();
+
+	HWND hWnd = create_bookmarkManagerWindow(hInstance, pCmdLine);
 	ShowWindow(hWnd, true);
 	UpdateWindow(hWnd);
 
@@ -121,6 +126,29 @@ static bool register_windowClasses(HINSTANCE hInstance)
 
 	if (!RegisterClassEx(&wndClass))
 		return false;
+
+	return true;
+}
+
+static bool initialization_settings()
+{
+	openXmlFile("Settings.bkms", XMLFILE_READ); //TODO: Проверять существование файла
+	TagStructure* mainTag = readXmlFile();
+	closeXmlFile("Settings.bkms");
+
+	TagStructure filter;
+	TagPath searchTag;
+	searchTag.setTagStructure(*mainTag);
+
+	filter.setTag("defaultTaskType");
+	searchTag.setFlags(TPF_TAG);
+	SearchResult searchResult = searchTag.search(filter);
+	ApplicationSettings::setDefaultTaskType(std::stoi(searchResult[0]->getValue()));
+
+	filter.setTag("launchMethod_window");
+	searchTag.setFlags(TPF_TAG);
+	searchResult = searchTag.search(filter);
+	ApplicationSettings::setLaunchMethodContainerCreationWindow((LaunchMethod)std::stoi(searchResult[0]->getValue()));
 
 	return true;
 }

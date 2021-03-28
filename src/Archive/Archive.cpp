@@ -36,6 +36,29 @@ bool Archive::freeId(const Archive_Id id)
 }
 
 
+Archive_Id Archive::getMaxId()
+{
+	return maxId_;
+}
+
+Archive_Id Archive::getNextId(const size_t index)
+{
+	return nextId_[index];
+}
+
+size_t Archive::getNextIdCount()
+{
+	return nextId_.size();
+}
+
+bool Archive::initialization(const Archive_Id maxId, const std::vector<Archive_Id>& nextId)
+{
+	maxId_ = maxId;
+	nextId_ = nextId;
+
+	return 0;
+}
+
 Archive_Id Archive::addContainer(const Container& container)
 {
 	Archive_Id _id = getFreeId();
@@ -44,6 +67,15 @@ Archive_Id Archive::addContainer(const Container& container)
 	archive_[_id].isRegistered = CONTAINER_REGISTERED;
 
 	return _id;
+}
+
+bool Archive::addContainer(const Container& container, const Archive_Id id)
+{
+	archive_.emplace(std::make_pair(id, container));
+
+	archive_[id].isRegistered = CONTAINER_REGISTERED;
+
+	return true;
 }
 
 Container* Archive::getContainer(const Archive_Id id)

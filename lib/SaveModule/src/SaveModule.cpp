@@ -1,4 +1,4 @@
-#include "SaveModule.h"
+ï»¿#include "SaveModule.h"
 #include <fstream>
 //#include <CommCtrl.h>
 #include <Windows.h>
@@ -45,7 +45,7 @@ bool openXmlFile(std::string fileName, int mode)
 {
 	if (mode == XMLFILE_WRITE)
 	{
-		file.open(fileName);//TODO: çàïèñûâàòü èíôîðìàöèþ î âåðñèè.
+		file.open(fileName);//TODO: Ð·Ð°Ð¿Ð¸ÑÑ‹Ð²Ð°Ñ‚ÑŒ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸ÑŽ Ð¾ Ð²ÐµÑ€ÑÐ¸Ð¸.
 
 		if (!file.is_open())
 			return false;
@@ -61,7 +61,7 @@ bool openXmlFile(std::string fileName, int mode)
 	return true;
 }
 
-bool closeXmlFile(std::string fileName) //TODO: Ïðîâåðÿòü èìÿ ôàéëà.
+bool closeXmlFile(std::string fileName) //TODO: ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÑ‚ÑŒ Ð¸Ð¼Ñ Ñ„Ð°Ð¹Ð»Ð°.
 {
 	file.close();
 	file_in.close();
@@ -364,9 +364,38 @@ void TagStructure::setTag(std::string tag)
 	this->tag = tag;
 }
 
+std::string TagStructure::getTag()
+{
+	return this->tag;
+}
+
 void TagStructure::addAttribute(std::string attribute, std::string attributeValue)
 {
 	attributes.emplace(std::make_pair(attribute, attributeValue));
+}
+
+std::string TagStructure::getAttribute(const int index, std::string what)
+{
+	if (what == "attribute")
+	{
+		auto _iterator = attributes.begin();
+		std::advance(_iterator, index);
+		return _iterator->first;
+	}
+
+	if (what == "value")
+	{
+		auto _iterator = attributes.begin();
+		std::advance(_iterator, index);
+		return _iterator->second;
+	}
+
+	return "";
+}
+
+std::string TagStructure::getAttribute(std::string attribute)
+{
+	return attributes[attribute];
 }
 
 void TagStructure::setFlag(bool flag)
@@ -374,9 +403,19 @@ void TagStructure::setFlag(bool flag)
 	this->flag = flag;
 }
 
+bool TagStructure::getFlag()
+{
+	return this->flag;
+}
+
 void TagStructure::setValue(std::string value)
 {
 	this->value = value;
+}
+
+std::string TagStructure::getValue()
+{
+	return this->value;
 }
 
 TagStructure* TagStructure::addSubTag(TagStructure*& subTags)
@@ -387,11 +426,39 @@ TagStructure* TagStructure::addSubTag(TagStructure*& subTags)
 	return newTagStructure;
 }
 
+int TagStructure::subTagSize()
+{
+	return subTags.size();
+}
+
+TagStructure* TagStructure::getSubTag(const int index)
+{
+	return subTags[index];
+}
+
+bool TagStructure::operator==(const int number)
+{
+	return err == number;
+}
+
+bool TagStructure::operator!=(const int number)
+{
+	return err != number;
+}
+
 TagStructure::TagStructure()
 {
 	tag = "";
 	flag = TSF_VALUE;
 	value = "";
+}
+
+TagStructure::TagStructure(int err)
+{
+	tag = "";
+	flag = TSF_VALUE;
+	value = "";
+	this->err = err;
 }
 
 TagStructure::TagStructure(TagStructure& other)
@@ -402,4 +469,209 @@ TagStructure::TagStructure(TagStructure& other)
 	value = other.value;
 	subTags = other.subTags;
 	attributes = other.attributes;
+}
+
+void TagPath::setTagStructure(TagStructure& tagStructure)
+{
+	tagStructure_ = &tagStructure;
+	currentTagStructure_ = &tagStructure;
+	previousTagStructure_ = &tagStructure;;
+}
+
+
+static int _index = 0;
+TagStructure TagPath::getTag(int index)
+{
+	if (currentTagStructure_->flag == TSF_VALUE && _index == index)
+	{
+		return *currentTagStructure_;
+	}
+	else
+	{
+		if (currentTagStructure_->flag == TSF_VALUE)
+		{
+			_index++;
+			currentTagStructure_ = previousTagStructure_;
+			return NULL;
+		}
+
+		previousTagStructure_ = currentTagStructure_;
+		int subTagsCount = currentTagStructure_->subTags.size();
+
+		for (int i = 0; i < subTagsCount; ++i)
+		{
+			currentTagStructure_ = currentTagStructure_->subTags[i];
+			TagStructure result = getTag(index);
+			if (result != NULL) {
+				currentTagStructure_ = tagStructure_;
+				_index = 0;
+				return result;
+			}
+		}
+
+		currentTagStructure_ = tagStructure_;
+		_index = 0;
+		return NULL;
+	}
+}
+
+TagStructure TagPath::getAllTag(int index)
+{
+	if (_index == index)
+		return *currentTagStructure_;
+
+
+	if (currentTagStructure_->flag == TSF_VALUE)
+	{
+		currentTagStructure_ = previousTagStructure_;
+		return NULL;
+	}
+
+	previousTagStructure_ = currentTagStructure_;
+	int subTagsCount = currentTagStructure_->subTags.size();
+
+	for (int i = 0; i < subTagsCount; ++i)
+	{
+		currentTagStructure_ = currentTagStructure_->subTags[i];
+		_index++;
+		TagStructure result = getAllTag(index);
+		if (result != NULL) {
+			currentTagStructure_ = tagStructure_;
+			_index = 0;
+			return result;
+		}
+	}
+
+	currentTagStructure_ = tagStructure_;
+	_index = 0;
+	return NULL;
+}
+
+TagStructure TagPath::getRootTag(int index)
+{
+	if (currentTagStructure_->flag == TSF_VALUE)
+	{
+		currentTagStructure_ = previousTagStructure_;
+		return NULL;
+	}
+
+	if (_index == index)
+		return *currentTagStructure_;
+
+
+	_index++;
+
+	previousTagStructure_ = currentTagStructure_;
+	int subTagsCount = currentTagStructure_->subTags.size();
+
+	for (int i = 0; i < subTagsCount; ++i)
+	{
+		currentTagStructure_ = currentTagStructure_->subTags[i];
+		TagStructure result = getRootTag(index);
+		if (result != NULL) {
+			currentTagStructure_ = tagStructure_;
+			_index = 0;
+			return result;
+		}
+	}
+
+	currentTagStructure_ = tagStructure_;
+	_index = 0;
+	return NULL;
+}
+
+void TagPath::setFlags(unsigned int flags)
+{
+	flags_ = flags;
+}
+
+SearchResult TagPath::search(TagStructure& tagStructureFilter)
+{
+	SearchResult localsearchResult;
+
+	if (checkTag(tagStructureFilter))
+	{
+		//searchResult_.push_back(currentTagStructure_);
+		localsearchResult.push_back(currentTagStructure_);
+	}
+
+
+	if (currentTagStructure_->flag == TSF_VALUE)
+	{
+		currentTagStructure_ = previousTagStructure_;
+		return localsearchResult;
+	}
+
+	TagStructure* previousTagStructure = currentTagStructure_;
+	previousTagStructure_ = currentTagStructure_;
+	int subTagsCount = currentTagStructure_->subTags.size();
+
+	for (int i = 0; i < subTagsCount; ++i)
+	{
+		currentTagStructure_ = previousTagStructure;
+		currentTagStructure_ = currentTagStructure_->subTags[i];
+		SearchResult result = search(tagStructureFilter);
+		localsearchResult.insert(localsearchResult.end(), result.begin(), result.end());
+	}
+
+	currentTagStructure_ = tagStructure_;
+	_index = 0;
+
+	//localsearchResult = searchResult_;
+	//searchResult_.clear();
+
+	return localsearchResult;
+}
+
+bool TagPath::checkTag(TagStructure& tagStructureFilter)//TODO: ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÑ‚ÑŒ Ð½Ð°Ð»Ð¸Ñ‡Ð¸Ðµ ÑƒÐºÐ°Ð·Ð°Ð½Ð½Ñ‹Ñ… Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ð¹.
+{
+	if (flags_ & TPF_VALUE)
+		if (tagStructureFilter.value != currentTagStructure_->value)
+			return 0;
+
+	if (flags_ & TPF_FLAG)
+		if (tagStructureFilter.flag != currentTagStructure_->flag)
+			return 0;
+
+	if (flags_ & TPF_TAG)
+		if (tagStructureFilter.tag != currentTagStructure_->tag)
+			return 0;
+
+	if (flags_ & TPF_ATTRIBUTES)
+	{
+		if (tagStructureFilter.attributes.size() > currentTagStructure_->attributes.size())
+			return 0;
+
+		auto _iterator = tagStructureFilter.attributes.begin();
+		for (; _iterator != tagStructureFilter.attributes.end(); ++_iterator)
+		{
+			if (currentTagStructure_->attributes.find(_iterator->first) == currentTagStructure_->attributes.end())
+				return 0;
+		}
+	}
+
+	if (flags_ & TPF_SUBTAGS)
+	{
+		if (tagStructureFilter.subTags.size() > currentTagStructure_->subTags.size())
+			return 0;
+
+		bool isEquals = true;
+
+		for (auto i : tagStructureFilter.subTags)
+		{
+			for (int j = 0; j < currentTagStructure_->subTags.size(); ++j)
+			{
+				if (j == currentTagStructure_->subTags.size() - 1)
+				{
+					isEquals = false;
+					break;
+				}
+			}
+		}
+
+		if (isEquals == false)
+			return 0;
+	}
+
+	return true;
 }

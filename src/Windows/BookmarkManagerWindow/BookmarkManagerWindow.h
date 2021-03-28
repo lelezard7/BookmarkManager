@@ -10,6 +10,6 @@
 
 
 LRESULT CALLBACK BkmManagerProc(_In_ HWND, _In_ UINT, _In_ WPARAM, _In_ LPARAM);
-HWND create_bookmarkManagerWindow(HINSTANCE);
+HWND create_bookmarkManagerWindow(HINSTANCE, PWSTR pCmdLine);
 
 #endif

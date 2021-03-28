@@ -50,7 +50,7 @@ public:
 *		entered in ContainerCreationWindow is saved, he must specify SHOW_CLOSED_WINDOW
 *		in the settings.
 */
-enum class LaunchMethod
+enum class LaunchMethod //TODO: был изменен на простой enum с enum class.
 {
 	CREATE_NEW_WINDOW,
 	SHOW_CLOSED_WINDOW,
