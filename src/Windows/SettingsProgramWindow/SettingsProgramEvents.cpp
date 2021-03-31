@@ -127,33 +127,32 @@ static void changeStartupMethod(HWND hDlg)
 
 static void save()
 {
-	TagStructure mainTag;
+	Tag mainTag;
 
 	mainTag.setFlag(TSF_SUBTAGS);
-	mainTag.setTag("Settings");
-	std::wstring newVerName = SAVEMODULE_VERSIONNAME;
-	mainTag.addAttribute("SaveVer", std::string(newVerName.begin(), newVerName.end()));
-	std::wstring newVer = BOOKMARKMANAGER_VERSIONNAME;
-	mainTag.addAttribute("BkmVer", std::string(newVer.begin(), newVer.end()));
+	mainTag.setName(L"Settings");
+	mainTag.addAttribute(L"SaveVer", SAVEMODULE_VERSIONNAME);
+	mainTag.addAttribute(L"BkmVer", BOOKMARKMANAGER_VERSIONNAME);
 
-	TagStructure* settingsTag[3];
-	settingsTag[0] = new TagStructure;
-	settingsTag[1] = new TagStructure;
-
-	mainTag.addSubTag(settingsTag[0]);
-	mainTag.addSubTag(settingsTag[1]);
+	Tag* settingsTag[2];
+	settingsTag[0] = mainTag.createSubTag(1);
+	settingsTag[1] = mainTag.createSubTag(2);
 	{
 		settingsTag[0]->setFlag(TSF_VALUE);
-		settingsTag[0]->setTag("defaultTaskType");
-		settingsTag[0]->setValue(std::to_string(ApplicationSettings::getDefaultTaskType()));
+		settingsTag[0]->setName(L"defaultTaskType");
+		settingsTag[0]->setValue(std::to_wstring(ApplicationSettings::getDefaultTaskType()));
 
 		settingsTag[1]->setFlag(TSF_VALUE);
-		settingsTag[1]->setTag("launchMethod_window");
+		settingsTag[1]->setName(L"launchMethod_window");
 		int launchMethod = static_cast<int>(ApplicationSettings::getLaunchMethodContainerCreationWindow());
-		settingsTag[1]->setValue(std::to_string(launchMethod));
+		settingsTag[1]->setValue(std::to_wstring(launchMethod));
+
+		mainTag.applySubTags();
 	}
 
-	openXmlFile("Settings.bkms", XMLFILE_WRITE);
-	saveXmlFile(mainTag);
-	closeXmlFile("Settings.bkms");
+	XmlFile newXmlFile;
+
+	newXmlFile.open(L"Settings.bkms", OpenMode::WRITE);
+	newXmlFile.write(mainTag);
+	newXmlFile.close();
 }

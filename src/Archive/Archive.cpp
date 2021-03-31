@@ -8,6 +8,7 @@
 std::map<Archive_Id, Container> Archive::archive_;
 std::vector<Archive_Id> Archive::nextId_;
 Archive_Id Archive::maxId_ = 0;
+bool Archive::isInitialized_ = false;
 
 
 Archive_Id Archive::getFreeId()
@@ -35,28 +36,58 @@ bool Archive::freeId(const Archive_Id id)
 	return true;
 }
 
+bool Archive::useNextId(const Archive_Id id)
+{
+	if (!findNextId(id))
+		return false;
+
+	nextId_.erase(std::find(nextId_.begin(), nextId_.end(), id));
+
+	return true;
+}
+
+bool Archive::findNextId(const Archive_Id id)
+{
+	for (auto i : nextId_)
+		if (i == id)
+			return true;
+
+	return false;
+}
+
 
 Archive_Id Archive::getMaxId()
 {
 	return maxId_;
 }
 
-Archive_Id Archive::getNextId(const size_t index)
+long long Archive::getNextId(const size_t index)
 {
+	if (index >= nextId_.size())
+		return -1;
+
 	return nextId_[index];
 }
 
-size_t Archive::getNextIdCount()
+size_t Archive::nextId_size()
 {
 	return nextId_.size();
 }
 
 bool Archive::initialization(const Archive_Id maxId, const std::vector<Archive_Id>& nextId)
 {
+	if (isInitialized_ == true)
+		return false;
+
+	for (auto i : nextId)
+		if (i >= maxId)
+			return false;
+
 	maxId_ = maxId;
 	nextId_ = nextId;
+	isInitialized_ = true;
 
-	return 0;
+	return true;
 }
 
 Archive_Id Archive::addContainer(const Container& container)
@@ -65,15 +96,29 @@ Archive_Id Archive::addContainer(const Container& container)
 	archive_.emplace(std::make_pair(_id, container));
 
 	archive_[_id].isRegistered = CONTAINER_REGISTERED;
+	isInitialized_ = true;
 
 	return _id;
 }
 
-bool Archive::addContainer(const Container& container, const Archive_Id id)
+bool Archive::addContainer(const Container& container, const Archive_Id id, AddContainerMode mode)
 {
+	if (id >= maxId_)
+		return false;
+
+	if (mode == AddContainerMode::NORMAL) {
+		if (!useNextId(id))
+			return false;
+	}
+	else {
+		if (find(id))
+			return false;
+	}
+
 	archive_.emplace(std::make_pair(id, container));
 
 	archive_[id].isRegistered = CONTAINER_REGISTERED;
+	isInitialized_ = true;
 
 	return true;
 }
@@ -123,6 +168,11 @@ void Archive::clear()
 	archive_.clear();
 	nextId_.clear();
 	maxId_ = 0;
+}
+
+bool Archive::find(const Archive_Id id)
+{
+	return archive_.find(id) != archive_.end();
 }
 
 size_t Archive::size()

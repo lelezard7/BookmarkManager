@@ -29,32 +29,51 @@
 #include <map>
 #include <vector>
 
-typedef size_t Archive_Id;
+typedef unsigned long Archive_Id;
 
 
-class Archive //Сделать find()
+class Archive
 {
 	static std::map<Archive_Id, Container> archive_;
 	static std::vector<Archive_Id> nextId_;
 	static Archive_Id maxId_;
+	static bool isInitialized_;
 
 	Archive() = delete;
 	~Archive() = delete;
 
 	static Archive_Id getFreeId();
 	static bool freeId(const Archive_Id id);
+	static bool useNextId(const Archive_Id id);
+	static bool findNextId(const Archive_Id id);
 
 public:
-	static Archive_Id getMaxId(); //TODO: check
-	static Archive_Id getNextId(const size_t index); //TODO: check
-	static size_t getNextIdCount(); //TODO: check
-	static bool initialization(const Archive_Id maxId, const std::vector<Archive_Id>& nextId); //TODO: сделать возможность уменьшения.
+	enum class AddContainerMode
+	{
+		NORMAL,
+		INITIALIZATION
+	};
+
+
+	static Archive_Id getMaxId();
+	static long long getNextId(const size_t index);
+	static size_t nextId_size();
+
+	static bool initialization(
+		const Archive_Id maxId,
+		const std::vector<Archive_Id>& nextId);
+
+	static bool addContainer(
+		const Container& container,
+		const Archive_Id id,
+		AddContainerMode mode = AddContainerMode::NORMAL);
+
 	static Archive_Id addContainer(const Container& container);
-	static bool addContainer(const Container& container, const Archive_Id id); //TODO: check
 	static Container* getContainer(const Archive_Id id);
 	static Archive_Id getIdByIndex(const size_t index);
 	static bool deleteContainer(const Archive_Id id);
 	static void clear();
+	static bool find(const Archive_Id id);
 	static size_t size();
 };
 
