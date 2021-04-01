@@ -225,18 +225,18 @@ LRESULT bkmManagerWnd_menu_file_save() //TODO: clear memory.
 	Tag mainTag;
 
 	mainTag.setName(L"BookmarkManager");
-	mainTag.setFlag(TSF_SUBTAGS);
+	mainTag.setFlag(TF_SUBTAGS);
 	mainTag.addAttribute(L"SaveVer", SAVEMODULE_VERSIONNAME);
 	mainTag.addAttribute(L"BkmVer", BOOKMARKMANAGER_VERSIONNAME);
 
 	Tag* archiveTag = mainTag.createSubTag(0);
 	{
 		archiveTag->setName(L"archive");
-		archiveTag->setFlag(TSF_SUBTAGS);
+		archiveTag->setFlag(TF_SUBTAGS);
 
 		Tag* archiveInfoTag = archiveTag->createSubTag(1);
 		{
-			archiveInfoTag->setFlag(TSF_VALUE);
+			archiveInfoTag->setFlag(TF_VALUE);
 			archiveInfoTag->setName(L"maxId");
 			archiveInfoTag->setValue(std::to_wstring(Archive::getMaxId()));
 
@@ -245,14 +245,14 @@ LRESULT bkmManagerWnd_menu_file_save() //TODO: clear memory.
 
 		archiveInfoTag = archiveTag->createSubTag(1);
 		{
-			archiveInfoTag->setFlag(TSF_SUBTAGS);
+			archiveInfoTag->setFlag(TF_SUBTAGS);
 			archiveInfoTag->setName(L"NextIdGroup");
-
-			for (size_t i = 0; i < Archive::nextId_size(); ++i)
+			
+			for (size_t i = 0; i < Archive::nextIdCount(); ++i)
 			{
 				Tag* nextIdTag = archiveInfoTag->createSubTag(2);
 				{
-					nextIdTag->setFlag(TSF_VALUE);
+					nextIdTag->setFlag(TF_VALUE);
 					nextIdTag->setName(L"nextId");
 					nextIdTag->setValue(std::to_wstring(Archive::getNextId(i)));
 
@@ -271,7 +271,7 @@ LRESULT bkmManagerWnd_menu_file_save() //TODO: clear memory.
 				Container* container = Archive::getContainer(containerId);
 
 				containerTag->setName(L"container");
-				containerTag->setFlag(TSF_SUBTAGS);
+				containerTag->setFlag(TF_SUBTAGS);
 				containerTag->addAttribute(L"id", std::to_wstring(containerId));
 
 
@@ -282,22 +282,22 @@ LRESULT bkmManagerWnd_menu_file_save() //TODO: clear memory.
 				containeDataTypesTag[3] = containerTag->createSubTag(8);
 				{
 					containeDataTypesTag[0]->setName(L"name");
-					containeDataTypesTag[0]->setFlag(TSF_VALUE);
+					containeDataTypesTag[0]->setFlag(TF_VALUE);
 					std::wstring buffer = container->getName();
 					containeDataTypesTag[0]->setValue(std::wstring(buffer.begin(), buffer.end()));
 
 					containeDataTypesTag[1]->setName(L"task");
-					containeDataTypesTag[1]->setFlag(TSF_VALUE);
+					containeDataTypesTag[1]->setFlag(TF_VALUE);
 					buffer = container->getTask();
 					containeDataTypesTag[1]->setValue(std::wstring(buffer.begin(), buffer.end()));
 
 					containeDataTypesTag[2]->setName(L"taskType");
-					containeDataTypesTag[2]->setFlag(TSF_VALUE);
+					containeDataTypesTag[2]->setFlag(TF_VALUE);
 					TaskType taskType = container->getTaskType();
 					containeDataTypesTag[2]->setValue(std::to_wstring(taskType));
 
 					containeDataTypesTag[3]->setName(L"TagsGroup");
-					containeDataTypesTag[3]->setFlag(TSF_SUBTAGS);
+					containeDataTypesTag[3]->setFlag(TF_SUBTAGS);
 
 					int index = 0;
 					while (container->getTag(index) != nullptr)
@@ -305,7 +305,7 @@ LRESULT bkmManagerWnd_menu_file_save() //TODO: clear memory.
 						Tag* tagTag = containeDataTypesTag[3]->createSubTag(10);
 						{
 							tagTag->setName(L"tag");
-							tagTag->setFlag(TSF_VALUE);
+							tagTag->setFlag(TF_VALUE);
 							buffer = container->getTag(index);
 							tagTag->setValue(std::wstring(buffer.begin(), buffer.end()));
 
@@ -314,7 +314,7 @@ LRESULT bkmManagerWnd_menu_file_save() //TODO: clear memory.
 						index++;
 					}
 
-					containerTag->applySubTags();
+					containerTag->applyAllSubTags();
 				}
 
 				archiveTag->applySubTag(1);
@@ -329,6 +329,16 @@ LRESULT bkmManagerWnd_menu_file_save() //TODO: clear memory.
 	newXmlFile.open(L"dfd.bkm", OpenMode::WRITE); //TODO:Удалять пробелы из tagsListView.
 	newXmlFile.write(mainTag);
 	newXmlFile.close();
+
+
+	Tag ddd;
+	ddd.setName(L"name");
+
+	XmlFilter f;
+	f.setTarget(mainTag);
+	f.setFilter(ddd);
+	f.setFlags(XFF_NAME);
+	SearchResult _searchResult = f.search();
 
 	//TagStructure filter;
 	//filter.setValue("rrr");
@@ -369,34 +379,36 @@ LRESULT bkmManagerWnd_menu_file_open(PWSTR path)
 	{
 		std::wstring path_ = path;
 		newXmlFile.open(path_, OpenMode::READ);
-		Tag* mainTag = newXmlFile.read();
+		Tag mainTag = newXmlFile.read();
 		newXmlFile.close();
 	}
 
 	newXmlFile.open(L"dfd.bkm", OpenMode::READ);
-	Tag* mainTag = newXmlFile.read();
+	Tag mainTag = newXmlFile.read();
 	newXmlFile.close();
 
 	Tag filter;
-	TagPath tagSearch;
-	std::vector<Tag*> searchResult;
-	tagSearch.setTagStructure(*mainTag);
+	XmlFilter tagSearch;
+	SearchResult searchResult;
+	tagSearch.setTarget(mainTag);
 
 	filter.setName(L"maxId");
-	tagSearch.setFlags(TPF_TAG);
-	searchResult = tagSearch.search(filter);
+	tagSearch.setFlags(XFF_NAME);
+	tagSearch.setFilter(filter);
+	searchResult = tagSearch.search();
 
-	int maxId = std::stoi(searchResult[0]->getValue());
+	int maxId = std::stoi(searchResult.getTag(0).getValue());
 	searchResult.clear();
 
 	filter.setName(L"nextId");
-	tagSearch.setFlags(TPF_TAG);
-	searchResult = tagSearch.search(filter);
+	tagSearch.setFlags(XFF_NAME);
+	tagSearch.setFilter(filter);
+	searchResult = tagSearch.search();
 
 	std::vector<Archive_Id> nextId;
 	for (int i = 0; i < searchResult.size(); ++i)
 	{
-		nextId.push_back(std::stoi(searchResult[i]->getValue()));
+		nextId.push_back(std::stoi(searchResult.getTag(i).getValue()));
 	}
 
 	Archive::initialization(maxId, nextId);
@@ -404,40 +416,41 @@ LRESULT bkmManagerWnd_menu_file_open(PWSTR path)
 
 
 	filter.setName(L"container");
-	tagSearch.setFlags(TPF_TAG);
-	searchResult = tagSearch.search(filter);
+	tagSearch.setFlags(XFF_NAME);
+	tagSearch.setFilter(filter);
+	searchResult = tagSearch.search();
 
 	for (int i = 0; i < searchResult.size(); ++i)
 	{
-		Container container;
+		//Container container;
 
-		Tag subTag = searchResult[i]->getSubTag(0);
-		std::wstring dd = subTag.getValue();
-		PWSTR buffer = (PWSTR)dd.c_str();
-		container.setName(buffer, subTag.getValue().size() + 1);
+		//Tag subTag = searchResult[i]->getSubTag(0);
+		//std::wstring dd = subTag.getValue();
+		//PWSTR buffer = (PWSTR)dd.c_str();
+		//container.setName(buffer, subTag.getValue().size() + 1);
 
-		subTag = searchResult[i]->getSubTag(1);
-		dd = subTag.getValue();
-		buffer = (PWSTR)dd.c_str();
-		container.setTask(buffer, subTag.getValue().size() + 1);
+		//subTag = searchResult[i]->getSubTag(1);
+		//dd = subTag.getValue();
+		//buffer = (PWSTR)dd.c_str();
+		//container.setTask(buffer, subTag.getValue().size() + 1);
 
-		subTag = searchResult[i]->getSubTag(2);
-		container.setTaskType(std::stoi(subTag.getValue()));
+		//subTag = searchResult[i]->getSubTag(2);
+		//container.setTaskType(std::stoi(subTag.getValue()));
 
-		subTag = searchResult[i]->getSubTag(3);
-		for (int j = 0; j < subTag.subTagsCount(); ++j)
-		{
-			Tag tagTag = subTag.getSubTag(j);
-			dd = tagTag.getValue();
-			buffer = (PWSTR)dd.c_str();
-			container.addTag(buffer);
-		}
+		//subTag = searchResult[i]->getSubTag(3);
+		//for (int j = 0; j < subTag.subTagsCount(); ++j)
+		//{
+		//	Tag tagTag = subTag.getSubTag(j);
+		//	dd = tagTag.getValue();
+		//	buffer = (PWSTR)dd.c_str();
+		//	container.addTag(buffer);
+		//}
 
-		Archive_Id id = std::stoi(searchResult[i]->getAttributeValue(L"id"));
-		Archive::addContainer(container, id, Archive::AddContainerMode::INITIALIZATION);
+		//Archive_Id id = std::stoi(searchResult[i]->getAttributeValue(L"id"));
+		//Archive::addContainer(container, id, Archive::AddContainerMode::INITIALIZATION);
 
-		HWND hWndParent = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_WND);
-		SendMessage(hWndParent, UM_SHOWCREATEDCONTAINER, id, NULL);
+		//HWND hWndParent = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_WND);
+		//SendMessage(hWndParent, UM_SHOWCREATEDCONTAINER, id, NULL);
 	}
 
 	return 0;

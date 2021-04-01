@@ -57,7 +57,7 @@ public:
 
 	static Archive_Id getMaxId();
 	static long long getNextId(const size_t index);
-	static size_t nextId_size();
+	static size_t nextIdCount();
 
 	static bool initialization(
 		const Archive_Id maxId,

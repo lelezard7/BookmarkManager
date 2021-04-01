@@ -69,7 +69,7 @@ long long Archive::getNextId(const size_t index)
 	return nextId_[index];
 }
 
-size_t Archive::nextId_size()
+size_t Archive::nextIdCount()
 {
 	return nextId_.size();
 }

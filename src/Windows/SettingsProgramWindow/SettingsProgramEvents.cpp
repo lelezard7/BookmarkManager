@@ -129,7 +129,7 @@ static void save()
 {
 	Tag mainTag;
 
-	mainTag.setFlag(TSF_SUBTAGS);
+	mainTag.setFlag(TF_SUBTAGS);
 	mainTag.setName(L"Settings");
 	mainTag.addAttribute(L"SaveVer", SAVEMODULE_VERSIONNAME);
 	mainTag.addAttribute(L"BkmVer", BOOKMARKMANAGER_VERSIONNAME);
@@ -138,16 +138,16 @@ static void save()
 	settingsTag[0] = mainTag.createSubTag(1);
 	settingsTag[1] = mainTag.createSubTag(2);
 	{
-		settingsTag[0]->setFlag(TSF_VALUE);
+		settingsTag[0]->setFlag(TF_VALUE);
 		settingsTag[0]->setName(L"defaultTaskType");
 		settingsTag[0]->setValue(std::to_wstring(ApplicationSettings::getDefaultTaskType()));
 
-		settingsTag[1]->setFlag(TSF_VALUE);
+		settingsTag[1]->setFlag(TF_VALUE);
 		settingsTag[1]->setName(L"launchMethod_window");
 		int launchMethod = static_cast<int>(ApplicationSettings::getLaunchMethodContainerCreationWindow());
 		settingsTag[1]->setValue(std::to_wstring(launchMethod));
 
-		mainTag.applySubTags();
+		mainTag.applyAllSubTags();
 	}
 
 	XmlFile newXmlFile;

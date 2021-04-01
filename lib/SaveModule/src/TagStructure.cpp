@@ -1,11 +1,10 @@
 ﻿#include "TagStructure.h"
-#include <fstream>
 
 
 Tag::Tag()
 {
 	name_ = L"";
-	flag_ = TSF_VALUE;
+	flag_ = TF_VALUE;
 	value_ = L"";
 }
 
@@ -25,9 +24,14 @@ void Tag::setName(const std::wstring name)
 	name_ = name;
 }
 
-void Tag::setFlag(const Flag flag)
+bool Tag::setFlag(const Tag_Flag flag)
 {
+	if (flag != TF_VALUE && flag != TF_SUBTAGS)
+		return false;
+
 	flag_ = flag;
+
+	return true;
 }
 
 void Tag::setValue(const std::wstring value)
@@ -72,7 +76,7 @@ std::wstring Tag::getName() const
 	return name_;
 }
 
-Flag Tag::getFlag() const
+Tag_Flag Tag::getFlag() const
 {
 	return flag_;
 }
@@ -122,6 +126,14 @@ size_t Tag::attributesCount() const
 	return attributes_.size();
 }
 
+bool Tag::findAttribute(const std::wstring name) const
+{
+	if (attributes_.find(name) != attributes_.end())
+		return true;
+
+	return false;
+}
+
 Tag Tag::getSubTag(const size_t index) const
 {
 	if (index >= subTags_.size()) {
@@ -137,14 +149,24 @@ size_t Tag::subTagsCount() const
 	return subTags_.size();
 }
 
+bool Tag::findSubTag(const Tag& tag) const
+{
+	for (auto i : subTags_)
+		if (tag == i)
+			return true;
+
+	return false;
+}
+
+
 void Tag::clear()
 {
-	applySubTags();
+	applyAllSubTags();
 	subTags_.clear();
 
 	attributes_.clear();
 	name_ = L"";
-	flag_ = TSF_VALUE;
+	flag_ = TF_VALUE;
 	value_ = L"";
 }
 
@@ -160,14 +182,14 @@ Tag* Tag::createSubTag(const SubTag_ID id)
 	return _tag;
 }
 
-bool Tag::applySubTags()
+bool Tag::applyAllSubTags()
 {
 	if (deferredSubTags_.size() == 0)
 		return false;
 
 	for (auto i : deferredSubTags_)
 	{
-		i.second->applySubTags();
+		i.second->applyAllSubTags();
 		subTags_.push_back(*i.second);
 		delete i.second;
 	}
@@ -181,7 +203,7 @@ bool Tag::applySubTag(const SubTag_ID id)
 	if (deferredSubTags_.find(id) == deferredSubTags_.end())
 		return false;
 
-	deferredSubTags_[id]->applySubTags();
+	deferredSubTags_[id]->applyAllSubTags();
 	subTags_.push_back(*deferredSubTags_[id]);
 
 	delete deferredSubTags_[id];
@@ -193,11 +215,12 @@ bool Tag::applySubTag(const SubTag_ID id)
 
 bool Tag::operator==(const Tag& other) const
 {
-	return (attributes_ == other.attributes_ &&
+	return
+		attributes_ == other.attributes_ &&
 		subTags_ == other.subTags_ &&
 		value_ == other.value_ &&
 		flag_ == other.flag_ &&
-		name_ == other.name_);
+		name_ == other.name_;
 }
 
 bool Tag::operator!=(const Tag& other) const
@@ -207,14 +230,14 @@ bool Tag::operator!=(const Tag& other) const
 
 void Tag::operator=(const Tag& other)
 {
+	clear();
+
 	name_ = other.name_;
 	flag_ = other.flag_;
 	value_ = other.value_;
 	subTags_ = other.subTags_;
 	attributes_ = other.attributes_;
 }
-
-
 
 
 
@@ -241,9 +264,16 @@ Attribute::Attribute(const std::wstring name, const std::wstring value)
 
 Attribute::~Attribute()
 {
+	clear();
+}
+
+
+void Attribute::clear()
+{
 	name = L"";
 	value = L"";
 }
+
 
 bool Attribute::operator==(const Attribute& other) const
 {
@@ -257,6 +287,8 @@ bool Attribute::operator!=(const Attribute& other) const
 
 void Attribute::operator=(const Attribute& other)
 {
+	clear();
+
 	name = other.name;
 	value = other.value;
 }

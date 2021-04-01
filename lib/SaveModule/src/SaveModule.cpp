@@ -2,8 +2,6 @@
 #include <Windows.h>
 #include <vector>
 
-std::ifstream XmlFile::file_in;
-
 
 
 wchar_t XmlFile::entityToSymbol(const std::wstring essence) const
@@ -76,7 +74,7 @@ size_t XmlFile::write(const Tag& tag, int level)
 
 	fileStream_ << _openingTag << L">";
 
-	if (tag.getFlag() == TSF_VALUE)
+	if (tag.getFlag() == TF_VALUE)
 	{
 		std::wstring _convertedValue = convertAllSymbolsToEntities(tag.getValue());
 		fileStream_ << _convertedValue + L"</" + tag.getName() + L">\n";
@@ -170,70 +168,137 @@ bool XmlFile::write(const Tag& tag)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-std::wstring XmlFile::readXmlLine(std::wstring condition)
+Tag XmlFile::read()
 {
-	char symbol;
-	std::wstring result;
+	History _history;
+	Tag _tag = read(_history);
 
-	int conditionSize = condition.size();
-	if (conditionSize == 0)
-		return L"";
-
-	while (file_in.get(symbol))
-	{
-		if (conditionSize == 1) {
-			if (symbol == condition[0])
-				return result;
-		}
-		else if (symbol == condition[0])
-		{
-			std::wstring buffer = L"";
-			for (int i = 0; i < conditionSize; ++i)
-			{
-				if (condition[i] == symbol && i == conditionSize - 1)
-					return result;
-
-				if (condition[i] != symbol)
-				{
-					result += buffer;
-					break;
-				}
-
-				buffer += symbol;
-				file_in.get(symbol);
-			}
-		}
-
-		if (symbol == '&')
-		{
-			std::wstring buf = readXmlLine(L";");
-			buf = entityToSymbol(buf);
-			result += buf;
-			continue;
-		}
-		result += symbol;
-	}
-
-	return L"";
+	return _tag;
 }
 
 
-int XmlFile::readXmlLine(std::vector<std::wstring> conditions, std::wstring& result)
-{
-	char symbol;
 
+static bool isSameLevel = false;
+
+Tag XmlFile::read(History& history)
+{
+	wchar_t _symbol;
+	Tag _tag;
+
+	while (fileStream_.get(_symbol))
+	{
+		//tag
+		if (_symbol == '<')
+		{
+			Сonditions _conditions;
+			_conditions.push_back(L" ");
+			_conditions.push_back(L">");
+
+			int _errCode = readXmlLine(_conditions, _tag.getName());
+			history.push_back(_tag.getName());
+
+			if (_errCode == -1) {//TODO: return NULL
+				Tag _nullTag;
+				return _nullTag;
+			}
+
+			//attributes
+			if (_errCode == 0)
+			{
+				Attribute _attribute;
+
+				while (fileStream_.get(_symbol))
+				{
+					if (_symbol == '>')
+						break;
+
+					fileStream_.unget();
+
+					_attribute.name = readXmlLine(L"=\"");
+					_attribute.value = readXmlLine(L"\"");
+					_tag.addAttribute(_attribute.name, _attribute.value);
+
+					_attribute.clear();
+				}
+			}
+		}
+
+		//value
+		while (fileStream_.get(_symbol))
+		{
+			if (_symbol == '\n' || _symbol == '\t')
+				continue;
+
+			if (_symbol == '<')
+			{
+				do {
+					_tag.setFlag(TF_SUBTAGS);
+					fileStream_.unget();
+					_tag.addSubTag(read(history));
+				} while (isSameLevel);
+
+				readXmlLine(L"</");
+				std::wstring _closingTag = readXmlLine(L">");
+
+				if (_closingTag != history.back()) {//TODO: return NULL
+					Tag _nullTag;
+					return _nullTag;
+				}
+
+				history.pop_back();
+				goto END;
+			}
+
+			fileStream_.unget();
+			_tag.setFlag(TF_VALUE);
+			_tag.setValue(readXmlLine(L"</"));
+
+			std::wstring _closingTag = readXmlLine(L">");
+
+			if (_closingTag != history.back()) {//TODO: return NULL
+				Tag _nullTag;
+				return _nullTag;
+			}
+
+			history.pop_back();
+			goto END;
+		}
+	}
+END:
+
+	isSameLevel = read_isSameLevel_check();
+
+	return _tag;
+}
+
+bool XmlFile::read_isSameLevel_check()
+{
+	wchar_t _symbol;
+	bool _isSameLevel = 0;
+
+	while (fileStream_.get(_symbol))
+	{
+		if (_symbol == '\n' || _symbol == '\t')
+			continue;
+
+		if (_symbol == '<')
+		{
+			fileStream_.get(_symbol);
+			if (_symbol == '/')
+				_isSameLevel = false;
+			else
+				_isSameLevel = true;
+
+			fileStream_.unget();
+			break;
+		}
+	}
+	fileStream_.unget();
+	return _isSameLevel;
+}
+
+int XmlFile::readXmlLine(Сonditions conditions, std::wstring& result)
+{
 	if (conditions.size() == 0)
 		return -1;
 
@@ -241,382 +306,95 @@ int XmlFile::readXmlLine(std::vector<std::wstring> conditions, std::wstring& res
 		if (i.size() == 0)
 			return -1;
 
-	while (file_in.get(symbol))
+	wchar_t _symbol;
+
+	while (fileStream_.get(_symbol))
 	{
 		int ind = 0;
 		for (auto i : conditions)
 		{
 			if (i.size() == 1) {
-				if (symbol == i[0])
+				if (_symbol == i[0])
 					return ind;
 			}
-			else if (symbol == i[0])
+			else if (_symbol == i[0])
 			{
-				std::wstring buffer = L"";
+				std::wstring _buffer = L"";
 				for (int j = 0; j < i.size(); ++j)
 				{
-					if (i[j] == symbol && j == i.size() - 1)
+					if (i[j] == _symbol && j == i.size() - 1)
 						return ind;
 
-					if (i[j] != symbol)
+					if (i[j] != _symbol)
 					{
-						result += buffer;
+						result += _buffer;
 						break;
 					}
 
-					buffer += symbol;
-					file_in.get(symbol);
+					_buffer += _symbol;
+					fileStream_.get(_symbol);
 				}
 			}
 			ind++;
 		}
 
-		if (symbol == '&')
+		if (_symbol == '&')
 		{
-			std::wstring buf = readXmlLine(L";");
-			buf = entityToSymbol(buf);
-			result += buf;
+			std::wstring _buffer = readXmlLine(L";");
+			_buffer = entityToSymbol(_buffer);
+			result += _buffer;
 			continue;
 		}
-		result += symbol;
+		result += _symbol;
 	}
 
 	return -1;
 }
 
-bool XmlFile::checkLevel()
+std::wstring XmlFile::readXmlLine(std::wstring condition)
 {
-	char symbol;
-	bool result = 0;
-	while (file_in.get(symbol))
+	int _conditionSize = condition.size();
+
+	if (_conditionSize == 0)
+		return L"";
+
+	wchar_t _symbol;
+	std::wstring _result;
+
+	while (fileStream_.get(_symbol))
 	{
-		if (symbol == '\n' || symbol == '\t')
-			continue;
-
-		if (symbol == '<')
-		{
-			file_in.get(symbol);
-			if (symbol == '/')
-				result = false;
-			else
-				result = true;
-
-			file_in.unget();
-			break;
+		if (_conditionSize == 1) {
+			if (_symbol == condition[0])
+				return _result;
 		}
-	}
-	file_in.unget();
-	return result;
-}
-
-
-
-static bool isSameLevel = false;
-
-Tag* XmlFile::read()
-{
-	static std::vector<std::wstring> history;
-	char symbol;
-	Tag* tagStructure = new Tag;
-
-	while (file_in.get(symbol))
-	{
-		if (symbol == '<')
+		else if (_symbol == condition[0])
 		{
-			//tag
-			std::vector<std::wstring> conditions;
-			conditions.push_back(L" ");
-			conditions.push_back(L">");
-			int res = readXmlLine(conditions, tagStructure->name_);
-			history.push_back(tagStructure->name_);
-
-
-			if (res == -1)
-				return 0;
-
-			if (res == 0)
+			std::wstring _buffer = L"";
+			for (int i = 0; i < _conditionSize; ++i)
 			{
-				//attributes
-				std::wstring attribute;
-				std::wstring attributeValue;
-				while (file_in.get(symbol))
+				if (condition[i] == _symbol && i == _conditionSize - 1)
+					return _result;
+
+				if (condition[i] != _symbol)
 				{
-					if (symbol == '>')
-						break;
-
-					file_in.unget();
-
-					attribute = readXmlLine(L"=\"");
-					attributeValue = readXmlLine(L"\"");
-					tagStructure->attributes_.emplace(std::make_pair(attribute, attributeValue));
-
-					attribute.clear();
-					attributeValue.clear();
-				}
-			}
-
-			//value
-			while (file_in.get(symbol))
-			{
-				if (symbol == '\n' || symbol == '\t')
-					continue;
-
-				if (symbol == '<')
-				{
-					do {
-						tagStructure->flag_ = TSF_SUBTAGS;
-						file_in.unget();
-						tagStructure->subTags_.push_back(*read());
-					} while (isSameLevel);
-
-					readXmlLine(L"</");
-					std::wstring closingTag = readXmlLine(L">");
-					if (closingTag != history.back())
-						return 0;
-
-					history.pop_back();
-					goto END;
-				}
-
-				file_in.unget();
-				tagStructure->flag_ = TSF_VALUE;
-				tagStructure->value_ = readXmlLine(L"</");
-
-				std::wstring closingTag = readXmlLine(L">");
-				if (closingTag != history.back())
-					return 0;
-
-				history.pop_back();
-				goto END;
-			}
-		}
-	}
-	END:
-
-	isSameLevel = checkLevel();
-
-	return tagStructure;
-}
-
-
-
-
-
-void TagPath::setTagStructure(Tag& tagStructure)
-{
-	tagStructure_ = &tagStructure;
-	currentTagStructure_ = &tagStructure;
-	previousTagStructure_ = &tagStructure;;
-}
-
-
-static int _index = 0;
-Tag TagPath::getTag(int index)
-{
-	if (currentTagStructure_->flag_ == TSF_VALUE && _index == index)
-	{
-		return *currentTagStructure_;
-	}
-	else
-	{
-		if (currentTagStructure_->flag_ == TSF_VALUE)
-		{
-			_index++;
-			currentTagStructure_ = previousTagStructure_;
-			Tag f;
-			return f;// return NULL
-		}
-
-		previousTagStructure_ = currentTagStructure_;
-		int subTagsCount = currentTagStructure_->subTags_.size();
-
-		for (int i = 0; i < subTagsCount; ++i)
-		{
-			currentTagStructure_ = &currentTagStructure_->subTags_[i];
-			Tag result = getTag(index);
-			Tag f;
-			if (result != f) {// != NULL
-				currentTagStructure_ = tagStructure_;
-				_index = 0;
-				return result;
-			}
-		}
-
-		currentTagStructure_ = tagStructure_;
-		_index = 0;
-		Tag f;
-		return f;// return NULL
-	}
-}
-
-Tag TagPath::getAllTag(int index)
-{
-	if (_index == index)
-		return *currentTagStructure_;
-
-
-	if (currentTagStructure_->flag_ == TSF_VALUE)
-	{
-		currentTagStructure_ = previousTagStructure_;
-		Tag f;
-		return f;// return NULL
-	}
-
-	previousTagStructure_ = currentTagStructure_;
-	int subTagsCount = currentTagStructure_->subTags_.size();
-
-	for (int i = 0; i < subTagsCount; ++i)
-	{
-		currentTagStructure_ = &currentTagStructure_->subTags_[i];
-		_index++;
-		Tag result = getAllTag(index);
-
-		Tag f;
-		if (result != f) {// != NULL
-			currentTagStructure_ = tagStructure_;
-			_index = 0;
-			return result;
-		}
-	}
-
-	currentTagStructure_ = tagStructure_;
-	_index = 0;
-
-	Tag f;
-	return f;// return NULL
-}
-
-Tag TagPath::getRootTag(int index)
-{
-	if (currentTagStructure_->flag_ == TSF_VALUE)
-	{
-		currentTagStructure_ = previousTagStructure_;
-
-		Tag f;
-		return f;// return NULL
-	}
-
-	if (_index == index)
-		return *currentTagStructure_;
-
-
-	_index++;
-
-	previousTagStructure_ = currentTagStructure_;
-	int subTagsCount = currentTagStructure_->subTags_.size();
-
-	for (int i = 0; i < subTagsCount; ++i)
-	{
-		currentTagStructure_ = &currentTagStructure_->subTags_[i];
-		Tag result = getRootTag(index);
-
-		Tag f;
-		if (result != f) {// != NULL
-			currentTagStructure_ = tagStructure_;
-			_index = 0;
-			return result;
-		}
-	}
-
-	currentTagStructure_ = tagStructure_;
-	_index = 0;
-
-	Tag f;
-	return f;// return NULL
-}
-
-void TagPath::setFlags(unsigned int flags)
-{
-	flags_ = flags;
-}
-
-SearchResult TagPath::search(Tag& tagStructureFilter)
-{
-	SearchResult localsearchResult;
-
-	if (checkTag(tagStructureFilter))
-	{
-		//searchResult_.push_back(currentTagStructure_);
-		localsearchResult.push_back(currentTagStructure_);
-	}
-
-
-	if (currentTagStructure_->flag_ == TSF_VALUE)
-	{
-		currentTagStructure_ = previousTagStructure_;
-		return localsearchResult;
-	}
-
-	Tag* previousTagStructure = currentTagStructure_;
-	previousTagStructure_ = currentTagStructure_;
-	int subTagsCount = currentTagStructure_->subTags_.size();
-
-	for (int i = 0; i < subTagsCount; ++i)
-	{
-		currentTagStructure_ = previousTagStructure;
-		currentTagStructure_ = &currentTagStructure_->subTags_[i];
-		SearchResult result = search(tagStructureFilter);
-		localsearchResult.insert(localsearchResult.end(), result.begin(), result.end());
-	}
-
-	currentTagStructure_ = tagStructure_;
-	_index = 0;
-
-	//localsearchResult = searchResult_;
-	//searchResult_.clear();
-
-	return localsearchResult;
-}
-
-bool TagPath::checkTag(Tag& tagStructureFilter)//TODO: Проверять наличие указанных значений.
-{
-	if (flags_ & TPF_VALUE)
-		if (tagStructureFilter.value_ != currentTagStructure_->value_)
-			return 0;
-
-	if (flags_ & TPF_FLAG)
-		if (tagStructureFilter.flag_ != currentTagStructure_->flag_)
-			return 0;
-
-	if (flags_ & TPF_TAG)
-		if (tagStructureFilter.name_ != currentTagStructure_->name_)
-			return 0;
-
-	if (flags_ & TPF_ATTRIBUTES)
-	{
-		if (tagStructureFilter.attributes_.size() > currentTagStructure_->attributes_.size())
-			return 0;
-
-		auto _iterator = tagStructureFilter.attributes_.begin();
-		for (; _iterator != tagStructureFilter.attributes_.end(); ++_iterator)
-		{
-			if (currentTagStructure_->attributes_.find(_iterator->first) == currentTagStructure_->attributes_.end())
-				return 0;
-		}
-	}
-
-	if (flags_ & TPF_SUBTAGS)
-	{
-		if (tagStructureFilter.subTags_.size() > currentTagStructure_->subTags_.size())
-			return 0;
-
-		bool isEquals = true;
-
-		for (auto i : tagStructureFilter.subTags_)
-		{
-			for (int j = 0; j < currentTagStructure_->subTags_.size(); ++j)
-			{
-				if (j == currentTagStructure_->subTags_.size() - 1)
-				{
-					isEquals = false;
+					_result += _buffer;
 					break;
 				}
+
+				_buffer += _symbol;
+				fileStream_.get(_symbol);
 			}
 		}
 
-		if (isEquals == false)
-			return 0;
+		if (_symbol == '&')
+		{
+			std::wstring _buffer = readXmlLine(L";");
+			_buffer = entityToSymbol(_buffer);
+			_result += _buffer;
+			continue;
+		}
+		_result += _symbol;
 	}
 
-	return true;
+	return L"";
 }
