@@ -34,32 +34,33 @@ public:
 	Tag(const Tag& other);
 	~Tag();
 
-	void setName(const std::wstring name);
-	bool setFlag(const Tag_Flag flag);
-	void setValue(const std::wstring value);
-	bool addAttribute(const std::wstring name, const std::wstring value);
+	void setName(std::wstring name);
+	bool setFlag(Tag_Flag flag);
+	void setValue(std::wstring value);
+	bool addAttribute(std::wstring name, std::wstring value);
 	bool addAttribute(const Attribute& attribute);
-	void addSubTag(const Tag& subTag);
+	bool addSubTag(const Tag& subTag);
 
-	std::wstring getName() const;
-	Tag_Flag getFlag() const;
-	std::wstring getValue() const;
+	std::wstring getName() const	{	return name_;	}
+	Tag_Flag getFlag() const		{	return flag_;	}
+	std::wstring getValue() const	{	return value_;	}
 
-	Attribute getAttribute(const size_t index) const;
-	std::wstring getAttributeValue(const std::wstring name);
-	std::wstring getAttributeValue(const size_t index) const;
-	size_t attributesCount() const;
-	bool findAttribute(const std::wstring name) const;
+	size_t attributesCount() const	{	return attributes_.size();	}
+	size_t subTagsCount() const		{	return subTags_.size();		}
 
-	Tag getSubTag(const size_t index) const;
-	size_t subTagsCount() const;
+	Attribute getAttribute(size_t index) const;
+	std::wstring getAttributeValue(std::wstring name) const;
+	std::wstring getAttributeValue(size_t index) const;
+	bool findAttribute(std::wstring name) const;
+
+	Tag getSubTag(size_t index) const;
 	bool findSubTag(const Tag& tag) const;
 
 	void clear();
 
-	Tag* createSubTag(const SubTag_ID id);
+	Tag* createSubTag(SubTag_ID id);
 	bool applyAllSubTags();
-	bool applySubTag(const SubTag_ID id);
+	bool applySubTag(SubTag_ID id);
 
 	bool operator==(const Tag& other) const;
 	bool operator!=(const Tag& other) const;
@@ -76,7 +77,7 @@ public:
 
 	Attribute();
 	Attribute(const Attribute& other);
-	Attribute(const std::wstring name, const std::wstring value);
+	Attribute(std::wstring name, std::wstring value);
 	~Attribute();
 
 	void clear();

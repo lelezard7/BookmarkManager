@@ -1,7 +1,7 @@
 ﻿#include "XmlFilter.h"
 
 
-bool XmlFilter::compareTags(const Tag& filter, const Tag& target)
+bool XmlFilter::compareTags(const Tag& filter, const Tag& target) const
 {
 	if (flags_ & XFF_VALUE)
 		if (filter.getValue() != target.getValue())
@@ -41,7 +41,7 @@ bool XmlFilter::compareTags(const Tag& filter, const Tag& target)
 	return true;
 }
 
-SearchResult XmlFilter::search(Tag& nextTag)
+SearchResult XmlFilter::search(Tag& nextTag) const
 {
 	if (nextTag == Tag())
 		return SearchResult();
@@ -164,7 +164,7 @@ XmlFilter::~XmlFilter()
 }
 
 
-bool XmlFilter::setFlags(const unsigned int flags)
+bool XmlFilter::setFlags(unsigned int flags)
 {
 	if (flags == 0)
 		return false;
@@ -195,7 +195,7 @@ bool XmlFilter::setFilter(const Tag& filter)
 }
 
 
-Tag XmlFilter::getTag(const int index, const Tag_Flag tagFlag) const
+Tag XmlFilter::getTag(int index, Tag_Flag tagFlag) const
 {
 	if (tagFlag != TF_EMPTY && tagFlag != TF_VALUE && tagFlag != TF_SUBTAGS)
 		return Tag();
@@ -214,7 +214,7 @@ Tag XmlFilter::getTag(const int index, const Tag_Flag tagFlag) const
 }
 
 
-SearchResult XmlFilter::search()
+SearchResult XmlFilter::search() const
 {
 	if (flags_ == 0 || target_ == Tag() || filter_ == Tag())
 		return SearchResult();
@@ -276,7 +276,7 @@ void SearchResult::addTag(const Tag& tag)
 	searchResult_.push_back(tag);
 }
 
-Tag SearchResult::getTag(const size_t index) const
+Tag SearchResult::getTag(size_t index) const
 {
 	if (index >= searchResult_.size())
 		return Tag();
@@ -284,11 +284,6 @@ Tag SearchResult::getTag(const size_t index) const
 	return searchResult_[index];
 }
 
-
-size_t SearchResult::size() const
-{
-	return searchResult_.size();
-}
 
 void SearchResult::clear()
 {

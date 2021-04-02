@@ -19,12 +19,12 @@ Tag::~Tag()
 }
 
 
-void Tag::setName(const std::wstring name)
+void Tag::setName(std::wstring name)
 {
 	name_ = name;
 }
 
-bool Tag::setFlag(const Tag_Flag flag)
+bool Tag::setFlag(Tag_Flag flag)
 {
 	if (flag != TF_VALUE && flag != TF_SUBTAGS)
 		return false;
@@ -34,12 +34,12 @@ bool Tag::setFlag(const Tag_Flag flag)
 	return true;
 }
 
-void Tag::setValue(const std::wstring value)
+void Tag::setValue(std::wstring value)
 {
 	value_ = value;
 }
 
-bool Tag::addAttribute(const std::wstring name, const std::wstring value)
+bool Tag::addAttribute(std::wstring name, std::wstring value)
 {
 	if (name.size() == 0)
 		return false;
@@ -65,28 +65,15 @@ bool Tag::addAttribute(const Attribute& attribute)
 	return true;
 }
 
-void Tag::addSubTag(const Tag& subTag)
+bool Tag::addSubTag(const Tag& subTag)
 {
+	if (subTag == Tag())
+		return false;
+
 	subTags_.push_back(subTag);
 }
 
-
-std::wstring Tag::getName() const
-{
-	return name_;
-}
-
-Tag_Flag Tag::getFlag() const
-{
-	return flag_;
-}
-
-std::wstring Tag::getValue() const
-{
-	return value_;
-}
-
-Attribute Tag::getAttribute(const size_t index) const
+Attribute Tag::getAttribute(size_t index) const
 {
 	Attribute _attribute;
 
@@ -102,15 +89,17 @@ Attribute Tag::getAttribute(const size_t index) const
 	return _attribute;
 }
 
-std::wstring Tag::getAttributeValue(const std::wstring name)
+std::wstring Tag::getAttributeValue(std::wstring name) const
 {
-	if (attributes_.find(name) == attributes_.end())
+	auto _iterator = attributes_.find(name);
+
+	if (_iterator == attributes_.end())
 		return L"";
 
-	return attributes_[name];
+	return _iterator->second;
 }
 
-std::wstring Tag::getAttributeValue(const size_t index) const
+std::wstring Tag::getAttributeValue(size_t index) const
 {
 	if (index >= attributes_.size())
 		return L"";
@@ -121,12 +110,7 @@ std::wstring Tag::getAttributeValue(const size_t index) const
 	return _iterator->second;
 }
 
-size_t Tag::attributesCount() const
-{
-	return attributes_.size();
-}
-
-bool Tag::findAttribute(const std::wstring name) const
+bool Tag::findAttribute(std::wstring name) const
 {
 	if (attributes_.find(name) != attributes_.end())
 		return true;
@@ -134,7 +118,7 @@ bool Tag::findAttribute(const std::wstring name) const
 	return false;
 }
 
-Tag Tag::getSubTag(const size_t index) const
+Tag Tag::getSubTag(size_t index) const
 {
 	if (index >= subTags_.size()) {
 		Tag _tag;
@@ -142,11 +126,6 @@ Tag Tag::getSubTag(const size_t index) const
 	}
 
 	return subTags_[index];
-}
-
-size_t Tag::subTagsCount() const
-{
-	return subTags_.size();
 }
 
 bool Tag::findSubTag(const Tag& tag) const
@@ -171,7 +150,7 @@ void Tag::clear()
 }
 
 
-Tag* Tag::createSubTag(const SubTag_ID id)
+Tag* Tag::createSubTag(SubTag_ID id)
 {
 	if (deferredSubTags_.find(id) != deferredSubTags_.end())
 		return nullptr;
@@ -198,7 +177,7 @@ bool Tag::applyAllSubTags()
 	return true;
 }
 
-bool Tag::applySubTag(const SubTag_ID id)
+bool Tag::applySubTag(SubTag_ID id)
 {
 	if (deferredSubTags_.find(id) == deferredSubTags_.end())
 		return false;
@@ -256,7 +235,7 @@ Attribute::Attribute(const Attribute& other)
 	value = other.value;
 }
 
-Attribute::Attribute(const std::wstring name, const std::wstring value)
+Attribute::Attribute(std::wstring name, std::wstring value)
 {
 	this->name = name;
 	this->value = value;

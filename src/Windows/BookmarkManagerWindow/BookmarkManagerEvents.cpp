@@ -331,14 +331,14 @@ LRESULT bkmManagerWnd_menu_file_save() //TODO: clear memory.
 	newXmlFile.close();
 
 
-	Tag ddd;
-	ddd.setName(L"name");
+	//Tag ddd;
+	//ddd.setName(L"name");
 
-	XmlFilter f;
-	f.setTarget(mainTag);
-	f.setFilter(ddd);
-	f.setFlags(XFF_NAME);
-	SearchResult _searchResult = f.search();
+	//XmlFilter f;
+	//f.setTarget(mainTag);
+	//f.setFilter(ddd);
+	//f.setFlags(XFF_NAME);
+	//SearchResult _searchResult = f.search();
 
 	//TagStructure filter;
 	//filter.setValue("rrr");
@@ -397,7 +397,8 @@ LRESULT bkmManagerWnd_menu_file_open(PWSTR path)
 	tagSearch.setFilter(filter);
 	searchResult = tagSearch.search();
 
-	int maxId = std::stoi(searchResult.getTag(0).getValue());
+	Tag tg1 = searchResult.getTag(0);
+	int maxId = std::stoi(tg1.getValue());
 	searchResult.clear();
 
 	filter.setName(L"nextId");
@@ -408,7 +409,8 @@ LRESULT bkmManagerWnd_menu_file_open(PWSTR path)
 	std::vector<Archive_Id> nextId;
 	for (int i = 0; i < searchResult.size(); ++i)
 	{
-		nextId.push_back(std::stoi(searchResult.getTag(i).getValue()));
+		Tag tg2 = searchResult.getTag(i);
+		nextId.push_back(std::stoi(tg2.getValue()));
 	}
 
 	Archive::initialization(maxId, nextId);
@@ -422,35 +424,36 @@ LRESULT bkmManagerWnd_menu_file_open(PWSTR path)
 
 	for (int i = 0; i < searchResult.size(); ++i)
 	{
-		//Container container;
+		Container container;
 
-		//Tag subTag = searchResult[i]->getSubTag(0);
-		//std::wstring dd = subTag.getValue();
-		//PWSTR buffer = (PWSTR)dd.c_str();
-		//container.setName(buffer, subTag.getValue().size() + 1);
+		Tag __tag = searchResult.getTag(i);
+		Tag subTag = __tag.getSubTag(0);
+		std::wstring dd = subTag.getValue();
+		PWSTR buffer = (PWSTR)dd.c_str();
+		container.setName(buffer, subTag.getValue().size() + 1);
 
-		//subTag = searchResult[i]->getSubTag(1);
-		//dd = subTag.getValue();
-		//buffer = (PWSTR)dd.c_str();
-		//container.setTask(buffer, subTag.getValue().size() + 1);
+		subTag = __tag.getSubTag(1);
+		dd = subTag.getValue();
+		buffer = (PWSTR)dd.c_str();
+		container.setTask(buffer, subTag.getValue().size() + 1);
 
-		//subTag = searchResult[i]->getSubTag(2);
-		//container.setTaskType(std::stoi(subTag.getValue()));
+		subTag = __tag.getSubTag(2);
+		container.setTaskType(std::stoi(subTag.getValue()));
 
-		//subTag = searchResult[i]->getSubTag(3);
-		//for (int j = 0; j < subTag.subTagsCount(); ++j)
-		//{
-		//	Tag tagTag = subTag.getSubTag(j);
-		//	dd = tagTag.getValue();
-		//	buffer = (PWSTR)dd.c_str();
-		//	container.addTag(buffer);
-		//}
+		subTag = __tag.getSubTag(3);
+		for (int j = 0; j < subTag.subTagsCount(); ++j)
+		{
+			Tag tagTag = subTag.getSubTag(j);
+			dd = tagTag.getValue();
+			buffer = (PWSTR)dd.c_str();
+			container.addTag(buffer);
+		}
 
-		//Archive_Id id = std::stoi(searchResult[i]->getAttributeValue(L"id"));
-		//Archive::addContainer(container, id, Archive::AddContainerMode::INITIALIZATION);
+		Archive_Id id = std::stoi(__tag.getAttributeValue(L"id"));
+		Archive::addContainer(container, id, Archive::AddContainerMode::INITIALIZATION);
 
-		//HWND hWndParent = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_WND);
-		//SendMessage(hWndParent, UM_SHOWCREATEDCONTAINER, id, NULL);
+		HWND hWndParent = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_WND);
+		SendMessage(hWndParent, UM_SHOWCREATEDCONTAINER, id, NULL);
 	}
 
 	return 0;

@@ -19,7 +19,7 @@ Container::Container(const Container& other)
 
 Container::~Container()
 {
-	isRegistered == CONTAINER_UNREGISTERED;
+	isRegistered = CONTAINER_UNREGISTERED;
 	clear();
 }
 
