@@ -1,4 +1,6 @@
-﻿#include "SaveModule.h"
+﻿#define UNICODE
+
+#include "SaveModule.h"
 
 
 wchar_t XmlFile::entityToSymbol(std::wstring entity) const
@@ -424,7 +426,7 @@ bool XmlFile::open(std::wstring fileName, OpenMode openMode)
 {
 	if (fileName == L"")
 		return false;
-
+	
 	openMode_ = std::wfstream::in;
 
 	switch (openMode)
@@ -433,15 +435,14 @@ bool XmlFile::open(std::wstring fileName, OpenMode openMode)
 	case OpenMode::APPEND:	openMode_ = std::wfstream::out | std::wfstream::app;	break;
 	}
 
+	fileStream_.imbue(std::locale("en_US.UTF-8")); //TODO: ???
 	fileName_ = fileName;
 	fileStream_.open(fileName_, openMode_);
-
+	
 	if (!fileStream_.is_open()) {
 		close();
 		return false;
 	}
-
-	fileStream_.imbue(std::locale("en_US.UTF-8")); //TODO: ???
 
 	return true;
 }

@@ -170,6 +170,12 @@ void Archive::clear()
 	maxId_ = 0;
 }
 
+void Archive::close()
+{
+	isInitialized_ = false;
+	clear();
+}
+
 bool Archive::find(const Archive_Id id)
 {
 	return archive_.find(id) != archive_.end();

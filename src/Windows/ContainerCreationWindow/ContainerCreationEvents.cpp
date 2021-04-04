@@ -114,6 +114,26 @@ LRESULT contCreatWnd_applyTag()
 
 	GetWindowText(hTagsTextBox, buffer, length);
 
+	int spaceCounter = 0;
+	for (size_t i = 0; i < length - 1; i++) {
+		if (buffer[i] != L' ')
+			break;
+
+		spaceCounter++;
+	}
+
+	if (spaceCounter) {
+		std::wstring newText = buffer;
+		newText.erase(0, spaceCounter);
+		length -= spaceCounter;
+		wcscpy_s(buffer, length, newText.c_str());
+	}
+
+	if (length - 1 == 0) {
+		delete[] buffer;
+		return false;
+	}
+
 	LVITEM lvitem = { NULL };
 	lvitem.mask = LVIF_TEXT;
 	lvitem.pszText = buffer;

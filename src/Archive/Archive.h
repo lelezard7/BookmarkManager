@@ -73,6 +73,7 @@ public:
 	static Archive_Id getIdByIndex(const size_t index);
 	static bool deleteContainer(const Archive_Id id);
 	static void clear();
+	static void close();
 	static bool find(const Archive_Id id);
 	static size_t size();
 };

@@ -1,4 +1,6 @@
-﻿#include "TagStructure.h"
+﻿#define UNICODE
+
+#include "TagStructure.h"
 
 
 Tag::Tag()

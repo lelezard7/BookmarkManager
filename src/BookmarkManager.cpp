@@ -31,7 +31,7 @@ processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 
 
 static bool initialization_commCtrl();
-static bool register_windowClasses(HINSTANCE hInstance);
+static bool register_windowClasses(HINSTANCE);
 static bool initialization_settings();
 
 INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ PWSTR pCmdLine, _In_ int nCmdShow)
@@ -49,7 +49,9 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	TaskTypesCollection::addTaskType(L"URL");
 	TaskTypesCollection::addTaskType(L"Программа");
 
-	initialization_settings();
+	if (!initialization_settings()) {
+		ApplicationSettings::restoreDefaultSettings();
+	}
 
 	HWND hWnd = create_bookmarkManagerWindow(hInstance, pCmdLine);
 	ShowWindow(hWnd, true);
@@ -132,48 +134,50 @@ static bool register_windowClasses(HINSTANCE hInstance)
 
 static bool initialization_settings()
 {
-	//XmlFile file;
-	//file.open(L"dfd.bkm", OpenMode::WRITE);
-	//file.
+	XmlFile newXmlFile;
+	if (!newXmlFile.open(L"Settings.bkms"))
+		return true;
 
-	//file.open(L"dfd.bkm", OpenMode::WRITE);
+	Tag rootTag = newXmlFile.read();
+	newXmlFile.close();
 
-	//XmlFile file2;
-	//file2.open(L"dfd.bkm", OpenMode::WRITE);
-
-	//XmlFile file3;
-	//file3.open(L"dfd.bkm", OpenMode::APPEND);
+	if (rootTag == Tag())
+		return true;
 
 
+	Tag filterTag;
+	XmlFilter filter;
+
+	filter.setTarget(rootTag);
+	filter.setFlags(XFF_NAME);
 
 
+	filterTag.setName(L"defaultTaskType");
+	filter.setFilter(filterTag);
+
+	SearchResult searchResult = filter.search();
+	if (searchResult == SearchResult())
+		return false;
+
+	Tag tag = searchResult.getTag(0);
+	if (tag == Tag())
+		return false;
+
+	ApplicationSettings::setDefaultTaskType(std::stoi(tag.getValue()));
 
 
+	filterTag.setName(L"launchMethod_window");
+	filter.setFilter(filterTag);
 
+	searchResult = filter.search();
+	if (searchResult == SearchResult())
+		return false;
 
+	tag = searchResult.getTag(0);
+	if (tag == Tag())
+		return false;
 
-
-	//XmlFile newXmlFile;
-
-	//if (newXmlFile.open(L"Settings.bkms", OpenMode::READ)) //TODO: Проверять существование файла
-	//{
-	//	TagStructure* mainTag = newXmlFile.read();
-	//	newXmlFile.close(L"Settings.bkms");
-
-	//	TagStructure filter;
-	//	TagPath searchTag;
-	//	searchTag.setTagStructure(*mainTag);
-
-	//	filter.setTag("defaultTaskType");
-	//	searchTag.setFlags(TPF_TAG);
-	//	SearchResult searchResult = searchTag.search(filter);
-	//	ApplicationSettings::setDefaultTaskType(std::stoi(searchResult[0]->getValue()));
-
-	//	filter.setTag("launchMethod_window");
-	//	searchTag.setFlags(TPF_TAG);
-	//	searchResult = searchTag.search(filter);
-	//	ApplicationSettings::setLaunchMethodContainerCreationWindow((LaunchMethod)std::stoi(searchResult[0]->getValue()));
-	//}
+	ApplicationSettings::setLaunchMethodContainerCreationWindow((LaunchMethod)std::stoi(tag.getValue()));
 
 	return true;
 }

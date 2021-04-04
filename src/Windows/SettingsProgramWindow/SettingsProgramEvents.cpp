@@ -127,32 +127,30 @@ static void changeStartupMethod(HWND hDlg)
 
 static void save()
 {
-	Tag mainTag;
+	Tag rootTag;
 
-	mainTag.setFlag(TF_SUBTAGS);
-	mainTag.setName(L"Settings");
-	mainTag.addAttribute(L"SaveVer", SAVEMODULE_VERSIONNAME);
-	mainTag.addAttribute(L"BkmVer", BOOKMARKMANAGER_VERSIONNAME);
+	rootTag.setFlag(TF_SUBTAGS);
+	rootTag.setName(L"Settings");
+	rootTag.addAttribute(L"SaveVer", SAVEMODULE_VERSIONNAME);
+	rootTag.addAttribute(L"BkmVer", BOOKMARKMANAGER_VERSIONNAME);
 
 	Tag* settingsTag[2];
-	settingsTag[0] = mainTag.createSubTag(1);
-	settingsTag[1] = mainTag.createSubTag(2);
+	settingsTag[0] = rootTag.createSubTag(0);
+	settingsTag[1] = rootTag.createSubTag(1);
 	{
-		settingsTag[0]->setFlag(TF_VALUE);
 		settingsTag[0]->setName(L"defaultTaskType");
 		settingsTag[0]->setValue(std::to_wstring(ApplicationSettings::getDefaultTaskType()));
 
-		settingsTag[1]->setFlag(TF_VALUE);
 		settingsTag[1]->setName(L"launchMethod_window");
 		int launchMethod = static_cast<int>(ApplicationSettings::getLaunchMethodContainerCreationWindow());
 		settingsTag[1]->setValue(std::to_wstring(launchMethod));
 
-		mainTag.applyAllSubTags();
+		rootTag.applyAllSubTags();
 	}
 
-	XmlFile newXmlFile;
+	XmlFile settingsFile;
 
-	newXmlFile.open(L"Settings.bkms", OpenMode::WRITE);
-	newXmlFile.write(mainTag);
-	newXmlFile.close();
+	settingsFile.open(L"Settings.bkms", OpenMode::WRITE);
+	settingsFile.write(rootTag);
+	settingsFile.close();
 }

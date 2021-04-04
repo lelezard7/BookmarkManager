@@ -43,6 +43,7 @@ public:
 	PWSTR getTask();
 	TaskType getTaskType();
 	PWSTR getTag(const size_t index);
+	size_t tagsCount() {	return tags_.size();	}
 
 	void start();
 	void operator=(const Container& other);

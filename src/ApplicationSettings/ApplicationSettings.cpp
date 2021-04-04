@@ -3,7 +3,7 @@
 #include "..\Common\Debug.h"
 #include "ApplicationSettings.h"
 
-LaunchMethod ApplicationSettings::containerCreationWindowLaunchMethod_ = LaunchMethod::SHOW_CLOSED_WINDOW;
+LaunchMethod ApplicationSettings::containerCreationWindowLaunchMethod_ = LaunchMethod::CONTINUE_UNFINISHED_CREATION;
 TaskType ApplicationSettings::defaultTaskType_ = TASKTYPE_NOTSPECIFIED;
 
 
@@ -26,4 +26,10 @@ void ApplicationSettings::setDefaultTaskType(TaskType taskType)
 TaskType ApplicationSettings::getDefaultTaskType()
 {
 	return defaultTaskType_;
+}
+
+void ApplicationSettings::restoreDefaultSettings()
+{
+	containerCreationWindowLaunchMethod_ = LaunchMethod::CONTINUE_UNFINISHED_CREATION;
+	defaultTaskType_ = TASKTYPE_NOTSPECIFIED;
 }

@@ -34,7 +34,8 @@ LRESULT CALLBACK BkmManagerProc(_In_ HWND hWnd, _In_ UINT msg, _In_ WPARAM wPara
 		case ID_FILE_SETTINGS:				return create_settingsProgramWindow(GetModuleHandle(NULL), hWnd);
 		case ID_HELP_HOWTOUSE:				return bkmManagerWnd_menu_help_howToUse(hWnd);
 		case ID_FILE_SAVE:					return bkmManagerWnd_menu_file_save();
-		case ID_FILE_OPEN:					return bkmManagerWnd_menu_file_open(L"");
+		case ID_FILE_OPEN:					return bkmManagerWnd_menu_file_open(hWnd);
+		case ID_FILE_NEW:					return bkmManagerWnd_menu_file_new(hWnd);
 
 		case BKM_ID_DELETE:	return bkmManagerWnd_delete_pressed(hWnd);
 		case BKM_ID_ENTER:	return bkmManagerWnd_startСontainer(hWnd);
@@ -79,7 +80,9 @@ HWND create_bookmarkManagerWindow(HINSTANCE hInstance, PWSTR pCmdLine)
 	SetMenu(hWnd, hMenu);
 
 	moveWindowToCenterScreen(hWnd);
-	bkmManagerWnd_initialization(pCmdLine);
+
+	if (wcslen(pCmdLine) != 0)
+		bkmManagerWnd_menu_file_open(hWnd, pCmdLine);
 
 	return hWnd;
 }

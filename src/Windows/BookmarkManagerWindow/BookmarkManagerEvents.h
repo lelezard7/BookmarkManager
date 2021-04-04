@@ -9,8 +9,6 @@
 #include <Windows.h>
 
 
-LRESULT bkmManagerWnd_initialization(PWSTR pCmdLine);
-
 LRESULT bkmManagerWnd_adjustmentControls(HWND hWnd);
 LRESULT showCreatedContainer(WPARAM);
 
@@ -23,7 +21,8 @@ LRESULT bkmManagerWnd_menu_help_howToUse(HWND hWnd);
 LRESULT bkmManagerWnd_menu_help_aboutProg(HWND hWnd);
 LRESULT bkmManagerWnd_menu_file_close(HWND hWnd);
 LRESULT bkmManagerWnd_menu_file_save();
-LRESULT bkmManagerWnd_menu_file_open(PWSTR pCmdLine);
+LRESULT bkmManagerWnd_menu_file_open(HWND hWnd, PWSTR path = nullptr);
+LRESULT bkmManagerWnd_menu_file_new(HWND hWnd);
 
 LRESULT bkmManagerWnd_closeProgram(HWND hWnd);
 LRESULT bkmManagerWnd_destroyWindow();

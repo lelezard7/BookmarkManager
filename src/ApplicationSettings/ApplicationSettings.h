@@ -31,6 +31,8 @@ public:
 
 	static void setDefaultTaskType(TaskType taskType);
 	static TaskType getDefaultTaskType();
+
+	static void restoreDefaultSettings();
 };
 
 

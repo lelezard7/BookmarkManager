@@ -35,7 +35,7 @@ public:
 	~Tag();
 
 	void setName(std::wstring name);
-	bool setFlag(Tag_Flag flag);
+	bool setFlag(Tag_Flag flag = TF_VALUE);
 	void setValue(std::wstring value);
 	bool addAttribute(std::wstring name, std::wstring value);
 	bool addAttribute(const Attribute& attribute);

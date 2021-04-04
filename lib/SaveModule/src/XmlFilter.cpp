@@ -1,4 +1,6 @@
-﻿#include "XmlFilter.h"
+﻿#define UNICODE
+
+#include "XmlFilter.h"
 
 
 bool XmlFilter::compareTags(const Tag& filter, const Tag& target) const

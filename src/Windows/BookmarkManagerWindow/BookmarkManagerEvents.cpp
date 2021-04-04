@@ -14,8 +14,19 @@
 #include <CommCtrl.h>
 #include <HtmlHelp.h>
 
-//static PWSTR pCmdLine;
+static bool isProgramChanged = false;
 
+
+static void changeProgramState(bool state)
+{
+	isProgramChanged = state;
+	HWND hWndParent = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_WND);
+
+	if (state == true)
+		SetWindowText(hWndParent, L"Bookmark Manager*");
+	else
+		SetWindowText(hWndParent, L"Bookmark Manager");
+}
 
 static size_t mainListView_getSelectedId()
 {
@@ -29,15 +40,6 @@ static size_t mainListView_getSelectedId()
 	delete[] buffer_id;
 
 	return id;
-}
-
-LRESULT bkmManagerWnd_initialization(PWSTR pCmdLine)
-{
-	//::pCmdLine = pCmdLine;
-	if (wcslen(pCmdLine) != 0)
-		bkmManagerWnd_menu_file_open(pCmdLine);
-
-	return 0;
 }
 
 LRESULT bkmManagerWnd_adjustmentControls(HWND hWnd)
@@ -90,6 +92,8 @@ LRESULT showCreatedContainer(WPARAM wParam)
 	lvitem.iSubItem = 2;
 	lvitem.pszText = container->getTask();
 	ListView_SetItem(hWnd, &lvitem);
+
+	changeProgramState(true);
 
 	return 0;
 }
@@ -220,47 +224,47 @@ LRESULT bkmManagerWnd_menu_file_close(HWND hWnd)
 	return 0;
 }
 
-LRESULT bkmManagerWnd_menu_file_save() //TODO: clear memory.
+LRESULT bkmManagerWnd_menu_file_save()
 {
-	Tag mainTag;
+	Tag rootTag;
+	rootTag.setName(L"BookmarkManager");
+	rootTag.setFlag(TF_SUBTAGS);
+	rootTag.addAttribute(L"SaveVer", SAVEMODULE_VERSIONNAME);
+	rootTag.addAttribute(L"BkmVer", BOOKMARKMANAGER_VERSIONNAME);
 
-	mainTag.setName(L"BookmarkManager");
-	mainTag.setFlag(TF_SUBTAGS);
-	mainTag.addAttribute(L"SaveVer", SAVEMODULE_VERSIONNAME);
-	mainTag.addAttribute(L"BkmVer", BOOKMARKMANAGER_VERSIONNAME);
-
-	Tag* archiveTag = mainTag.createSubTag(0);
+	Tag* archiveTag = rootTag.createSubTag(0);
 	{
 		archiveTag->setName(L"archive");
 		archiveTag->setFlag(TF_SUBTAGS);
 
 		Tag* archiveInfoTag = archiveTag->createSubTag(1);
 		{
-			archiveInfoTag->setFlag(TF_VALUE);
 			archiveInfoTag->setName(L"maxId");
 			archiveInfoTag->setValue(std::to_wstring(Archive::getMaxId()));
 
 			archiveTag->applySubTag(1);
 		}
 
-		archiveInfoTag = archiveTag->createSubTag(1);
+		if (Archive::nextIdCount() != 0)
 		{
-			archiveInfoTag->setFlag(TF_SUBTAGS);
-			archiveInfoTag->setName(L"NextIdGroup");
-			
-			for (size_t i = 0; i < Archive::nextIdCount(); ++i)
+			archiveInfoTag = archiveTag->createSubTag(1);
 			{
-				Tag* nextIdTag = archiveInfoTag->createSubTag(2);
+				archiveInfoTag->setFlag(TF_SUBTAGS);
+				archiveInfoTag->setName(L"NextIdGroup");
+
+				for (size_t i = 0; i < Archive::nextIdCount(); ++i)
 				{
-					nextIdTag->setFlag(TF_VALUE);
-					nextIdTag->setName(L"nextId");
-					nextIdTag->setValue(std::to_wstring(Archive::getNextId(i)));
+					Tag* nextIdTag = archiveInfoTag->createSubTag(2);
+					{
+						nextIdTag->setName(L"nextId");
+						nextIdTag->setValue(std::to_wstring(Archive::getNextId(i)));
 
-					archiveInfoTag->applySubTag(2);
+						archiveInfoTag->applySubTag(2);
+					}
 				}
-			}
 
-			archiveTag->applySubTag(1);
+				archiveTag->applySubTag(1);
+			}
 		}
 
 		for (size_t i = 0; i < Archive::size(); ++i)
@@ -274,44 +278,42 @@ LRESULT bkmManagerWnd_menu_file_save() //TODO: clear memory.
 				containerTag->setFlag(TF_SUBTAGS);
 				containerTag->addAttribute(L"id", std::to_wstring(containerId));
 
-
 				Tag* containeDataTypesTag[4];
 				containeDataTypesTag[0] = containerTag->createSubTag(5);
 				containeDataTypesTag[1] = containerTag->createSubTag(6);
 				containeDataTypesTag[2] = containerTag->createSubTag(7);
-				containeDataTypesTag[3] = containerTag->createSubTag(8);
 				{
 					containeDataTypesTag[0]->setName(L"name");
-					containeDataTypesTag[0]->setFlag(TF_VALUE);
 					std::wstring buffer = container->getName();
 					containeDataTypesTag[0]->setValue(std::wstring(buffer.begin(), buffer.end()));
 
 					containeDataTypesTag[1]->setName(L"task");
-					containeDataTypesTag[1]->setFlag(TF_VALUE);
 					buffer = container->getTask();
 					containeDataTypesTag[1]->setValue(std::wstring(buffer.begin(), buffer.end()));
 
 					containeDataTypesTag[2]->setName(L"taskType");
-					containeDataTypesTag[2]->setFlag(TF_VALUE);
 					TaskType taskType = container->getTaskType();
 					containeDataTypesTag[2]->setValue(std::to_wstring(taskType));
 
-					containeDataTypesTag[3]->setName(L"TagsGroup");
-					containeDataTypesTag[3]->setFlag(TF_SUBTAGS);
-
-					int index = 0;
-					while (container->getTag(index) != nullptr)
+					if (container->tagsCount() != 0)
 					{
-						Tag* tagTag = containeDataTypesTag[3]->createSubTag(10);
+						containeDataTypesTag[3] = containerTag->createSubTag(8);
 						{
-							tagTag->setName(L"tag");
-							tagTag->setFlag(TF_VALUE);
-							buffer = container->getTag(index);
-							tagTag->setValue(std::wstring(buffer.begin(), buffer.end()));
+							containeDataTypesTag[3]->setName(L"TagsGroup");
+							containeDataTypesTag[3]->setFlag(TF_SUBTAGS);
 
-							containeDataTypesTag[3]->applySubTag(10);
+							for (size_t i = 0; i < container->tagsCount(); ++i)
+							{
+								Tag* tagTag = containeDataTypesTag[3]->createSubTag(10);
+								{
+									tagTag->setName(L"tag");
+									buffer = container->getTag(i);
+									tagTag->setValue(std::wstring(buffer.begin(), buffer.end()));
+
+									containeDataTypesTag[3]->applySubTag(10);
+								}
+							}
 						}
-						index++;
 					}
 
 					containerTag->applyAllSubTags();
@@ -321,156 +323,373 @@ LRESULT bkmManagerWnd_menu_file_save() //TODO: clear memory.
 			}
 		}
 
-		mainTag.applySubTag(0);
+		rootTag.applySubTag(0);
 	}
 
-	XmlFile newXmlFile;
+	XmlFile saveFile;
+	saveFile.open(L"dfd.bkm", OpenMode::WRITE);
+	saveFile.write(rootTag);
+	saveFile.close();
 
-	newXmlFile.open(L"dfd.bkm", OpenMode::WRITE); //TODO:Удалять пробелы из tagsListView.
-	newXmlFile.write(mainTag);
-	newXmlFile.close();
-
-
-	//Tag ddd;
-	//ddd.setName(L"name");
-
-	//XmlFilter f;
-	//f.setTarget(mainTag);
-	//f.setFilter(ddd);
-	//f.setFlags(XFF_NAME);
-	//SearchResult _searchResult = f.search();
-
-	//TagStructure filter;
-	//filter.setValue("rrr");
-	//filter.setTag("tag");
-
-	//TagPath tagPath;
-	//tagPath.setFlags(TPF_VALUE | TPF_TAG);
-	//tagPath.setTagStructure(mainTag);
-	//auto d = tagPath.search(filter);
-
-
-	//TagStructure f = tagPath.getRootTag(0);
-	//TagStructure k = tagPath.getRootTag(2);
-	//TagStructure h = tagPath.getRootTag(1);
-	//TagStructure z = tagPath.getRootTag(90);
-	//TagStructure j = tagPath.getRootTag(3);
-
-	//tagPath.setTagStructure(mainTag);
-	//TagStructure f = tagPath.getTag(0);
-	//TagStructure g = tagPath.getTag(1);
-	//TagStructure j = tagPath.getTag(100);
-	//TagStructure p = tagPath.getTag(3);
-
-	//TagStructure u = tagPath.getAllTag(0);
-	//TagStructure m = tagPath.getAllTag(3);
-	//TagStructure n = tagPath.getAllTag(6);
-	//TagStructure o = tagPath.getAllTag(80);
-	//TagStructure y = tagPath.getAllTag(1);
+	changeProgramState(false);
 
 	return 0;
 }
 
-LRESULT bkmManagerWnd_menu_file_open(PWSTR path)
+
+static LRESULT bkmManagerWnd_menu_file_open_error(HWND hWnd, std::wstring errorMessage);
+static bool bkmManagerWnd_menu_file_open_setStandardData(
+	HWND hWnd,
+	Container* container,
+	Tag* containerTag,
+	std::wstring searchSubTagName,
+	std::wstring errorMessage);
+#include <shobjidl_core.h>
+LRESULT bkmManagerWnd_menu_file_open(HWND hWnd, PWSTR path)
 {
-	XmlFile newXmlFile;
-
-	if (wcslen(path) != 0)
-	{
-		std::wstring path_ = path;
-		newXmlFile.open(path_, OpenMode::READ);
-		Tag mainTag = newXmlFile.read();
-		newXmlFile.close();
+	if (isProgramChanged) {
+		int answer = MessageBox(hWnd, L"Сохранить изменения?", L"Bookmark Manager", MB_YESNOCANCEL | MB_ICONQUESTION);
+		if (answer == IDYES) {
+			bkmManagerWnd_menu_file_save();
+		}
+		else if (answer == IDCANCEL) {
+			return 0;
+		}
 	}
+	changeProgramState(false);
+	bkmManagerWnd_menu_file_new(hWnd);
 
-	newXmlFile.open(L"dfd.bkm", OpenMode::READ);
-	Tag mainTag = newXmlFile.read();
-	newXmlFile.close();
 
-	Tag filter;
-	XmlFilter tagSearch;
-	SearchResult searchResult;
-	tagSearch.setTarget(mainTag);
 
-	filter.setName(L"maxId");
-	tagSearch.setFlags(XFF_NAME);
-	tagSearch.setFilter(filter);
-	searchResult = tagSearch.search();
 
-	Tag tg1 = searchResult.getTag(0);
-	int maxId = std::stoi(tg1.getValue());
-	searchResult.clear();
 
-	filter.setName(L"nextId");
-	tagSearch.setFlags(XFF_NAME);
-	tagSearch.setFilter(filter);
-	searchResult = tagSearch.search();
 
-	std::vector<Archive_Id> nextId;
-	for (int i = 0; i < searchResult.size(); ++i)
+	// CoCreate the File Open Dialog object.
+	IFileDialog* pfd = NULL;
+	HRESULT hr = CoCreateInstance(CLSID_FileOpenDialog,
+		NULL,
+		CLSCTX_INPROC_SERVER,
+		IID_PPV_ARGS(&pfd));
+	if (SUCCEEDED(hr))
 	{
-		Tag tg2 = searchResult.getTag(i);
-		nextId.push_back(std::stoi(tg2.getValue()));
-	}
+		// Set the options on the dialog.
+		DWORD dwFlags;
 
-	Archive::initialization(maxId, nextId);
-	searchResult.clear();
-
-
-	filter.setName(L"container");
-	tagSearch.setFlags(XFF_NAME);
-	tagSearch.setFilter(filter);
-	searchResult = tagSearch.search();
-
-	for (int i = 0; i < searchResult.size(); ++i)
-	{
-		Container container;
-
-		Tag __tag = searchResult.getTag(i);
-		Tag subTag = __tag.getSubTag(0);
-		std::wstring dd = subTag.getValue();
-		PWSTR buffer = (PWSTR)dd.c_str();
-		container.setName(buffer, subTag.getValue().size() + 1);
-
-		subTag = __tag.getSubTag(1);
-		dd = subTag.getValue();
-		buffer = (PWSTR)dd.c_str();
-		container.setTask(buffer, subTag.getValue().size() + 1);
-
-		subTag = __tag.getSubTag(2);
-		container.setTaskType(std::stoi(subTag.getValue()));
-
-		subTag = __tag.getSubTag(3);
-		for (int j = 0; j < subTag.subTagsCount(); ++j)
+		// Before setting, always get the options first in order 
+		// not to override existing options.
+		hr = pfd->GetOptions(&dwFlags);
+		if (SUCCEEDED(hr))
 		{
-			Tag tagTag = subTag.getSubTag(j);
-			dd = tagTag.getValue();
-			buffer = (PWSTR)dd.c_str();
-			container.addTag(buffer);
+			// In this case, get shell items only for file system items.
+			hr = pfd->SetOptions(dwFlags | FOS_FORCEFILESYSTEM);
+			if (SUCCEEDED(hr))
+			{
+				// Set the default extension to be ".doc" file.
+				hr = pfd->SetDefaultExtension(L"doc;docx");
+				if (SUCCEEDED(hr))
+				{
+					// Show the dialog
+					hr = pfd->Show(NULL);
+					if (SUCCEEDED(hr))
+					{
+						// Obtain the result once the user clicks 
+						// the 'Open' button.
+						// The result is an IShellItem object.
+						IShellItem* psiResult;
+						hr = pfd->GetResult(&psiResult);
+						if (SUCCEEDED(hr))
+						{
+							// We are just going to print out the 
+							// name of the file for sample sake.
+							PWSTR pszFilePath = NULL;
+							hr = psiResult->GetDisplayName(SIGDN_FILESYSPATH,
+								&pszFilePath);
+							if (SUCCEEDED(hr))
+							{
+								TaskDialog(NULL,
+									NULL,
+									L"CommonFileDialogApp",
+									pszFilePath,
+									NULL,
+									TDCBF_OK_BUTTON,
+									TD_INFORMATION_ICON,
+									NULL);
+								CoTaskMemFree(pszFilePath);
+							}
+							psiResult->Release();
+						}
+					}
+
+
+				}
+			}
+
+		}
+		
+	}
+		pfd->Release();
+	
+
+
+
+
+
+
+
+	/*IFileDialog* pfd = NULL;
+	HRESULT hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_INPROC_SERVER, IID_IFileDialog, (void**)&pfd);
+
+	LPOPENFILENAMEW lpofn;
+
+	GetOpenFileName(lpofn);
+
+	pfd->Release();*/
+
+
+
+	Tag rootTag;
+
+	XmlFile saveFile;
+	bool errCode;
+	if (path != nullptr) {
+		errCode = saveFile.open(path);
+	}
+	else {
+		
+		errCode = saveFile.open(L"dfd.bkm");
+	}
+
+	if (!errCode) {
+		saveFile.close();
+		MessageBox(hWnd, L"Не удалось открыть файл сохранения!", L"Bookmark Manager", MB_OK | MB_ICONWARNING);
+		return 0;
+	}
+	else {
+		rootTag = saveFile.read();
+		saveFile.close();
+	}
+
+	if (rootTag == Tag()) {
+		MessageBox(hWnd, L"Не удалось считать данные из файла сохранения!", L"Bookmark Manager", MB_OK | MB_ICONSTOP);
+		return 0;
+	}
+
+	XmlFilter filter;
+	filter.setTarget(rootTag);
+	filter.setFlags(XFF_NAME);
+
+	Tag filterTag;
+	SearchResult searchResult;
+
+
+	filterTag.setName(L"maxId");
+	filter.setFilter(filterTag);
+
+	searchResult = filter.search();
+	Tag maxIdTag = searchResult.getTag(0);
+	if (searchResult == SearchResult() || maxIdTag == Tag()) {
+		MessageBox(
+			hWnd,
+			L"Не удалось считать данные из файла сохранения! Не найденно поле \"maxId.\"",
+			L"Bookmark Manager",
+			MB_OK | MB_ICONSTOP);
+		return 0;
+	}
+
+	int maxId = std::stoi(maxIdTag.getValue());
+	searchResult.clear();
+	filterTag.clear();
+
+
+	filterTag.setName(L"nextId");
+	filter.setFilter(filterTag);
+	searchResult = filter.search();
+
+	std::vector<Archive_Id> nextIds;
+	for (int i = 0; i < searchResult.size(); ++i) {
+		Tag nextIdTag = searchResult.getTag(i);
+		nextIds.push_back(std::stoi(nextIdTag.getValue()));
+	}
+
+	if (!Archive::initialization(maxId, nextIds)) {
+		MessageBox(
+			hWnd,
+			L"Не удалось инициализировать архив!",
+			L"Bookmark Manager",
+			MB_OK | MB_ICONSTOP);
+		return 0;
+	}
+	searchResult.clear();
+	filterTag.clear();
+
+
+	filterTag.setName(L"container");
+	filter.setFilter(filterTag);
+	searchResult = filter.search();
+
+	Tag containerTag;
+	Container container;
+	Tag subTag;
+	std::wstring value;
+	for (size_t i = 0; i < searchResult.size(); ++i) {
+		containerTag = searchResult.getTag(i);
+		
+		errCode = bkmManagerWnd_menu_file_open_setStandardData(
+			hWnd,
+			&container,
+			&containerTag,
+			L"name",
+			L"Не удалось полностью считать данные из файла сохранения! В " +
+			std::to_wstring(i + 1) + L"м контейнере не найденно имя.");
+
+		if (errCode == 0)
+			return 0;
+
+		errCode = bkmManagerWnd_menu_file_open_setStandardData(
+			hWnd,
+			&container,
+			&containerTag,
+			L"task",
+			L"Не удалось полностью считать данные из файла сохранения! В " +
+			std::to_wstring(i + 1) + L"м контейнере не найдена задача.");
+
+		if (errCode == 0)
+			return 0;
+
+		errCode = bkmManagerWnd_menu_file_open_setStandardData(
+			hWnd,
+			&container,
+			&containerTag,
+			L"taskType",
+			L"Не удалось полностью считать данные из файла сохранения! В " +
+			std::to_wstring(i + 1) + L"м контейнере не найден тип задачи.");
+
+		if (errCode == 0)
+			return 0;
+
+		for (size_t j = 0; j < 4; ++j) {
+			subTag = containerTag.getSubTag(j);
+
+			if (subTag.getName() == L"TagsGroup") {
+				for (size_t k = 0; k < subTag.subTagsCount(); ++k)
+				{
+					Tag tagTag = subTag.getSubTag(k);
+					value = tagTag.getValue();
+					if (value == L"") {
+						return bkmManagerWnd_menu_file_open_error(hWnd,
+							L"Не удалось полностью считать данные из файла сохранения! В " +
+							std::to_wstring(i + 1) + L"м контейнере " + std::to_wstring(k + 1) +
+							L"й тег не имеет имя.");
+					}
+					container.addTag((PWSTR)value.c_str());
+				}
+			}
 		}
 
-		Archive_Id id = std::stoi(__tag.getAttributeValue(L"id"));
-		Archive::addContainer(container, id, Archive::AddContainerMode::INITIALIZATION);
+		std::wstring idTagValue = containerTag.getAttributeValue(L"id");
+		if(idTagValue == L"") {
+			return bkmManagerWnd_menu_file_open_error(hWnd,
+				L"Не удалось полностью считать данные из файла сохранения! В " +
+				std::to_wstring(i + 1) + L"м контейнере атрибут id не найден или не имеет значения.");
+		}
 
-		HWND hWndParent = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_WND);
-		SendMessage(hWndParent, UM_SHOWCREATEDCONTAINER, id, NULL);
+		Archive_Id id = std::stoi(idTagValue);
+		if (!Archive::addContainer(container, id, Archive::AddContainerMode::INITIALIZATION)) {
+			return bkmManagerWnd_menu_file_open_error(hWnd,
+				L"Не удалось полностью считать данные из файла сохранения! В " +
+				std::to_wstring(i + 1) + L"м контейнере неверный id.");
+		}
+
+		SendMessage(hWnd, UM_SHOWCREATEDCONTAINER, id, NULL);
+
+		containerTag.clear();
+		container.clear();
+		subTag.clear();
 	}
+
+	changeProgramState(false);
 
 	return 0;
 }
 
+static LRESULT bkmManagerWnd_menu_file_open_error(HWND hWnd, std::wstring errorMessage)
+{
+	Archive::close();
+
+	HWND hMainListView = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_MAINLISTVIEW);
+	ListView_DeleteAllItems(hMainListView);
+
+	MessageBox(hWnd, errorMessage.c_str(), L"Bookmark Manager", MB_OK | MB_ICONSTOP);
+
+	return 0;
+}
+
+static bool bkmManagerWnd_menu_file_open_setStandardData(
+	HWND hWnd,
+	Container* container,
+	Tag* containerTag,
+	std::wstring searchSubTagName,
+	std::wstring errorMessage)
+{
+	Tag subTag;
+	std::wstring value;
+
+	for (size_t j = 0; j < 4; ++j) {
+		subTag = containerTag->getSubTag(j);
+
+		if (subTag.getName() == searchSubTagName) {
+			value = subTag.getValue();
+			if (value == L"")
+				return bkmManagerWnd_menu_file_open_error(hWnd, errorMessage);
+
+			if (searchSubTagName == L"name")
+				container->setName((PWSTR)value.c_str(), subTag.getValue().size() + 1);
+			else if (searchSubTagName == L"task")
+				container->setTask((PWSTR)value.c_str(), subTag.getValue().size() + 1);
+			else if (searchSubTagName == L"taskType")
+				container->setTaskType(std::stoi(value));
+
+			break;
+		}
+		else if (j == 3) {
+			return bkmManagerWnd_menu_file_open_error(hWnd, errorMessage);
+		}
+	}
+
+	return true;
+}
+
+LRESULT bkmManagerWnd_menu_file_new(HWND hWnd)
+{
+	if (isProgramChanged) {
+		int answer = MessageBox(hWnd, L"Сохранить изменения?", L"Bookmark Manager", MB_YESNOCANCEL | MB_ICONQUESTION);
+		if (answer == IDYES) {
+			bkmManagerWnd_menu_file_save();
+		}
+		else if (answer == IDNO) {
+			changeProgramState(false);
+		}
+		else {
+			return 0;
+		}
+	}
+
+	Archive::close();
+	HWND hMainListView = HandleManager::getHandleWnd(HNAME_BOOKMARKMANAGERWND_MAINLISTVIEW);
+	ListView_DeleteAllItems(hMainListView);
+
+	return 0;
+}
 
 
 LRESULT bkmManagerWnd_closeProgram(HWND hWnd)
 {
 	DestroyWindow(hWnd);
-
 	return 0;
 }
 
 LRESULT bkmManagerWnd_destroyWindow()
 {
 	PostQuitMessage(0);
-
 	return 0;
 }
